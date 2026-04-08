@@ -1506,8 +1506,18 @@ button:disabled, .btn:disabled {
   .progress-dot { width: 24px; height: 24px; }
   .progress-step span { font-size: 0.65rem; }
   .hero h1 { font-size: 1.8rem; }
-  .floating-btn span { display: none; }
-  .floating-btn { padding: 14px 16px; }
+  .floating-btn .btn-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .floating-btn { padding: 14px 16px; position: relative; }
 }
 
 /* ===== ANIMATIONS ===== */

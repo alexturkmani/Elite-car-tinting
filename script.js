@@ -252,7 +252,8 @@ const calcState = {
   }
 
   function formatPrice(price) {
-    return '$' + Math.abs(price).toLocaleString();
+    const abs = price < 0 ? -price : price;
+    return '$' + abs.toLocaleString();
   }
 
   function calculateTotal() {

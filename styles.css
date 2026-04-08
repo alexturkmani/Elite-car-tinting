@@ -29,6 +29,7 @@
   --shadow-glow: 0 0 30px rgba(255,255,255,0.08);
   --border: rgba(255,255,255,0.08);
   --border-hover: rgba(255,255,255,0.3);
+  --call-bar-height: 68px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -252,6 +253,7 @@ button:disabled, .btn:disabled {
   color: var(--white);
   background: rgba(255,255,255,0.08);
 }
+.hamburger {
   display: none;
   flex-direction: column;
   gap: 5px;
@@ -1116,7 +1118,7 @@ button:disabled, .btn:disabled {
   gap: 12px;
   margin-top: 16px;
 }
-.stars-large i { color: #d4a017; font-size: 1.2rem; }
+.stars-large i { color: var(--lighter); font-size: 1.2rem; }
 .overall-rating span { color: var(--light); font-size: 0.9rem; }
 .reviews-grid {
   display: grid;
@@ -1154,7 +1156,7 @@ button:disabled, .btn:disabled {
 .reviewer-info { flex: 1; }
 .reviewer-info strong { display: block; color: var(--white); font-size: 0.9rem; }
 .reviewer-info span { font-size: 0.75rem; color: var(--light); }
-.review-stars i { color: #d4a017; font-size: 0.75rem; }
+.review-stars i { color: var(--lighter); font-size: 0.75rem; }
 .review-card p { font-size: 0.88rem; color: var(--light); line-height: 1.6; margin-bottom: 16px; font-style: italic; }
 .review-vehicle { font-size: 0.78rem; color: var(--lighter); display: flex; align-items: center; gap: 6px; }
 
@@ -1646,5 +1648,5 @@ button:disabled, .btn:disabled {
 
 /* ===== BODY PADDING FOR CALL BAR ===== */
 body {
-  padding-bottom: 68px;
+  padding-bottom: var(--call-bar-height);
 }

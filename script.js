@@ -544,7 +544,7 @@ const calcState = {
       if (link) {
         if (scrollPos >= top && scrollPos < top + height) {
           navLinks.forEach(function (l) { l.style.color = ''; });
-          link.style.color = '#5b9ae8';
+          link.style.color = '#ffffff';
         }
       }
     });

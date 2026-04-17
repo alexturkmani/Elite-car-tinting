@@ -746,7 +746,6 @@ button:disabled, .btn:disabled {
   border-radius: var(--radius-sm);
   margin-bottom: 8px;
   border: 1px solid rgba(255,255,255,0.1);
-  position: relative;
   overflow: hidden;
 }
 .shade-img {
@@ -754,12 +753,6 @@ button:disabled, .btn:disabled {
   height: 100%;
   object-fit: cover;
   display: block;
-}
-.shade-overlay {
-  position: absolute;
-  inset: 0;
-  background: #000;
-  pointer-events: none;
 }
 .shade-vlt { display: block; font-size: 0.9rem; font-weight: 700; color: var(--white); }
 .shade-name { display: block; font-size: 0.8rem; color: var(--lighter); margin-bottom: 4px; }

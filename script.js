@@ -508,15 +508,15 @@ const calcState = {
     const phone = form.querySelector('#contactPhone');
     const email = form.querySelector('#contactEmail');
 
-    if (!name.value.trim() || name.value.trim().length < 2) {
+    if (name && (!name.value.trim() || name.value.trim().length < 2)) {
       showFieldError(name);
       valid = false;
     }
-    if (!phone.value.trim() || !validatePhone(phone.value)) {
+    if (phone && (!phone.value.trim() || !validatePhone(phone.value))) {
       showFieldError(phone);
       valid = false;
     }
-    if (!email.value.trim() || !validateEmail(email.value)) {
+    if (email && (!email.value.trim() || !validateEmail(email.value))) {
       showFieldError(email);
       valid = false;
     }
@@ -569,4 +569,165 @@ const calcState = {
   }
 
   window.addEventListener('scroll', updateActiveLink, { passive: true });
+})();
+
+// ===== GOOGLE REVIEWS (live from Google Business Profile) =====
+// To enable live reviews:
+//   1. Create a Google Cloud project and enable "Places API (New)".
+//   2. Create an API key and restrict it by HTTP referrer to your domain
+//      (e.g. https://www.elitecartinting.com.au/*).
+//   3. Find your Place ID: https://developers.google.com/maps/documentation/places/web-service/place-id
+//   4. Paste both values below.
+// While left blank, the curated fallback reviews remain visible.
+const GOOGLE_REVIEWS_CONFIG = {
+  apiKey: '',      // e.g. 'AIzaSy...'
+  placeId: '',     // e.g. 'ChIJ...'
+  refreshMs: 5 * 60 * 1000, // 5 minutes – effectively "real-time" for GBP
+  maxReviews: 6
+};
+
+(function initGoogleReviews() {
+  const grid = document.getElementById('googleReviewsGrid');
+  const scoreEl = document.getElementById('googleRatingScore');
+  const countEl = document.getElementById('googleRatingCount');
+  const starsEl = document.getElementById('googleStars');
+  const writeBtn = document.getElementById('googleWriteReview');
+  const liveInd = document.getElementById('googleLiveIndicator');
+  if (!grid) return;
+
+  // "Write a review" deep link (works as soon as Place ID is provided)
+  if (writeBtn && GOOGLE_REVIEWS_CONFIG.placeId) {
+    writeBtn.href = 'https://search.google.com/local/writereview?placeid=' +
+      encodeURIComponent(GOOGLE_REVIEWS_CONFIG.placeId);
+  } else if (writeBtn) {
+    writeBtn.href = 'https://www.google.com/search?q=Elite+Car+Tinting+Essendon';
+  }
+
+  function renderStars(rating) {
+    const full = Math.floor(rating);
+    const half = rating - full >= 0.5;
+    let html = '';
+    for (let i = 0; i < 5; i++) {
+      if (i < full) html += '<i class="fas fa-star"></i>';
+      else if (i === full && half) html += '<i class="fas fa-star-half-alt"></i>';
+      else html += '<i class="far fa-star"></i>';
+    }
+    return html;
+  }
+
+  function timeAgo(isoOrSeconds) {
+    let t;
+    if (typeof isoOrSeconds === 'number') t = isoOrSeconds * 1000;
+    else t = new Date(isoOrSeconds).getTime();
+    if (!t) return '';
+    const diff = Math.max(0, Date.now() - t);
+    const days = Math.floor(diff / 86400000);
+    if (days < 1) return 'today';
+    if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+    if (days < 30) { const w = Math.floor(days / 7); return w + ' week' + (w > 1 ? 's' : '') + ' ago'; }
+    if (days < 365) { const m = Math.floor(days / 30); return m + ' month' + (m > 1 ? 's' : '') + ' ago'; }
+    const y = Math.floor(days / 365); return y + ' year' + (y > 1 ? 's' : '') + ' ago';
+  }
+
+  function initials(name) {
+    if (!name) return 'G';
+    return name.split(/\s+/).filter(Boolean).slice(0, 2).map(function (p) { return p[0]; }).join('').toUpperCase();
+  }
+
+  function avatarColor(name) {
+    const palette = ['#EA4335', '#4285F4', '#FBBC05', '#34A853', '#9334E6', '#E8710A'];
+    let h = 0;
+    for (let i = 0; i < (name || '').length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+    return palette[h % palette.length];
+  }
+
+  function googleGSvg() {
+    return '<svg class="review-google-g" viewBox="0 0 48 48" aria-hidden="true">' +
+      '<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>' +
+      '<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>' +
+      '<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>' +
+      '<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>' +
+      '</svg>';
+  }
+
+  function renderReviews(reviews) {
+    grid.innerHTML = reviews.slice(0, GOOGLE_REVIEWS_CONFIG.maxReviews).map(function (r) {
+      const name = r.authorName || r.author_name || 'Google User';
+      const photo = r.profilePhotoUrl || r.profile_photo_url || '';
+      const when = r.publishTime || r.time || r.relativeTime || '';
+      const relative = r.relativeTime || (when ? timeAgo(when) : '');
+      const text = (r.text || '').replace(/</g, '&lt;');
+      const rating = r.rating || 5;
+      const avatar = photo
+        ? '<img class="reviewer-avatar-img" src="' + photo + '" alt="' + name + '" loading="lazy" referrerpolicy="no-referrer" />'
+        : '<div class="reviewer-avatar" style="background:' + avatarColor(name) + '">' + initials(name) + '</div>';
+      return (
+        '<div class="review-card google-review-card">' +
+          '<div class="review-header">' +
+            avatar +
+            '<div class="reviewer-info">' +
+              '<strong>' + name + '</strong>' +
+              '<span class="review-meta">' + (relative || '') + '</span>' +
+            '</div>' +
+            googleGSvg() +
+          '</div>' +
+          '<div class="review-stars google-stars">' + renderStars(rating) + '</div>' +
+          '<p>' + text + '</p>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function renderSummary(rating, count) {
+    if (scoreEl) scoreEl.textContent = (Math.round(rating * 10) / 10).toFixed(1);
+    if (starsEl) starsEl.innerHTML = renderStars(rating);
+    if (countEl) countEl.textContent = 'Based on ' + count + ' Google review' + (count === 1 ? '' : 's');
+  }
+
+  async function fetchGoogleReviews() {
+    const { apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
+    if (!apiKey || !placeId) return null;
+    const url = 'https://places.googleapis.com/v1/places/' + encodeURIComponent(placeId);
+    const res = await fetch(url, {
+      headers: {
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'displayName,rating,userRatingCount,reviews.rating,reviews.text,reviews.relativePublishTimeDescription,reviews.publishTime,reviews.authorAttribution'
+      }
+    });
+    if (!res.ok) throw new Error('Places API ' + res.status);
+    const data = await res.json();
+    const reviews = (data.reviews || []).map(function (r) {
+      return {
+        authorName: r.authorAttribution && r.authorAttribution.displayName,
+        profilePhotoUrl: r.authorAttribution && r.authorAttribution.photoUri,
+        rating: r.rating,
+        text: (r.text && r.text.text) || '',
+        relativeTime: r.relativePublishTimeDescription,
+        publishTime: r.publishTime
+      };
+    });
+    return {
+      rating: data.rating || 4.9,
+      count: data.userRatingCount || reviews.length,
+      reviews: reviews
+    };
+  }
+
+  async function refresh() {
+    try {
+      const data = await fetchGoogleReviews();
+      if (!data) return; // no config → keep curated fallback cards
+      renderSummary(data.rating, data.count);
+      if (data.reviews.length) renderReviews(data.reviews);
+      if (liveInd) liveInd.hidden = false;
+    } catch (err) {
+      // Silent fallback – curated reviews remain visible
+      console.warn('[GoogleReviews] fetch failed:', err.message);
+    }
+  }
+
+  refresh();
+  if (GOOGLE_REVIEWS_CONFIG.refreshMs > 0) {
+    setInterval(refresh, GOOGLE_REVIEWS_CONFIG.refreshMs);
+  }
 })();

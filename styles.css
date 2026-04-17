@@ -93,17 +93,13 @@ input, select, textarea { font-family: inherit; }
 }
 .section-header.light h2 { color: var(--white); }
 .section-tag {
-  display: inline-block;
-  background: rgba(56,189,248,0.12);
+  display: block;
   color: var(--accent);
-  border: 1px solid rgba(56,189,248,0.35);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .gradient-text {

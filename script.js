@@ -599,7 +599,6 @@ const GOOGLE_REVIEWS_CONFIG = {
   const countEl = document.getElementById('googleRatingCount');
   const starsEl = document.getElementById('googleStars');
   const writeBtn = document.getElementById('googleWriteReview');
-  const liveInd = document.getElementById('googleLiveIndicator');
   if (!grid) return;
 
   // "Write a review" deep link — opens the Google review composer
@@ -769,7 +768,6 @@ const GOOGLE_REVIEWS_CONFIG = {
       if (!data) return; // no config → keep curated fallback cards
       renderSummary(data.rating, data.count);
       if (data.reviews.length) renderReviews(data.reviews);
-      if (liveInd) liveInd.hidden = false;
     } catch (err) {
       // Silent fallback – curated reviews remain visible
       console.warn('[GoogleReviews] fetch failed:', err.message);

@@ -1823,30 +1823,6 @@ body.call-bar-visible {
   border-color: #1a73e8;
 }
 
-.google-live-indicator {
-  margin-top: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.82rem;
-  color: var(--light);
-  letter-spacing: 0.5px;
-}
-.google-live-indicator[hidden] { display: none; }
-.live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #34A853;
-  box-shadow: 0 0 0 0 rgba(52,168,83,0.6);
-  animation: livePulse 1.8s infinite;
-}
-@keyframes livePulse {
-  0%   { box-shadow: 0 0 0 0 rgba(52,168,83,0.6); }
-  70%  { box-shadow: 0 0 0 10px rgba(52,168,83,0); }
-  100% { box-shadow: 0 0 0 0 rgba(52,168,83,0); }
-}
-
 .google-review-card,
 .review-card { position: relative; }
 .review-google-g {

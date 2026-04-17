@@ -122,6 +122,24 @@ const calcState = {
   }, { passive: true });
 })();
 
+// ===== CALL BAR SCROLL REVEAL =====
+(function initCallBar() {
+  const callBar = document.getElementById('callBar');
+  if (!callBar) return;
+  const threshold = 300;
+  function onScroll() {
+    if (window.scrollY > threshold) {
+      callBar.classList.add('visible');
+      document.body.classList.add('call-bar-visible');
+    } else {
+      callBar.classList.remove('visible');
+      document.body.classList.remove('call-bar-visible');
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
 // ===== STATS COUNTER =====
 (function initCounters() {
   const statNumbers = document.querySelectorAll('.stat-number[data-target]');

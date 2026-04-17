@@ -776,79 +776,131 @@ const GOOGLE_REVIEWS_CONFIG = {
   }
 })();
 
-// ===== PARALLAX EFFECT (site-wide) =====
-// Lightweight, performant, respects reduced-motion and scales back on touch.
+// ===== PARALLAX EFFECT (layered hero + site-wide) =====
+// - Hero uses 4 layers: bg (0.2x) / mid streaks (0.5x) / car subject (0.7x) /
+//   foreground content (1x, untransformed). Subject also tilts with the cursor.
+// - Other sections keep a light single-axis parallax via data-parallax.
+// - Respects prefers-reduced-motion; disables decorative hero layers on mobile.
 (function initParallax() {
-  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
+  const reduce = mq('(prefers-reduced-motion: reduce)');
   if (reduce) return;
+  const mobile = mq('(max-width: 767px)');
+  const coarse = mq('(pointer: coarse)');
 
-  // Auto-tag default parallax elements
-  const autoTargets = [
-    { sel: '.hero-bg', speed: 0.4 },
-    { sel: '.section-header', speed: 0.12 },
-    { sel: '.stats-bar', speed: 0.15 },
-    { sel: '.comparison-section', speed: 0.1 },
-    { sel: '.instagram-section .insta-grid', speed: 0.1 },
-    { sel: '.gallery-grid', speed: 0.08 },
-    { sel: '.why-us .features-grid', speed: 0.1 },
-    { sel: '.services-grid', speed: 0.08 },
-    { sel: '.reviews-section .google-rating-header', speed: 0.12 }
-  ];
-  autoTargets.forEach(function (t) {
-    document.querySelectorAll(t.sel).forEach(function (el) {
-      if (!el.hasAttribute('data-parallax')) el.setAttribute('data-parallax', String(t.speed));
+  // ---- HERO LAYERED PARALLAX ----
+  const hero = document.querySelector('.hero');
+  const heroBg = hero && hero.querySelector('[data-hero-layer="bg"]');
+  const heroMid = hero && hero.querySelector('[data-hero-layer="mid"]');
+  const heroSubject = hero && hero.querySelector('[data-hero-layer="subject"]');
+
+  const heroLayers = [
+    heroBg && { el: heroBg, speed: 0.2, isSubject: false },
+    !mobile && heroMid && { el: heroMid, speed: 0.5, isSubject: false },
+    !mobile && heroSubject && { el: heroSubject, speed: 0.7, isSubject: true }
+  ].filter(Boolean);
+
+  let tiltX = 0, tiltY = 0, targetTiltX = 0, targetTiltY = 0;
+  let heroTicking = false;
+  function heroUpdate() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    heroLayers.forEach(function (l) {
+      const y = -scrollY * l.speed;
+      let extra = '';
+      if (l.isSubject) {
+        tiltX += (targetTiltX - tiltX) * 0.08;
+        tiltY += (targetTiltY - tiltY) * 0.08;
+        extra = ' translate3d(' + tiltX.toFixed(2) + 'px,' + tiltY.toFixed(2) + 'px,0)';
+      }
+      l.el.style.transform = 'translate3d(0,' + y.toFixed(1) + 'px,0)' + extra;
     });
-  });
+    heroTicking = false;
+    if (Math.abs(tiltX - targetTiltX) > 0.1 || Math.abs(tiltY - targetTiltY) > 0.1) {
+      requestAnimationFrame(heroUpdate);
+    }
+  }
+  function heroOnScroll() {
+    if (!heroTicking) { heroTicking = true; requestAnimationFrame(heroUpdate); }
+  }
+  if (heroLayers.length) {
+    window.addEventListener('scroll', heroOnScroll, { passive: true });
+    window.addEventListener('resize', heroOnScroll);
+    heroUpdate();
 
-  const nodes = Array.from(document.querySelectorAll('[data-parallax]'));
-  if (!nodes.length) return;
+    if (!mobile && !coarse && heroSubject) {
+      hero.addEventListener('mousemove', function (e) {
+        const rect = hero.getBoundingClientRect();
+        const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        targetTiltX = nx * 14;
+        targetTiltY = ny * 10;
+        heroOnScroll();
+      });
+      hero.addEventListener('mouseleave', function () {
+        targetTiltX = 0; targetTiltY = 0;
+        heroOnScroll();
+      });
+    }
+  }
 
-  // Record each element's initial document-relative top ONCE
-  const targets = (coarse ? nodes.filter(function (n) { return n.classList.contains('hero-bg'); }) : nodes)
-    .map(function (el) {
+  // ---- SITE-WIDE LIGHT PARALLAX (non-hero sections) ----
+  (function sectionParallax() {
+    if (mobile) return; // skip entirely on mobile for performance
+    const autoTargets = [
+      { sel: '.stats-bar', speed: 0.12 },
+      { sel: '.comparison-section', speed: 0.08 },
+      { sel: '.instagram-section .insta-grid', speed: 0.08 },
+      { sel: '.gallery-grid', speed: 0.06 },
+      { sel: '.why-us .features-grid', speed: 0.08 },
+      { sel: '.services-grid', speed: 0.06 },
+      { sel: '.reviews-section .google-rating-header', speed: 0.1 }
+    ];
+    autoTargets.forEach(function (t) {
+      document.querySelectorAll(t.sel).forEach(function (el) {
+        if (!el.hasAttribute('data-parallax')) el.setAttribute('data-parallax', String(t.speed));
+      });
+    });
+    // Skip anything inside the hero (handled above)
+    const nodes = Array.from(document.querySelectorAll('[data-parallax]'))
+      .filter(function (n) { return !hero || !hero.contains(n); });
+    if (!nodes.length) return;
+
+    const targets = nodes.map(function (el) {
       const rect = el.getBoundingClientRect();
       return {
         el: el,
-        speed: parseFloat(el.getAttribute('data-parallax')) || 0.2,
+        speed: parseFloat(el.getAttribute('data-parallax')) || 0.1,
         start: rect.top + (window.scrollY || window.pageYOffset),
         height: rect.height
       };
     });
-  if (!targets.length) return;
-
-  let ticking = false;
-  function update() {
-    const scrollY = window.scrollY || window.pageYOffset;
-    const viewportH = window.innerHeight;
-    targets.forEach(function (t) {
-      // Only animate when element is near the viewport (+/- 1 screen margin)
-      const relative = scrollY - t.start;
-      if (relative < -viewportH || relative > t.height + viewportH) return;
-      const translate = relative * t.speed * -1; // element moves opposite to scroll
-      t.el.style.transform = 'translate3d(0,' + translate.toFixed(1) + 'px,0)';
-    });
-    ticking = false;
-  }
-
-  // Re-measure on resize (layout changes invalidate cached starts)
-  function remeasure() {
-    targets.forEach(function (t) {
-      t.el.style.transform = '';
-      const rect = t.el.getBoundingClientRect();
-      t.start = rect.top + (window.scrollY || window.pageYOffset);
-      t.height = rect.height;
-    });
+    let ticking = false;
+    function update() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const viewportH = window.innerHeight;
+      targets.forEach(function (t) {
+        const relative = scrollY - t.start;
+        if (relative < -viewportH || relative > t.height + viewportH) return;
+        t.el.style.transform = 'translate3d(0,' + (relative * t.speed * -1).toFixed(1) + 'px,0)';
+      });
+      ticking = false;
+    }
+    function remeasure() {
+      targets.forEach(function (t) {
+        t.el.style.transform = '';
+        const rect = t.el.getBoundingClientRect();
+        t.start = rect.top + (window.scrollY || window.pageYOffset);
+        t.height = rect.height;
+      });
+      update();
+    }
+    targets.forEach(function (t) { t.el.style.willChange = 'transform'; });
+    function onScroll() {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', remeasure);
+    window.addEventListener('load', remeasure);
     update();
-  }
-
-  targets.forEach(function (t) { t.el.style.willChange = 'transform'; });
-
-  function onScroll() {
-    if (!ticking) { ticking = true; requestAnimationFrame(update); }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', remeasure);
-  window.addEventListener('load', remeasure);
-  update();
+  })();
 })();

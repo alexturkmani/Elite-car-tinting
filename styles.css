@@ -78,11 +78,12 @@ input, select, textarea { font-family: inherit; }
 }
 .section-header h2 {
   font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
   color: var(--white);
-  line-height: 1.2;
+  line-height: 1.15;
   margin-bottom: 16px;
+  letter-spacing: -0.5px;
 }
 .section-header p {
   font-size: 1.05rem;
@@ -93,14 +94,14 @@ input, select, textarea { font-family: inherit; }
 .section-header.light h2 { color: var(--white); }
 .section-tag {
   display: inline-block;
-  background: rgba(56,189,248,0.1);
+  background: rgba(56,189,248,0.12);
   color: var(--accent);
-  border: 1px solid rgba(56,189,248,0.3);
-  padding: 6px 16px;
+  border: 1px solid rgba(56,189,248,0.35);
+  padding: 8px 20px;
   border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   margin-bottom: 16px;
 }

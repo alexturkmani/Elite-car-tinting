@@ -601,15 +601,11 @@ const GOOGLE_REVIEWS_CONFIG = {
   const writeBtn = document.getElementById('googleWriteReview');
   if (!grid) return;
 
-  // "Write a review" deep link — opens the Google review composer
+  // "Write a review" — opens the Google Maps listing via stable CID URL.
+  // The listing page has a prominent "Write a review" button; CID is the
+  // business's numeric ID (decoded from the Maps hex feature ID).
   if (writeBtn) {
-    const pid = GOOGLE_REVIEWS_CONFIG.placeId;
-    // search.google.com/local/writereview only accepts the ChIJ… Places ID.
-    // Anything else (hex feature ID, empty) falls back to the Maps listing,
-    // which still has a "Write a review" button on the page.
-    writeBtn.href = (pid && /^ChIJ/.test(pid))
-      ? 'https://search.google.com/local/writereview?placeid=' + encodeURIComponent(pid)
-      : 'https://www.google.com/maps/place/Elite+Car+Tinting/@-37.703024,144.885953,15z/data=!4m6!3m5!1s0x6ad65a3916c617d7:0x34ed38bbe863374a!8m2!3d-37.703024!4d144.885953!16s%2Fg%2F11s90wqxyz';
+    writeBtn.href = 'https://www.google.com/maps?cid=3813766839161534282';
     writeBtn.target = '_blank';
     writeBtn.rel = 'noopener noreferrer';
   }

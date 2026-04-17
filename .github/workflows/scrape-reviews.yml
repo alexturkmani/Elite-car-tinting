@@ -1,0 +1,40 @@
+name: Scrape Google Reviews
+
+on:
+  schedule:
+    - cron: '0 19 * * *' # daily 06:00 Melbourne (AEST, UTC+10 in winter)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null
+          npm i -D playwright@^1.47.0
+          npx playwright install --with-deps chromium
+
+      - name: Run scraper
+        run: node scripts/scrape-google-reviews.mjs
+
+      - name: Commit updated reviews.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet reviews.json; then
+            git add reviews.json
+            git commit -m "chore: refresh Google reviews [skip ci]"
+            git push
+          else
+            echo "No changes."
+          fi

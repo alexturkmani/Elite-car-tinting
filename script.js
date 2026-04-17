@@ -581,10 +581,14 @@ const calcState = {
 //
 // If neither is configured, the curated fallback reviews remain visible.
 const GOOGLE_REVIEWS_CONFIG = {
+  // PREFERRED: static file committed by the scheduled scraper (see
+  // scripts/scrape-google-reviews.mjs + .github/workflows/scrape-reviews.yml).
+  // Refreshed automatically every day – no credentials required.
+  staticUrl: './reviews.json?v=' + Date.now(),
   proxyUrl: '',    // e.g. 'https://elite-reviews-proxy.yoursub.workers.dev'
   apiKey: '',      // e.g. 'AIzaSy...' (only if not using a proxy)
-  placeId: '',     // e.g. 'ChIJ...'
-  refreshMs: 5 * 60 * 1000, // 5 minutes – effectively "real-time" for GBP
+  placeId: '0x6ad65a3916c617d7:0x34ed38bbe863374a',
+  refreshMs: 15 * 60 * 1000, // re-fetch the static JSON every 15 min
   maxReviews: 6
 };
 
@@ -687,9 +691,33 @@ const GOOGLE_REVIEWS_CONFIG = {
   }
 
   async function fetchGoogleReviews() {
-    const { proxyUrl, apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
+    const { staticUrl, proxyUrl, apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
 
-    // PREFERRED: Cloudflare Worker proxy (server-side cached, key hidden)
+    // PREFERRED: static reviews.json committed by the scheduled scraper
+    if (staticUrl) {
+      try {
+        const res = await fetch(staticUrl, { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          const reviews = (data.reviews || []).map(function (r) {
+            return {
+              authorName: r.name || r.authorName,
+              profilePhotoUrl: r.photo || r.profilePhotoUrl,
+              rating: r.rating || 5,
+              text: r.text || '',
+              relativeTime: r.relative || r.relativeTime || ''
+            };
+          });
+          return {
+            rating: data.rating || 5.0,
+            count: data.userRatingCount || reviews.length,
+            reviews: reviews
+          };
+        }
+      } catch (_) { /* fall through to proxy/API */ }
+    }
+
+    // Cloudflare Worker proxy (server-side cached, key hidden)
     if (proxyUrl) {
       const res = await fetch(proxyUrl, { cache: 'no-store' });
       if (!res.ok) throw new Error('Proxy ' + res.status);

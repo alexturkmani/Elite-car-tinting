@@ -779,3 +779,61 @@ const GOOGLE_REVIEWS_CONFIG = {
     setInterval(refresh, GOOGLE_REVIEWS_CONFIG.refreshMs);
   }
 })();
+
+// ===== PARALLAX EFFECT (site-wide) =====
+// Lightweight, performant, respects reduced-motion and skips touch devices.
+(function initParallax() {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  if (reduce) return;
+
+  // Auto-tag default parallax elements if the author hasn't set `data-parallax`
+  const autoTargets = [
+    { sel: '.hero-bg', speed: 0.35 },
+    { sel: '.section-header', speed: 0.1 },
+    { sel: '.instagram-feed', speed: 0.08 },
+    { sel: '.stats-section', speed: 0.12 },
+    { sel: '.cta-section', speed: 0.15 }
+  ];
+  autoTargets.forEach(function (t) {
+    document.querySelectorAll(t.sel).forEach(function (el) {
+      if (!el.hasAttribute('data-parallax')) el.setAttribute('data-parallax', String(t.speed));
+    });
+  });
+
+  const nodes = Array.from(document.querySelectorAll('[data-parallax]'));
+  if (!nodes.length) return;
+
+  // On touch devices keep only the hero parallax (avoids jank on low-end phones)
+  const targets = (coarse ? nodes.filter(function (n) { return n.classList.contains('hero-bg'); }) : nodes)
+    .map(function (el) {
+      return { el: el, speed: parseFloat(el.getAttribute('data-parallax')) || 0.2 };
+    });
+  if (!targets.length) return;
+
+  let ticking = false;
+  function update() {
+    const viewportH = window.innerHeight;
+    const scrollY = window.scrollY || window.pageYOffset;
+    targets.forEach(function (t) {
+      const rect = t.el.getBoundingClientRect();
+      const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
+      // translate opposite to scroll, clamped for stability
+      const translate = Math.max(-120, Math.min(120, -centerOffset * t.speed));
+      t.el.style.transform = 'translate3d(0,' + translate.toFixed(2) + 'px,0)';
+      t.el.style.willChange = 'transform';
+    });
+    ticking = false;
+    // silence unused warning
+    void scrollY;
+  }
+  function onScroll() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();

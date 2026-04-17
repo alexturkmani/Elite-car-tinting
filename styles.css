@@ -78,10 +78,10 @@ input, select, textarea { font-family: inherit; }
 }
 .section-header h2 {
   font-family: var(--font-heading);
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: clamp(2.4rem, 6vw, 3.8rem);
   font-weight: 900;
   color: var(--white);
-  line-height: 1.15;
+  line-height: 1.1;
   margin-bottom: 16px;
   letter-spacing: -0.5px;
 }
@@ -95,7 +95,7 @@ input, select, textarea { font-family: inherit; }
 .section-tag {
   display: block;
   color: var(--accent);
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;

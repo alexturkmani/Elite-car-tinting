@@ -272,7 +272,10 @@ button:disabled, .btn:disabled {
 }
 .hero-bg {
   position: absolute;
-  inset: -10% 0;
+  top: -20%;
+  left: 0;
+  right: 0;
+  bottom: -20%;
   background: linear-gradient(135deg, #0b1120 0%, #162032 50%, #0f172a 100%);
   background: url('https://images.unsplash.com/photo-1619405399517-d7fce0f13302?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat, linear-gradient(135deg, #0b1120 0%, #162032 50%, #0f172a 100%);
   will-change: transform;

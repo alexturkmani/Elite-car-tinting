@@ -777,19 +777,23 @@ const GOOGLE_REVIEWS_CONFIG = {
 })();
 
 // ===== PARALLAX EFFECT (site-wide) =====
-// Lightweight, performant, respects reduced-motion and skips touch devices.
+// Lightweight, performant, respects reduced-motion and scales back on touch.
 (function initParallax() {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   if (reduce) return;
 
-  // Auto-tag default parallax elements if the author hasn't set `data-parallax`
+  // Auto-tag default parallax elements
   const autoTargets = [
-    { sel: '.hero-bg', speed: 0.35 },
-    { sel: '.section-header', speed: 0.1 },
-    { sel: '.instagram-feed', speed: 0.08 },
-    { sel: '.stats-section', speed: 0.12 },
-    { sel: '.cta-section', speed: 0.15 }
+    { sel: '.hero-bg', speed: 0.4 },
+    { sel: '.section-header', speed: 0.12 },
+    { sel: '.stats-bar', speed: 0.15 },
+    { sel: '.comparison-section', speed: 0.1 },
+    { sel: '.instagram-section .insta-grid', speed: 0.1 },
+    { sel: '.gallery-grid', speed: 0.08 },
+    { sel: '.why-us .features-grid', speed: 0.1 },
+    { sel: '.services-grid', speed: 0.08 },
+    { sel: '.reviews-section .google-rating-header', speed: 0.12 }
   ];
   autoTargets.forEach(function (t) {
     document.querySelectorAll(t.sel).forEach(function (el) {
@@ -800,36 +804,51 @@ const GOOGLE_REVIEWS_CONFIG = {
   const nodes = Array.from(document.querySelectorAll('[data-parallax]'));
   if (!nodes.length) return;
 
-  // On touch devices keep only the hero parallax (avoids jank on low-end phones)
+  // Record each element's initial document-relative top ONCE
   const targets = (coarse ? nodes.filter(function (n) { return n.classList.contains('hero-bg'); }) : nodes)
     .map(function (el) {
-      return { el: el, speed: parseFloat(el.getAttribute('data-parallax')) || 0.2 };
+      const rect = el.getBoundingClientRect();
+      return {
+        el: el,
+        speed: parseFloat(el.getAttribute('data-parallax')) || 0.2,
+        start: rect.top + (window.scrollY || window.pageYOffset),
+        height: rect.height
+      };
     });
   if (!targets.length) return;
 
   let ticking = false;
   function update() {
-    const viewportH = window.innerHeight;
     const scrollY = window.scrollY || window.pageYOffset;
+    const viewportH = window.innerHeight;
     targets.forEach(function (t) {
-      const rect = t.el.getBoundingClientRect();
-      const centerOffset = (rect.top + rect.height / 2) - viewportH / 2;
-      // translate opposite to scroll, clamped for stability
-      const translate = Math.max(-120, Math.min(120, -centerOffset * t.speed));
-      t.el.style.transform = 'translate3d(0,' + translate.toFixed(2) + 'px,0)';
-      t.el.style.willChange = 'transform';
+      // Only animate when element is near the viewport (+/- 1 screen margin)
+      const relative = scrollY - t.start;
+      if (relative < -viewportH || relative > t.height + viewportH) return;
+      const translate = relative * t.speed * -1; // element moves opposite to scroll
+      t.el.style.transform = 'translate3d(0,' + translate.toFixed(1) + 'px,0)';
     });
     ticking = false;
-    // silence unused warning
-    void scrollY;
   }
+
+  // Re-measure on resize (layout changes invalidate cached starts)
+  function remeasure() {
+    targets.forEach(function (t) {
+      t.el.style.transform = '';
+      const rect = t.el.getBoundingClientRect();
+      t.start = rect.top + (window.scrollY || window.pageYOffset);
+      t.height = rect.height;
+    });
+    update();
+  }
+
+  targets.forEach(function (t) { t.el.style.willChange = 'transform'; });
+
   function onScroll() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(update);
-    }
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  window.addEventListener('resize', remeasure);
+  window.addEventListener('load', remeasure);
   update();
 })();

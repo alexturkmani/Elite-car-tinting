@@ -572,15 +572,17 @@ const calcState = {
 })();
 
 // ===== GOOGLE REVIEWS (live from Google Business Profile) =====
-// To enable live reviews:
-//   1. Create a Google Cloud project and enable "Places API (New)".
-//   2. Create an API key and restrict it by HTTP referrer to your domain
-//      (e.g. https://www.elitecartinting.com.au/*).
-//   3. Find your Place ID: https://developers.google.com/maps/documentation/places/web-service/place-id
-//   4. Paste both values below.
-// While left blank, the curated fallback reviews remain visible.
+// PREFERRED: deploy the Cloudflare Worker in /worker and set `proxyUrl` below.
+// The worker keeps your API key private and caches responses at the edge.
+// See worker/README.md for one-time setup.
+//
+// FALLBACK: set apiKey + placeId to call Google Places API directly from the
+// browser (exposes the key — only use with strict HTTP referrer restrictions).
+//
+// If neither is configured, the curated fallback reviews remain visible.
 const GOOGLE_REVIEWS_CONFIG = {
-  apiKey: '',      // e.g. 'AIzaSy...'
+  proxyUrl: '',    // e.g. 'https://elite-reviews-proxy.yoursub.workers.dev'
+  apiKey: '',      // e.g. 'AIzaSy...' (only if not using a proxy)
   placeId: '',     // e.g. 'ChIJ...'
   refreshMs: 5 * 60 * 1000, // 5 minutes – effectively "real-time" for GBP
   maxReviews: 6
@@ -685,7 +687,21 @@ const GOOGLE_REVIEWS_CONFIG = {
   }
 
   async function fetchGoogleReviews() {
-    const { apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
+    const { proxyUrl, apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
+
+    // PREFERRED: Cloudflare Worker proxy (server-side cached, key hidden)
+    if (proxyUrl) {
+      const res = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Proxy ' + res.status);
+      const data = await res.json();
+      return {
+        rating: data.rating || 4.9,
+        count: data.userRatingCount || (data.reviews || []).length,
+        reviews: data.reviews || []
+      };
+    }
+
+    // FALLBACK: direct browser → Google (API key is exposed)
     if (!apiKey || !placeId) return null;
     const url = 'https://places.googleapis.com/v1/places/' + encodeURIComponent(placeId);
     const res = await fetch(url, {

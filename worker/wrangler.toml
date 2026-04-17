@@ -1,0 +1,12 @@
+name = "elite-reviews-proxy"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Cache reviews at the edge for 10 minutes (600s). Adjust if you want reviews
+# to refresh faster or slower. Lower = more API calls = more cost.
+[vars]
+REVIEWS_CACHE_SECONDS = "600"
+
+# Secrets (set via `wrangler secret put`):
+#   GOOGLE_API_KEY   → your Places API (New) key
+#   GOOGLE_PLACE_ID  → your Google Place ID (e.g. ChIJ...)

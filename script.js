@@ -587,7 +587,8 @@ const GOOGLE_REVIEWS_CONFIG = {
   staticUrl: './reviews.json?v=' + Date.now(),
   proxyUrl: '',    // e.g. 'https://elite-reviews-proxy.yoursub.workers.dev'
   apiKey: '',      // e.g. 'AIzaSy...' (only if not using a proxy)
-  placeId: '0x6ad65a3916c617d7:0x34ed38bbe863374a',
+  // Google Places "ChIJ…" ID (required by the writereview deep link)
+  placeId: 'ChIJ1xfGFjla1moROjdj6Ls47TQ',
   refreshMs: 15 * 60 * 1000, // re-fetch the static JSON every 15 min
   maxReviews: 6
 };
@@ -601,12 +602,17 @@ const GOOGLE_REVIEWS_CONFIG = {
   const liveInd = document.getElementById('googleLiveIndicator');
   if (!grid) return;
 
-  // "Write a review" deep link (works as soon as Place ID is provided)
-  if (writeBtn && GOOGLE_REVIEWS_CONFIG.placeId) {
-    writeBtn.href = 'https://search.google.com/local/writereview?placeid=' +
-      encodeURIComponent(GOOGLE_REVIEWS_CONFIG.placeId);
-  } else if (writeBtn) {
-    writeBtn.href = 'https://www.google.com/search?q=Elite+Car+Tinting+Essendon';
+  // "Write a review" deep link — opens the Google review composer
+  if (writeBtn) {
+    const pid = GOOGLE_REVIEWS_CONFIG.placeId;
+    // search.google.com/local/writereview only accepts the ChIJ… Places ID.
+    // Anything else (hex feature ID, empty) falls back to the Maps listing,
+    // which still has a "Write a review" button on the page.
+    writeBtn.href = (pid && /^ChIJ/.test(pid))
+      ? 'https://search.google.com/local/writereview?placeid=' + encodeURIComponent(pid)
+      : 'https://www.google.com/maps/place/Elite+Car+Tinting/@-37.703024,144.885953,15z/data=!4m6!3m5!1s0x6ad65a3916c617d7:0x34ed38bbe863374a!8m2!3d-37.703024!4d144.885953!16s%2Fg%2F11s90wqxyz';
+    writeBtn.target = '_blank';
+    writeBtn.rel = 'noopener noreferrer';
   }
 
   function renderStars(rating) {

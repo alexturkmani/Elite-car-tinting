@@ -2126,3 +2126,20 @@ body.call-bar-visible {
   .hero-mid,
   .hero-subject { transform: none !important; }
 }
+
+/* Progressive enhancement: native Scroll-driven Animations (Chrome 115+) */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-bg,
+    .hero-mid {
+      animation: heroParallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100vh;
+    }
+    .hero-bg  { --parallax-speed: 0.2; }
+    .hero-mid { --parallax-speed: 0.5; }
+    @keyframes heroParallax {
+      to { transform: translate3d(0, calc(-100vh * var(--parallax-speed)), 0); }
+    }
+  }
+}

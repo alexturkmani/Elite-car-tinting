@@ -789,9 +789,14 @@ const GOOGLE_REVIEWS_CONFIG = {
   const coarse = mq('(pointer: coarse)');
 
   // ---- HERO LAYERED PARALLAX ----
+  // Skip JS path when the browser natively supports Scroll-driven Animations
+  // (CSS @supports block in styles.css handles it in pure CSS → better perf).
+  const nativeScrollTimeline = typeof CSS !== 'undefined' &&
+    CSS.supports && CSS.supports('animation-timeline: scroll()');
+
   const hero = document.querySelector('.hero');
-  const heroBg = hero && hero.querySelector('[data-hero-layer="bg"]');
-  const heroMid = hero && hero.querySelector('[data-hero-layer="mid"]');
+  const heroBg = !nativeScrollTimeline && hero && hero.querySelector('[data-hero-layer="bg"]');
+  const heroMid = !nativeScrollTimeline && hero && hero.querySelector('[data-hero-layer="mid"]');
   const heroSubject = hero && hero.querySelector('[data-hero-layer="subject"]');
 
   const heroLayers = [

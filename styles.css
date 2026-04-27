@@ -508,6 +508,18 @@ a.service-card:hover { text-decoration: none; }
   color: var(--white);
   border-color: var(--accent);
 }
+.service-icon-img img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+  transition: var(--transition);
+}
+.service-card:hover .service-icon-img img {
+  filter: brightness(0) invert(1);
+  opacity: 1;
+}
 .service-card h3 {
   font-size: 1.15rem;
   font-weight: 700;

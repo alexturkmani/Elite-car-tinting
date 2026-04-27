@@ -445,6 +445,23 @@ function renderCarLocation(p) {
 <section class="seo-section">
   <div class="container">
     <div class="section-header">
+      <span class="section-tag">Step 1 of 4</span>
+      <h2>Choose Your <span class="gradient-text">Service</span></h2>
+      <p>Pick the service you need. We&rsquo;ll then ask about your vehicle, film type and shade so we can build a transparent quote.</p>
+    </div>
+    <div class="seo-service-grid">
+      <a href="/#calculator" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/ceramic-coating/" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Ceramic Coating</h3><p>Long-lasting nano-ceramic paint protection with hydrophobic gloss.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/car-wrap-blackouts/" class="seo-service-card"><i class="fas fa-paint-roller"></i><h3>Vinyl Wrapping &amp; Blackouts</h3><p>Full or partial wraps and chrome-delete blackouts.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/headlights-taillights-tint/" class="seo-service-card"><i class="fas fa-lightbulb"></i><h3>Headlights &amp; Taillights Tint</h3><p>Smoked or tinted lighting film with road-legal shades.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="${homeHref}" class="seo-service-card"><i class="fas fa-home"></i><h3>Home &amp; Commercial Tinting</h3><p>Residential &amp; commercial window film for ${p.suburb} properties.</p><span class="seo-card-arrow">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="seo-section seo-section-alt">
+  <div class="container">
+    <div class="section-header">
       <span class="section-tag">Why Choose Us</span>
       <h2>Why ${p.suburb} Drivers Choose<br><span class="gradient-text">Elite Car Tinting</span></h2>
       <p>Professional automotive window tinting that delivers heat rejection, UV protection, glare reduction, privacy, and a clean, premium finish.</p>
@@ -460,7 +477,7 @@ function renderCarLocation(p) {
   </div>
 </section>
 
-<section class="seo-section seo-section-alt">
+<section class="seo-section">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">Our Process</span>
@@ -476,7 +493,7 @@ function renderCarLocation(p) {
   </div>
 </section>
 
-<section class="seo-section">
+<section class="seo-section seo-section-alt">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">More Services</span>
@@ -491,7 +508,7 @@ function renderCarLocation(p) {
   </div>
 </section>
 
-<section class="seo-section seo-section-alt">
+<section class="seo-section">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">FAQ</span>
@@ -531,6 +548,23 @@ function renderHomeLocation(p) {
 <section class="seo-section">
   <div class="container">
     <div class="section-header">
+      <span class="section-tag">Step 1 of 4</span>
+      <h2>Choose Your <span class="gradient-text">Service</span></h2>
+      <p>Pick the service you need. We&rsquo;ll then ask about your vehicle, film type and shade so we can build a transparent quote.</p>
+    </div>
+    <div class="seo-service-grid">
+      <a href="/#calculator" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/ceramic-coating/" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Ceramic Coating</h3><p>Long-lasting nano-ceramic paint protection with hydrophobic gloss.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/car-wrap-blackouts/" class="seo-service-card"><i class="fas fa-paint-roller"></i><h3>Vinyl Wrapping &amp; Blackouts</h3><p>Full or partial wraps and chrome-delete blackouts.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/headlights-taillights-tint/" class="seo-service-card"><i class="fas fa-lightbulb"></i><h3>Headlights &amp; Taillights Tint</h3><p>Smoked or tinted lighting film with road-legal shades.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/contact-us/" class="seo-service-card"><i class="fas fa-home"></i><h3>Home &amp; Commercial Tinting</h3><p>Residential &amp; commercial window film for ${p.suburb} properties.</p><span class="seo-card-arrow">&rarr;</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="seo-section seo-section-alt">
+  <div class="container">
+    <div class="section-header">
       <span class="section-tag">Benefits</span>
       <h2>Home Window Tinting in <span class="gradient-text">${p.suburb}</span></h2>
       <p>Whether it's heat reduction, privacy or UV protection — film delivers measurable results.</p>
@@ -546,7 +580,7 @@ function renderHomeLocation(p) {
   </div>
 </section>
 
-<section class="seo-section seo-section-alt">
+<section class="seo-section">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">Solutions</span>
@@ -563,7 +597,7 @@ function renderHomeLocation(p) {
   </div>
 </section>
 
-<section class="seo-section">
+<section class="seo-section seo-section-alt">
   <div class="container">
     <div class="section-header">
       <span class="section-tag">How It Works</span>

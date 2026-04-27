@@ -8,7 +8,7 @@
 //   node scripts/scrape-google-reviews.mjs
 
 import { chromium } from 'playwright';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,6 +19,7 @@ const MAPS_URL =
 
 const SCROLL_ROUNDS = 25;
 const MAX_REVIEWS = 120;
+const REVIEW_CARD_SEL = 'div[data-review-id], div.jftiEf, div.gws-localreviews__general-reviews-block';
 
 function normalise(raw) {
   const seen = new Set();
@@ -78,11 +79,11 @@ async function main() {
   }
 
   // Wait for the first review card
-  await page.waitForSelector('div[data-review-id]', { timeout: 30000 });
+  await page.waitForSelector(REVIEW_CARD_SEL, { timeout: 30000 });
 
   // Find the scrollable review pane and scroll it
-  const scrollHandle = await page.evaluateHandle(() => {
-    const card = document.querySelector('div[data-review-id]');
+  const scrollHandle = await page.evaluateHandle((sel) => {
+    const card = document.querySelector(sel);
     let el = card;
     while (el && el !== document.body) {
       const style = getComputedStyle(el);
@@ -90,12 +91,12 @@ async function main() {
       el = el.parentElement;
     }
     return document.scrollingElement;
-  });
+  }, REVIEW_CARD_SEL);
 
   for (let i = 0; i < SCROLL_ROUNDS; i++) {
     await page.evaluate((node) => { node.scrollBy(0, 4000); }, scrollHandle);
     await page.waitForTimeout(900);
-    const count = await page.locator('div[data-review-id]').count();
+    const count = await page.locator(REVIEW_CARD_SEL).count();
     if (count >= MAX_REVIEWS) break;
   }
 
@@ -107,8 +108,8 @@ async function main() {
   });
   await page.waitForTimeout(500);
 
-  const scraped = await page.evaluate(() => {
-    const cards = Array.from(document.querySelectorAll('div[data-review-id]'));
+  const scraped = await page.evaluate((sel) => {
+    const cards = Array.from(document.querySelectorAll(sel));
     return cards.map((c) => {
       const name = (c.querySelector('.d4r55, .TSUbDb')?.textContent || '').trim();
       const relative = (c.querySelector('.rsqaWe, .dehysf')?.textContent || '').trim();
@@ -122,7 +123,7 @@ async function main() {
       const photo = img?.src || '';
       return { name, relative, rating, text, photo };
     });
-  });
+  }, REVIEW_CARD_SEL);
 
   // Also scrape summary (rating + count)
   const summary = await page.evaluate(() => {
@@ -140,6 +141,27 @@ async function main() {
 
   const reviews = normalise(scraped).filter((r) => r.text.length > 0);
 
+  // Resilience: if the scrape returns nothing (Google DOM changed,
+  // CAPTCHA hit, etc.), preserve the previous payload but still bump
+  // fetchedAt so we can see the workflow ran. The job exits non-zero so
+  // failures are still visible in the Actions log.
+  const outPath = resolve(ROOT, 'reviews.json');
+  if (reviews.length < 3) {
+    console.warn(`[scrape] only got ${reviews.length} reviews — preserving previous payload.`);
+    if (existsSync(outPath)) {
+      try {
+        const prev = JSON.parse(readFileSync(outPath, 'utf8'));
+        prev.fetchedAt = new Date().toISOString();
+        prev.lastScrapeWarning = `low review count (${reviews.length}) at ${prev.fetchedAt}`;
+        writeFileSync(outPath, JSON.stringify(prev, null, 2), 'utf8');
+      } catch (e) {
+        console.error('[scrape] failed to read previous reviews.json:', e.message);
+      }
+    }
+    await browser.close();
+    process.exit(1);
+  }
+
   const out = {
     rating: summary.rating ?? 5.0,
     userRatingCount: summary.userRatingCount ?? reviews.length,
@@ -148,9 +170,8 @@ async function main() {
     reviews
   };
 
-  const path = resolve(ROOT, 'reviews.json');
-  writeFileSync(path, JSON.stringify(out, null, 2), 'utf8');
-  console.log(`Wrote ${reviews.length} reviews (rating ${out.rating}, ${out.userRatingCount} total) → ${path}`);
+  writeFileSync(outPath, JSON.stringify(out, null, 2), 'utf8');
+  console.log(`Wrote ${reviews.length} reviews (rating ${out.rating}, ${out.userRatingCount} total) → ${outPath}`);
 
   await browser.close();
 }

@@ -116,7 +116,7 @@
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Ceramic Coating","url":"https://www.elitecartinting.com.au/ceramic-coating/"}},
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Vinyl Wrapping & Blackouts","url":"https://www.elitecartinting.com.au/car-wrap-blackouts/"}},
         {"@type":"Offer","itemOffered":{"@type":"Service","name":"Headlights & Taillights Tint","url":"https://www.elitecartinting.com.au/headlights-taillights-tint/"}},
-        {"@type":"Offer","itemOffered":{"@type":"Service","name":"Home Window Tinting","url":"https://www.elitecartinting.com.au/home-window-tinting-tullamarine/"}}
+        {"@type":"Offer","itemOffered":{"@type":"Service","name":"Home Window Tinting","url":"https://www.elitecartinting.com.au/home-window-tinting-keilor/"}}
       ]
     }
   }
@@ -294,8 +294,8 @@
     <div class="container">
       <div class="section-header light">
         <span class="section-tag">Get a Quote</span>
-        <h2>Build Your Quote<br>in 30 Seconds</h2>
-        <p>Service &middot; Vehicle &middot; Coverage &middot; Quote. Transparent, upfront pricing &mdash; no hidden costs, ever.</p>
+        <h2>Request Your Quote<br>in 30 Seconds</h2>
+        <p>Service &middot; Vehicle &middot; Coverage &middot; Your Details. We&rsquo;ll reply with a personalised quote within 2 business hours.</p>
       </div>
 
       <div class="calculator-card">
@@ -342,19 +342,19 @@
           <div class="coverage-grid" id="coverageGrid"><!-- populated by JS --></div>
           <div class="step-nav">
             <button class="btn btn-primary btn-lg" id="toStep4" disabled>
-              Get My Indicative Quote <i class="fas fa-arrow-right"></i>
+              Continue to Your Details <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
 
-        <!-- Step 4: Indicative Quote -->
+        <!-- Step 4: Request Quote -->
         <div class="calc-step" data-step="4" id="calcStep4">
           <div class="step-header">
             <button class="back-btn" data-back="3"><i class="fas fa-arrow-left"></i> Back</button>
             <div class="step-number">4</div>
             <div class="step-info">
-              <h3>Your Indicative Quote</h3>
-              <p>Transparent pricing &mdash; final price confirmed on inspection</p>
+              <h3>Almost Done &mdash; Send Us Your Details</h3>
+              <p>We'll review your selection and get back with a personalised quote within 2 business hours.</p>
             </div>
           </div>
           <div class="quote-result">
@@ -372,38 +372,41 @@
                   <span class="summary-label">Coverage</span>
                   <span class="summary-value" id="qSummaryCoverage">&ndash;</span>
                 </div>
-              </div>
-              <div class="price-breakdown">
-                <div class="breakdown-row">
-                  <span>Base Price</span>
-                  <span id="qPriceBase">$0</span>
+                <div class="summary-item" id="qSummaryFilmRow" hidden>
+                  <span class="summary-label">Film Type</span>
+                  <span class="summary-value" id="qSummaryFilm">&ndash;</span>
                 </div>
-                <div class="breakdown-row">
-                  <span id="qCoverageRowLabel">Coverage Adjustment</span>
-                  <span id="qPriceCoverage">$0</span>
-                </div>
-                <div class="breakdown-total">
-                  <span>Indicative Estimate</span>
-                  <span id="qPriceTotal">$0</span>
+                <div class="summary-item" id="qSummaryShadeRow" hidden>
+                  <span class="summary-label">Shade (VLT)</span>
+                  <span class="summary-value" id="qSummaryShade">&ndash;</span>
                 </div>
               </div>
             </div>
             <div class="quote-cta-box">
-              <div class="quote-badge">
-                <i class="fas fa-shield-alt"></i>
-                <div>
-                  <strong>Price Match Guarantee</strong>
-                  <small>We'll beat any written quote</small>
+              <form class="quote-request-form" id="quoteRequestForm" novalidate>
+                <h4 class="quote-form-title">Your Details</h4>
+                <div class="quote-form-row">
+                  <label for="qName">Full Name</label>
+                  <input type="text" id="qName" name="name" placeholder="Jane Smith" required autocomplete="name" />
                 </div>
-              </div>
-              <p class="quote-disclaimer">This is an indicative estimate. Final pricing confirmed on-site after inspection. GST included. No hidden fees.</p>
-              <div class="quote-actions">
-                <a href="tel:+61411017040" class="btn btn-primary btn-lg">
-                  <i class="fas fa-phone-alt"></i> Call to Book: 0411 017 040
-                </a>
-                <a href="#contact" class="btn btn-outline btn-lg">
-                  <i class="fas fa-envelope"></i> Send Enquiry
-                </a>
+                <div class="quote-form-row">
+                  <label for="qPhone">Phone Number</label>
+                  <input type="tel" id="qPhone" name="phone" placeholder="0400 000 000" required autocomplete="tel" inputmode="tel" />
+                </div>
+                <div class="quote-actions">
+                  <button type="submit" class="btn btn-primary btn-lg" id="qSubmitBtn">
+                    <i class="fas fa-paper-plane"></i> Submit Quote Request
+                  </button>
+                  <a href="tel:+61411017040" class="btn btn-outline btn-lg">
+                    <i class="fas fa-phone-alt"></i> Or Call: 0411 017 040
+                  </a>
+                </div>
+                <p class="quote-disclaimer"><i class="fas fa-lock"></i> Your details go straight to our inbox &mdash; no spam, no third parties.</p>
+              </form>
+              <div class="form-success" id="quoteSuccess" hidden>
+                <i class="fas fa-check-circle"></i>
+                <h3>Thanks &mdash; we've got it!</h3>
+                <p>Your request has been sent. We typically reply within 2 business hours. For anything urgent, call <a href="tel:+61411017040">0411 017 040</a>.</p>
               </div>
               <div class="quote-trust">
                 <span><i class="fas fa-check-circle"></i> No deposit required</span>
@@ -436,125 +439,59 @@
           <div class="progress-line"></div>
           <div class="progress-step" data-pstep="4">
             <div class="progress-dot"></div>
-            <span>Quote</span>
+            <span>Details</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== GALLERY ===== -->
-  <section class="gallery-section" id="gallery">
+  <!-- ===== OUR WORK / INSTAGRAM ===== -->
+  <section class="instagram-section" id="gallery">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag">Our Work</span>
-        <h2>Premium Tint Installations</h2>
-        <p>Real results from our Melbourne shop. Every vehicle leaves with a flawless, showroom-quality finish.</p>
+        <span class="section-tag"><i class="fab fa-instagram"></i> Our Work</span>
+        <h2>See Our Latest Tint Jobs Live on Instagram</h2>
+        <p>Real installs from our Tullamarine workshop &mdash; updated automatically as we post. <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-handle">@elitecartinting</a></p>
       </div>
-      <div class="gallery-grid">
-        <div class="gallery-item large">
-          <div class="gallery-image" style="background: linear-gradient(135deg, #1a1a1a 0%, #222222 50%, #111111 100%);">
-            <div class="gallery-car-silhouette suv-silhouette">
-              <svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="car-svg">
-                <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-                  <path d="M30 140 Q30 110 50 103 L95 70 Q120 55 180 50 L290 50 Q335 50 350 78 L380 120 Q385 130 385 140"/>
-                  <line x1="10" y1="140" x2="395" y2="140"/>
-                  <circle cx="100" cy="146" r="26" stroke="rgba(255,255,255,0.7)" stroke-width="3" fill="rgba(20,20,20,0.8)"/>
-                  <circle cx="310" cy="146" r="26" stroke="rgba(255,255,255,0.7)" stroke-width="3" fill="rgba(20,20,20,0.8)"/>
-                  <circle cx="100" cy="146" r="12" fill="rgba(255,255,255,0.15)"/>
-                  <circle cx="310" cy="146" r="12" fill="rgba(255,255,255,0.15)"/>
-                  <path d="M125 103 L145 55 Q165 50 220 50 L285 50 L285 103 Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)"/>
-                  <path d="M50 103 L95 70 L125 103 Z" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.3)"/>
-                  <path d="M340 90 Q350 90 360 102 L370 118 L330 118 L330 90 Z" fill="rgba(255,255,255,0.07)"/>
-                </g>
-              </svg>
-            </div>
-            <div class="gallery-overlay">
-              <span class="gallery-tag">SUV Ceramic Tint</span>
-              <p>Toyota RAV4 – 35% VLT Ceramic</p>
-            </div>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-image" style="background: linear-gradient(135deg, #0d0d0d 0%, #161616 50%, #202020 100%);">
-            <div class="gallery-car-silhouette">
-              <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="car-svg">
-                <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-                  <path d="M20 115 Q20 90 40 85 L65 65 Q82 52 115 48 L200 48 Q225 48 235 65 L258 100 Q262 108 262 115"/>
-                  <line x1="8" y1="115" x2="270" y2="115"/>
-                  <circle cx="65" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(15,15,15,0.8)"/>
-                  <circle cx="210" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(15,15,15,0.8)"/>
-                  <path d="M88 85 L100 50 Q115 48 148 48 L196 48 L196 85 Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)"/>
-                  <path d="M45 85 L65 65 L88 85 Z" fill="rgba(255,255,255,0.07)"/>
-                </g>
-              </svg>
-            </div>
-            <div class="gallery-overlay">
-              <span class="gallery-tag">Sedan Carbon Tint</span>
-              <p>BMW 3 Series – 20% VLT Carbon</p>
-            </div>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-image" style="background: linear-gradient(135deg, #0a0a0a 0%, #181818 50%, #0e0e0e 100%);">
-            <div class="gallery-car-silhouette">
-              <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="car-svg">
-                <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-                  <path d="M22 115 Q22 92 40 87 L62 70 Q78 58 108 55 L192 55 L192 100 L260 100 L260 115"/>
-                  <line x1="8" y1="115" x2="270" y2="115"/>
-                  <circle cx="65" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(10,10,10,0.8)"/>
-                  <circle cx="212" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(10,10,10,0.8)"/>
-                  <path d="M65 87 L80 57 Q92 55 130 55 L190 55 L190 87 Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)"/>
-                  <rect x="192" y="72" width="68" height="28" rx="3" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.2)"/>
-                </g>
-              </svg>
-            </div>
-            <div class="gallery-overlay">
-              <span class="gallery-tag">Ute Tint</span>
-              <p>Ford Ranger – 35% VLT Carbon</p>
-            </div>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-image" style="background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #111111 100%);">
-            <div class="gallery-car-silhouette">
-              <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="car-svg">
-                <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-                  <path d="M18 115 Q18 90 38 85 L60 65 Q80 50 112 48 L195 48 Q222 48 232 65 L252 100 Q257 108 257 115"/>
-                  <line x1="5" y1="115" x2="265" y2="115"/>
-                  <circle cx="62" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(15,15,15,0.8)"/>
-                  <circle cx="205" cy="120" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(15,15,15,0.8)"/>
-                  <path d="M82 85 L95 50 Q108 48 142 48 L192 48 L192 85 Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)"/>
-                  <path d="M42 85 L62 65 L82 85 Z" fill="rgba(255,255,255,0.07)"/>
-                </g>
-              </svg>
-            </div>
-            <div class="gallery-overlay">
-              <span class="gallery-tag">Luxury Ceramic Tint</span>
-              <p>Mercedes C-Class – 20% VLT Ceramic</p>
-            </div>
-          </div>
-        </div>
-        <div class="gallery-item">
-          <div class="gallery-image" style="background: linear-gradient(135deg, #0a0a0a 0%, #141414 50%, #0a0a0a 100%);">
-            <div class="gallery-car-silhouette">
-              <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="car-svg">
-                <g fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
-                  <rect x="30" y="70" width="240" height="50" rx="8"/>
-                  <path d="M30 84 Q30 70 38 70 L95 70 L120 40 Q132 32 175 32 L230 32 Q250 32 258 44 L270 70"/>
-                  <circle cx="80" cy="122" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(10,10,10,0.8)"/>
-                  <circle cx="228" cy="122" r="20" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" fill="rgba(10,10,10,0.8)"/>
-                  <path d="M122 70 L138 34 Q152 32 185 32 L228 32 L228 70 Z" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.5)"/>
-                  <path d="M95 70 L120 40 L122 70 Z" fill="rgba(255,255,255,0.07)"/>
-                </g>
-              </svg>
-            </div>
-            <div class="gallery-overlay">
-              <span class="gallery-tag">SUV Ceramic Tint</span>
-              <p>Hyundai Tucson – 35% VLT Ceramic</p>
-            </div>
-          </div>
-        </div>
+
+      <!--
+        ========================================================================
+        AUTO-UPDATING INSTAGRAM FEED
+        ========================================================================
+        1. Go to https://behold.so and sign up (free)
+        2. Connect your @elitecartinting Instagram account
+        3. Create a widget, copy the <script> + <behold-widget> snippet
+        4. Paste it INSIDE <div class="instagram-feed"> below (replace the manual grid)
+        5. Done — posts auto-sync forever, no tokens to maintain
+        Alternatives: lightwidget.com, elfsight.com, snapwidget.com
+      -->
+      <div class="instagram-feed" id="instagramFeed">
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-20.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-50.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
+          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+        </a>
+      </div>
+
+      <div class="instagram-cta">
+        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="btn-instagram">
+          <i class="fab fa-instagram"></i>
+          <span>Follow Us on Instagram</span>
+        </a>
       </div>
     </div>
   </section>
@@ -613,48 +550,8 @@
           </div>
         </div>
         <div class="why-us-visual">
-          <div class="visual-card">
-            <div class="visual-car-display">
-              <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="hero-car-svg">
-                <defs>
-                  <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
-                  </linearGradient>
-                  <linearGradient id="glassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.15" />
-                    <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.06" />
-                  </linearGradient>
-                  <filter id="glow">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                    <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-                <!-- SUV Body -->
-                <path d="M25 165 Q25 132 48 125 L90 88 Q118 70 172 65 L278 65 Q325 65 342 95 L368 138 Q375 150 375 165" fill="url(#bodyGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-                <!-- Ground -->
-                <line x1="5" y1="165" x2="378" y2="165" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                <!-- Wheels -->
-                <circle cx="98" cy="172" r="32" fill="#0a0a0a" stroke="rgba(255,255,255,0.5)" stroke-width="3"/>
-                <circle cx="98" cy="172" r="18" fill="#141414" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                <circle cx="98" cy="172" r="8" fill="rgba(255,255,255,0.3)"/>
-                <circle cx="295" cy="172" r="32" fill="#0a0a0a" stroke="rgba(255,255,255,0.5)" stroke-width="3"/>
-                <circle cx="295" cy="172" r="18" fill="#141414" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
-                <circle cx="295" cy="172" r="8" fill="rgba(255,255,255,0.3)"/>
-                <!-- Windows with glow -->
-                <path d="M130 125 L152 68 Q168 65 218 65 L272 65 L272 125 Z" fill="url(#glassGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" filter="url(#glow)"/>
-                <path d="M95 125 L118 90 L130 125 Z" fill="url(#glassGrad)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-                <!-- Rear lights -->
-                <path d="M335 110 Q345 110 352 120 L360 138 L330 138 L330 110 Z" fill="rgba(255,50,50,0.5)" stroke="rgba(255,100,100,0.7)" stroke-width="1"/>
-                <!-- Headlights -->
-                <path d="M32 140 Q28 135 30 125 L45 125 L48 140 Z" fill="rgba(255,255,200,0.6)" stroke="rgba(255,255,150,0.8)" stroke-width="1"/>
-                <!-- Door lines -->
-                <line x1="198" y1="125" x2="200" y2="165" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                <!-- Roof rack -->
-                <line x1="150" y1="66" x2="270" y2="66" stroke="rgba(255,255,255,0.25)" stroke-width="2"/>
-              </svg>
-            </div>
-            <div class="visual-stats">
+          <div class="visual-card visual-card-stats">
+            <div class="visual-stats visual-stats-lg">
               <div class="v-stat">
                 <span class="v-stat-number">99%</span>
                 <span class="v-stat-label">UV Blocked</span>
@@ -669,7 +566,7 @@
               </div>
             </div>
           </div>
-          <div class="cert-badges">
+          <div class="cert-badges cert-badges-lg">
             <div class="cert-badge"><img src="images/brands/3m.svg" alt="3M" class="cert-logo" /> Certified</div>
             <div class="cert-badge"><img src="images/brands/llumar.png" alt="LLumar" class="cert-logo" /> Dealer</div>
             <div class="cert-badge"><img src="images/brands/suntek.svg" alt="SunTek" class="cert-logo" /> Pro</div>
@@ -858,59 +755,6 @@
     </div>
   </section>
 
-  <!-- ===== INSTAGRAM FEED ===== -->
-  <section class="instagram-section" id="instagram">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Latest Work</span>
-        <h2>Follow Our Latest Installs on Instagram</h2>
-        <p>See fresh tint jobs, behind-the-scenes, and customer deliveries as they happen. <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-handle">@elitecartinting</a></p>
-      </div>
-
-      <!--
-        ========================================================================
-        AUTO-UPDATING INSTAGRAM FEED (recommended — free, no branding, 5 min setup):
-        ========================================================================
-        1. Go to https://behold.so and sign up (free)
-        2. Connect your @elitecartinting Instagram account
-        3. Create a widget, copy the <script> + <behold-widget> snippet
-        4. Paste it INSIDE <div class="instagram-feed"> below (replace the manual grid)
-        5. Done — posts auto-sync forever, no tokens to maintain
-
-        Alternatives: lightwidget.com, elfsight.com, snapwidget.com
-      -->
-      <div class="instagram-feed" id="instagramFeed">
-        <!-- Manual fallback grid (replace src URLs with your actual post thumbnails,
-             or delete this whole block once the Behold widget is pasted above) -->
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-20.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-50.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-      </div>
-
-      <div class="instagram-cta">
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="btn-instagram">
-          <i class="fab fa-instagram"></i>
-          <span>Follow Us on Instagram</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== SERVICE AREAS ===== -->
   <section class="areas-section">
     <div class="container">
@@ -920,7 +764,7 @@
         <p>Based in Tullamarine, we're conveniently located to serve Melbourne's north, north-west and inner suburbs. Mobile service available on request.</p>
       </div>
       <div class="areas-grid">
-        <a class="area-tag primary" href="/home-window-tinting-tullamarine/"><i class="fas fa-map-marker-alt"></i> Tullamarine</a>
+        <a class="area-tag primary" href="/car-window-tinting-tullamarine/"><i class="fas fa-map-marker-alt"></i> Tullamarine</a>
         <a class="area-tag" href="/car-window-tinting-essendon/"><i class="fas fa-map-marker-alt"></i> Essendon</a>
         <a class="area-tag" href="/car-window-tinting-keilor/"><i class="fas fa-map-marker-alt"></i> Keilor</a>
         <a class="area-tag" href="/car-window-tinting-sunbury/"><i class="fas fa-map-marker-alt"></i> Sunbury</a>
@@ -939,18 +783,6 @@
         <a class="area-tag" href="/car-window-tinting-pascoe-vale/"><i class="fas fa-map-marker-alt"></i> Pascoe Vale</a>
         <a class="area-tag" href="/car-window-tinting-parkville/"><i class="fas fa-map-marker-alt"></i> Parkville</a>
         <a class="area-tag" href="/car-window-tinting-north-melbourne/"><i class="fas fa-map-marker-alt"></i> North Melbourne</a>
-      </div>
-      <div class="services-deeplinks" style="margin-top:2.5rem;text-align:center;">
-        <p style="margin-bottom:1rem;font-weight:600;">Explore our services:</p>
-        <p style="line-height:2;">
-          <a href="/automotive-window-tinting/">Automotive Window Tinting</a> &middot;
-          <a href="/ceramic-coating/">Ceramic Coating</a> &middot;
-          <a href="/car-wrap-blackouts/">Vinyl Wrapping &amp; Blackouts</a> &middot;
-          <a href="/headlights-taillights-tint/">Headlights &amp; Taillights Tint</a> &middot;
-          <a href="/home-window-tinting-tullamarine/">Home Window Tinting</a> &middot;
-          <a href="/about-us/">About Us</a> &middot;
-          <a href="/contact-us/">Contact</a>
-        </p>
       </div>
     </div>
   </section>
@@ -1123,7 +955,7 @@
             <li><a href="/car-window-tinting-sunbury/">Car Tinting Sunbury</a></li>
             <li><a href="/car-window-tinting-airport-west/">Car Tinting Airport West</a></li>
             <li><a href="/car-window-tinting-strathmore/">Car Tinting Strathmore</a></li>
-            <li><a href="/home-window-tinting-tullamarine/">Car Tinting Tullamarine</a></li>
+            <li><a href="/car-window-tinting-tullamarine/">Car Tinting Tullamarine</a></li>
           </ul>
         </div>
         <div class="footer-contact">

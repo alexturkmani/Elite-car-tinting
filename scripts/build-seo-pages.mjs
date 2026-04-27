@@ -162,6 +162,15 @@ const PAGES = [
     h1: 'Car Window Tinting North Melbourne',
   },
 
+  {
+    slug: 'car-window-tinting-tullamarine',
+    type: 'car',
+    suburb: 'Tullamarine',
+    title: 'Car Window Tinting Tullamarine | Elite Car Tinting',
+    description: 'Local car window tinting in Tullamarine — that\'s our home shop. Premium ceramic & carbon films, expert installers, lifetime warranty. Free quote from Elite Car Tinting.',
+    h1: 'Car Window Tinting Tullamarine',
+  },
+
   // Home / residential window tinting — location pages
   {
     slug: 'home-window-tinting-airport-west',
@@ -194,14 +203,6 @@ const PAGES = [
     title: 'Trusted Home Window Tinting near Sunbury | Elite Car Tinting',
     description: 'For Home Window Tinting in Sunbury, Contact Elite Car Tinting. We provide high quality window tinting for homes & vehicles in Melbourne at affordable rates.',
     h1: 'Home Window Tinting In Sunbury',
-  },
-  {
-    slug: 'home-window-tinting-tullamarine',
-    type: 'home',
-    suburb: 'Tullamarine',
-    title: 'Home Window Tinting near Tullamarine | Elite Car Tinting',
-    description: 'For Home Window Tinting in Tullamarine, Contact Elite Car Tinting. We provide high quality window tinting for homes & vehicles in Melbourne at affordable rates.',
-    h1: 'Home Window Tinting – Tullamarine',
   },
 
   // Service pages

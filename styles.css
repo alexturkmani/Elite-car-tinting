@@ -2456,3 +2456,188 @@ body.call-bar-visible {
   .vehicle-card .vehicle-name { font-size: 0.85rem; }
   .vehicle-card .vehicle-price { font-size: 0.72rem; }
 }
+
+/* ============================================================
+   QUOTE FORM (calculator step 4) + FILM/SHADE selectors (step 3)
+   + ENLARGED Why-Us stats/brand cards
+   ============================================================ */
+
+/* --- Larger Why-Us stats card (no SVG) --- */
+.visual-card-stats {
+  background: var(--gradient-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+}
+.visual-stats-lg {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.visual-stats-lg .v-stat-number {
+  font-size: 3rem;
+  line-height: 1;
+}
+.visual-stats-lg .v-stat-label {
+  font-size: 0.95rem;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.cert-badges-lg { gap: 18px; margin-top: 18px; }
+.cert-badges-lg .cert-badge {
+  font-size: 0.95rem;
+  padding: 14px 22px;
+  border-radius: 10px;
+  gap: 12px;
+}
+.cert-badges-lg .cert-badge .cert-logo {
+  height: 36px;
+}
+@media (max-width: 600px) {
+  .cert-badges-lg .cert-badge { padding: 10px 16px; font-size: 0.85rem; }
+  .cert-badges-lg .cert-badge .cert-logo { height: 26px; }
+  .visual-stats-lg .v-stat-number { font-size: 2.2rem; }
+}
+
+/* --- Tinting extras (film + shade) --- */
+.tint-extras {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 24px;
+}
+.tint-extras-block { width: 100%; }
+.tint-extras-title {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tint-extras-sub {
+  margin: 0 0 14px;
+  font-size: 0.85rem;
+  color: var(--light);
+}
+
+/* Film cards */
+.film-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 14px;
+}
+.film-option { cursor: pointer; }
+.film-option input { display: none; }
+.film-card {
+  position: relative;
+  padding: 18px 16px;
+  background: var(--gradient-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: #fff;
+  transition: all 0.25s ease;
+  height: 100%;
+}
+.film-option input:checked ~ .film-card {
+  border-color: var(--white);
+  box-shadow: 0 8px 24px rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+.film-option:hover .film-card { border-color: rgba(255,255,255,0.3); }
+.film-popular-badge {
+  position: absolute; top: 10px; right: 10px;
+  background: var(--gradient-primary);
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.film-name { margin: 0 0 4px; font-size: 1.05rem; font-weight: 700; }
+.film-tagline { margin: 0 0 12px; font-size: 0.78rem; color: var(--light); }
+.film-stats { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.film-stats li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  padding: 5px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.film-stats li span { color: var(--light); }
+.film-stats li strong { color: var(--white); font-weight: 700; }
+@media (max-width: 720px) {
+  .film-grid { grid-template-columns: 1fr; }
+}
+
+/* Shade pills */
+.shade-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+}
+.shade-option { cursor: pointer; }
+.shade-option input { display: none; }
+.shade-card {
+  text-align: center;
+  padding: 14px 10px;
+  background: var(--gradient-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+}
+.shade-option input:checked ~ .shade-card {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.06);
+}
+.shade-option:hover .shade-card { border-color: rgba(255,255,255,0.3); }
+.shade-vlt { display: block; font-size: 1.25rem; font-weight: 800; color: var(--white); }
+.shade-card small { display: block; font-size: 0.72rem; color: var(--light); margin-top: 4px; }
+@media (max-width: 520px) {
+  .shade-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Quote request form (step 4) --- */
+.quote-request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.quote-form-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+}
+.quote-form-row { display: flex; flex-direction: column; gap: 6px; }
+.quote-form-row label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--light);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.quote-form-row input {
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.quote-form-row input::placeholder { color: rgba(255,255,255,0.35); }
+.quote-form-row input:focus {
+  outline: none;
+  border-color: var(--white);
+  background: rgba(255,255,255,0.07);
+}
+.quote-form-row input.error {
+  border-color: #ff5a5a;
+  background: rgba(255, 90, 90, 0.08);
+}

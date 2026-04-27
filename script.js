@@ -168,19 +168,19 @@
   if (!calcRoot) return;
 
   const VEHICLES = [
-    { id: 'hatchback', label: 'Hatchback',       example: 'Golf, Mazda 3, Corolla',  base: 299, icon: 'fa-car-side' },
-    { id: 'sedan',     label: 'Sedan',           example: 'Camry, Accord, 3 Series', base: 329, icon: 'fa-car' },
-    { id: 'suv',       label: 'SUV / 4WD',       example: 'RAV4, Tucson, Prado',     base: 379, icon: 'fa-truck-monster' },
-    { id: 'wagon',     label: 'Wagon / Van',     example: 'Outback, Carnival, HiAce',base: 399, icon: 'fa-van-shuttle' },
-    { id: 'ute',       label: 'Ute / Truck',     example: 'HiLux, Ranger, Triton',   base: 349, icon: 'fa-truck-pickup' },
-    { id: 'luxury',    label: 'Luxury / Sports', example: 'BMW, Mercedes, Audi',     base: 449, icon: 'fa-car-rear' }
+    { id: 'hatchback', label: 'Hatchback',       example: 'Golf, Mazda 3, Corolla',  icon: 'fa-car-side' },
+    { id: 'sedan',     label: 'Sedan',           example: 'Camry, Accord, 3 Series', icon: 'fa-car' },
+    { id: 'suv',       label: 'SUV / 4WD',       example: 'RAV4, Tucson, Prado',     icon: 'fa-truck-monster' },
+    { id: 'wagon',     label: 'Wagon / Van',     example: 'Outback, Carnival, HiAce',icon: 'fa-van-shuttle' },
+    { id: 'ute',       label: 'Ute / Truck',     example: 'HiLux, Ranger, Triton',   icon: 'fa-truck-pickup' },
+    { id: 'luxury',    label: 'Luxury / Sports', example: 'BMW, Mercedes, Audi',     icon: 'fa-car-rear' }
   ];
 
   const PROPERTIES = [
-    { id: 'apartment',  label: 'Apartment',         example: '1-2 BR unit',          base: 600,  icon: 'fa-building' },
-    { id: 'house',      label: 'House',             example: '3-4 BR home',          base: 1200, icon: 'fa-home' },
-    { id: 'large',      label: 'Large Home',        example: '5+ BR / multi-level',  base: 2000, icon: 'fa-house-chimney' },
-    { id: 'office',     label: 'Office / Shopfront',example: 'Glass-fronted space',  base: 1500, icon: 'fa-store' }
+    { id: 'apartment',  label: 'Apartment',         example: '1-2 BR unit',          icon: 'fa-building' },
+    { id: 'house',      label: 'House',             example: '3-4 BR home',          icon: 'fa-home' },
+    { id: 'large',      label: 'Large Home',        example: '5+ BR / multi-level',  icon: 'fa-house-chimney' },
+    { id: 'office',     label: 'Office / Shopfront',example: 'Glass-fronted space',  icon: 'fa-store' }
   ];
 
   const SERVICES = {
@@ -191,10 +191,10 @@
       target: 'vehicle',
       multiplier: 1.0,
       coverage: [
-        { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         mult: 0.40, icon: 'fa-window-maximize' },
-        { id: 'rear5',      label: 'Rear 5 Windows',           desc: 'All rear windows incl. back glass', mult: 0.75, icon: 'fa-window-restore' },
-        { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           mult: 1.00, icon: 'fa-car' },
-        { id: 'windscreen', label: 'Full Car + Windscreen',    desc: 'Includes windscreen strip / film',  mult: 1.20, icon: 'fa-car-side' }
+        { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         icon: 'fa-window-maximize' },
+        { id: 'rear2',      label: 'Rear 2 Windows',           desc: 'Both rear passenger windows',       icon: 'fa-window-restore' },
+        { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' },
+        { id: 'windscreen', label: 'Full Car + Windscreen',    desc: 'Includes windscreen strip / film',  icon: 'fa-car-side' }
       ]
     },
     ceramic: {
@@ -252,7 +252,35 @@
     }
   };
 
-  const state = { service: null, target: null, coverage: null };
+  const state = { service: null, target: null, coverage: null, film: null, shade: null };
+
+  // Film options (only relevant for window tinting service)
+  const FILMS = [
+    {
+      id: 'standard', label: 'Standard',
+      tagline: 'Solid value, dyed film',
+      stats: { heat: '~30%', uv: '60%', warranty: '5 Years', signal: 'Minor' }
+    },
+    {
+      id: 'carbon', label: 'Carbon',
+      tagline: 'Most popular &mdash; deep matte look',
+      popular: true,
+      stats: { heat: '~55%', uv: '90%', warranty: '10 Years', signal: 'None' }
+    },
+    {
+      id: 'ceramic', label: 'Ceramic',
+      tagline: 'Top-tier nano-ceramic',
+      stats: { heat: 'Up to 80%', uv: '99%', warranty: 'Lifetime', signal: 'None' }
+    }
+  ];
+
+  // VLT (visible light transmission) shade options &mdash; lower % = darker
+  const SHADES = [
+    { id: 'vlt5',  label: '5%',  desc: 'Limo &mdash; very dark' },
+    { id: 'vlt20', label: '20%', desc: 'Dark, premium look' },
+    { id: 'vlt35', label: '35%', desc: 'Medium &mdash; balanced' },
+    { id: 'vlt50', label: '50%', desc: 'Light &mdash; subtle' }
+  ];
 
   // --- DOM refs ---
   const steps = calcRoot.querySelectorAll('.calc-step');
@@ -269,21 +297,17 @@
   const qSummaryService = document.getElementById('qSummaryService');
   const qSummaryTarget = document.getElementById('qSummaryTarget');
   const qSummaryCoverage = document.getElementById('qSummaryCoverage');
-  const qPriceBase = document.getElementById('qPriceBase');
-  const qPriceCoverage = document.getElementById('qPriceCoverage');
-  const qPriceTotal = document.getElementById('qPriceTotal');
-  const qCoverageRowLabel = document.getElementById('qCoverageRowLabel');
+  const qSummaryFilm = document.getElementById('qSummaryFilm');
+  const qSummaryShade = document.getElementById('qSummaryShade');
+  const qSummaryFilmRow = document.getElementById('qSummaryFilmRow');
+  const qSummaryShadeRow = document.getElementById('qSummaryShadeRow');
   const toStep3Btn = document.getElementById('toStep3');
   const toStep4Btn = document.getElementById('toStep4');
   const resetBtn = document.getElementById('resetCalc');
+  const quoteForm = document.getElementById('quoteRequestForm');
+  const quoteSuccess = document.getElementById('quoteSuccess');
 
   // --- Helpers ---
-  function formatPrice(n) {
-    return '$' + Math.round(n).toLocaleString('en-AU');
-  }
-  function roundTo(n, step) {
-    return Math.round(n / step) * step;
-  }
   function showStep(num) {
     steps.forEach(function (s) {
       s.classList.toggle('active', parseInt(s.getAttribute('data-step'), 10) === num);
@@ -326,14 +350,12 @@
     if (progressTargetLabel) progressTargetLabel.textContent = isProperty ? 'Property' : 'Vehicle';
 
     targetGrid.innerHTML = list.map(function (v) {
-      var indicative = formatPrice(roundTo(v.base * svc.multiplier, 10));
       return '<label class="vehicle-option" data-type="' + v.id + '">'
         + '<input type="radio" name="calc-target" value="' + v.id + '" />'
         + '<div class="vehicle-card">'
         +   '<div class="vehicle-icon"><i class="fas ' + v.icon + '"></i></div>'
         +   '<span class="vehicle-name">' + v.label + '</span>'
         +   '<span class="vehicle-example">' + v.example + '</span>'
-        +   '<span class="vehicle-price">From ' + indicative + '</span>'
         + '</div>'
         + '</label>';
     }).join('');
@@ -351,6 +373,7 @@
   function renderCoverage(service) {
     var svc = SERVICES[service];
     var isProperty = svc.target === 'property';
+    var isTinting = service === 'tinting';
     if (step3Title) step3Title.textContent = isProperty
       ? 'Where Should the Film Be Applied?'
       : 'Where on the Vehicle Should It Be Applied?';
@@ -358,7 +381,7 @@
       ? 'Pick the area / scope &mdash; we offer a free on-site measure if you\'re unsure'
       : 'Pick the panels / windows you want covered';
 
-    coverageGrid.innerHTML = svc.coverage.map(function (c) {
+    var coverageHtml = svc.coverage.map(function (c) {
       var iconHtml = c.img
         ? '<img class="coverage-icon-img" src="' + c.img + '" alt="" />'
         : '<i class="fas ' + c.icon + '"></i>';
@@ -371,17 +394,83 @@
         + '</div>'
         + '</label>';
     }).join('');
+
+    var extrasHtml = '';
+    if (isTinting) {
+      var filmCards = FILMS.map(function (f) {
+        var badge = f.popular ? '<span class="film-popular-badge">Popular</span>' : '';
+        return '<label class="film-option" data-id="' + f.id + '">'
+          + '<input type="radio" name="calc-film" value="' + f.id + '" />'
+          + '<div class="film-card">'
+          +   badge
+          +   '<h4 class="film-name">' + f.label + '</h4>'
+          +   '<p class="film-tagline">' + f.tagline + '</p>'
+          +   '<ul class="film-stats">'
+          +     '<li><span>Heat Rejection</span><strong>' + f.stats.heat + '</strong></li>'
+          +     '<li><span>UV Protection</span><strong>' + f.stats.uv + '</strong></li>'
+          +     '<li><span>Warranty</span><strong>' + f.stats.warranty + '</strong></li>'
+          +     '<li><span>Signal</span><strong>' + f.stats.signal + '</strong></li>'
+          +   '</ul>'
+          + '</div>'
+          + '</label>';
+      }).join('');
+      var shadePills = SHADES.map(function (s) {
+        return '<label class="shade-option" data-id="' + s.id + '">'
+          + '<input type="radio" name="calc-shade" value="' + s.id + '" />'
+          + '<div class="shade-card">'
+          +   '<span class="shade-vlt">' + s.label + '</span>'
+          +   '<small>' + s.desc + '</small>'
+          + '</div>'
+          + '</label>';
+      }).join('');
+      extrasHtml =
+        '<div class="tint-extras">'
+        +   '<div class="tint-extras-block">'
+        +     '<h4 class="tint-extras-title">Choose Your Film Type</h4>'
+        +     '<div class="film-grid">' + filmCards + '</div>'
+        +   '</div>'
+        +   '<div class="tint-extras-block">'
+        +     '<h4 class="tint-extras-title">Pick a Shade (VLT)</h4>'
+        +     '<p class="tint-extras-sub">Lower % = darker. We&rsquo;ll confirm legal limits with you on site.</p>'
+        +     '<div class="shade-grid">' + shadePills + '</div>'
+        +   '</div>'
+        + '</div>';
+    }
+
+    coverageGrid.innerHTML = coverageHtml + extrasHtml;
+
+    function updateNextEnabled() {
+      var ok = !!state.coverage;
+      if (isTinting) ok = ok && !!state.film && !!state.shade;
+      if (toStep4Btn) toStep4Btn.disabled = !ok;
+    }
+
     coverageGrid.querySelectorAll('input[name="calc-coverage"]').forEach(function (input) {
       input.addEventListener('change', function () {
         state.coverage = input.value;
-        if (toStep4Btn) toStep4Btn.disabled = false;
+        updateNextEnabled();
       });
     });
-    if (toStep4Btn) toStep4Btn.disabled = true;
+    coverageGrid.querySelectorAll('input[name="calc-film"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        state.film = input.value;
+        updateNextEnabled();
+      });
+    });
+    coverageGrid.querySelectorAll('input[name="calc-shade"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        state.shade = input.value;
+        updateNextEnabled();
+      });
+    });
+
     state.coverage = null;
+    state.film = null;
+    state.shade = null;
+    if (toStep4Btn) toStep4Btn.disabled = true;
   }
 
-  // --- Render Step 4 (quote) ---
+  // --- Render Step 4 (request quote) ---
   function renderQuote() {
     var svc = SERVICES[state.service];
     var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
@@ -389,21 +478,27 @@
     var coverage = svc.coverage.find(function (c) { return c.id === state.coverage; });
     if (!svc || !target || !coverage) return;
 
-    var basePrice = target.base * svc.multiplier;
-    var coverageAdj = basePrice * (coverage.mult - 1);
-    var total = basePrice * coverage.mult;
-
-    var basePriceR = roundTo(basePrice, 10);
-    var totalR = roundTo(total, 10);
-    var coverageAdjR = totalR - basePriceR;
-
     if (qSummaryService) qSummaryService.textContent = svc.label;
     if (qSummaryTarget) qSummaryTarget.textContent = target.label;
     if (qSummaryCoverage) qSummaryCoverage.textContent = coverage.label;
-    if (qPriceBase) qPriceBase.textContent = formatPrice(basePriceR);
-    if (qCoverageRowLabel) qCoverageRowLabel.textContent = (coverage.mult >= 1 ? 'Coverage Adjustment (+' : 'Coverage Adjustment (-') + Math.round(Math.abs(coverage.mult - 1) * 100) + '%)';
-    if (qPriceCoverage) qPriceCoverage.textContent = (coverageAdjR >= 0 ? '+' : '-') + formatPrice(Math.abs(coverageAdjR));
-    if (qPriceTotal) qPriceTotal.textContent = formatPrice(totalR);
+
+    var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
+    var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
+    if (qSummaryFilmRow) qSummaryFilmRow.hidden = !film;
+    if (qSummaryShadeRow) qSummaryShadeRow.hidden = !shade;
+    if (film && qSummaryFilm) qSummaryFilm.textContent = film.label;
+    if (shade && qSummaryShade) qSummaryShade.textContent = shade.label;
+
+    // Reset form state when re-entering step 4
+    if (quoteForm) {
+      quoteForm.hidden = false;
+      var sb = quoteForm.querySelector('#qSubmitBtn');
+      if (sb) {
+        sb.disabled = false;
+        sb.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Quote Request';
+      }
+    }
+    if (quoteSuccess) quoteSuccess.hidden = true;
   }
 
   // --- Flow control ---
@@ -419,9 +514,79 @@
     state.service = null;
     state.target = null;
     state.coverage = null;
+    state.film = null;
+    state.shade = null;
     showStep(1);
     if (toStep3Btn) toStep3Btn.disabled = true;
     if (toStep4Btn) toStep4Btn.disabled = true;
+    if (quoteForm) {
+      quoteForm.hidden = false;
+      quoteForm.reset();
+    }
+    if (quoteSuccess) quoteSuccess.hidden = true;
+  }
+
+  // --- Quote request submission ---
+  if (quoteForm) {
+    quoteForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var nameEl = quoteForm.querySelector('#qName');
+      var phoneEl = quoteForm.querySelector('#qPhone');
+      var sb = quoteForm.querySelector('#qSubmitBtn');
+      var name = (nameEl && nameEl.value || '').trim();
+      var phone = (phoneEl && phoneEl.value || '').trim();
+      var validPhone = /^[\d\s\+\-\(\)]{8,}$/.test(phone);
+      if (name.length < 2) { nameEl.classList.add('error'); nameEl.focus(); return; }
+      else nameEl.classList.remove('error');
+      if (!validPhone) { phoneEl.classList.add('error'); phoneEl.focus(); return; }
+      else phoneEl.classList.remove('error');
+
+      var svc = SERVICES[state.service];
+      var list = svc && svc.target === 'property' ? PROPERTIES : VEHICLES;
+      var target = list && list.find(function (v) { return v.id === state.target; });
+      var coverage = svc && svc.coverage.find(function (c) { return c.id === state.coverage; });
+      var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
+      var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
+
+      var payload = {
+        name: name,
+        phone: phone,
+        service: svc ? svc.label : '',
+        target: target ? target.label : '',
+        coverage: coverage ? coverage.label : '',
+        film: film ? film.label : '',
+        shade: shade ? shade.label : '',
+        _subject: 'New Quote Request — ' + (svc ? svc.label : 'Elite Car Tinting'),
+        _template: 'table',
+        _captcha: 'false'
+      };
+
+      if (sb) {
+        sb.disabled = true;
+        sb.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending&hellip;';
+      }
+
+      fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      }).then(function () {
+        quoteForm.hidden = true;
+        if (quoteSuccess) {
+          quoteSuccess.hidden = false;
+          quoteSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }).catch(function (err) {
+        console.warn('[QuoteForm] submit failed:', err && err.message);
+        if (sb) {
+          sb.disabled = false;
+          sb.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed &mdash; Try Calling';
+        }
+      });
+    });
   }
 
   // --- Wire navigation ---

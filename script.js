@@ -938,28 +938,26 @@ const GOOGLE_REVIEWS_CONFIG = {
     if (stored && SUBURBS.indexOf(stored) !== -1) { applyLocation(stored); return; }
   } catch (e) {}
 
-  // 2) Geolocation (with consent prompt) - only if user clicks an opt-in or supports automatic
-  if (!('geolocation' in navigator)) return;
-  if (!navigator.permissions || !navigator.permissions.query) return;
-  navigator.permissions.query({ name: 'geolocation' }).then(function (status) {
-    if (status.state !== 'granted') return; // do not prompt automatically
-    navigator.geolocation.getCurrentPosition(function (pos) {
-      var lat = pos.coords.latitude, lng = pos.coords.longitude;
-      var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lng + '&zoom=14&addressdetails=1';
-      fetch(url, { headers: { 'Accept': 'application/json' } })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          var addr = data && data.address ? data.address : {};
-          var candidate = addr.suburb || addr.neighbourhood || addr.town || addr.city || addr.city_district;
-          if (!candidate) return;
-          var match = SUBURBS.find(function (s) { return s.toLowerCase() === candidate.toLowerCase(); });
-          if (match) {
-            applyLocation(match);
-            try { localStorage.setItem('ect_loc', match); } catch (e) {}
-          }
-        })
-        .catch(function () {});
-    }, function () {}, { maximumAge: 600000, timeout: 5000 });
-  }).catch(function () {});
+  // 2) Silent IP-based geolocation (no permission prompt, no UX friction)
+  //    Uses ipapi.co (free, ~1k requests/day per IP, returns city + region).
+  //    Falls back silently on any error so the default H1 (Essendon) stays.
+  fetch('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      if (!data) return;
+      // Only personalise if visitor is in VIC, Australia (avoid showing Sydney users an Essendon-specific H1)
+      if (data.country_code !== 'AU') return;
+      var candidates = [data.city, data.region, data.community].filter(Boolean);
+      for (var i = 0; i < candidates.length; i++) {
+        var c = String(candidates[i]);
+        var match = SUBURBS.find(function (s) { return s.toLowerCase() === c.toLowerCase(); });
+        if (match) {
+          applyLocation(match);
+          try { localStorage.setItem('ect_loc', match); } catch (e) {}
+          return;
+        }
+      }
+    })
+    .catch(function () {});
 })();
 

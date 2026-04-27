@@ -194,19 +194,20 @@ button:disabled, .btn:disabled {
   transition: var(--transition);
 }
 .navbar.scrolled {
-  background: rgba(0,0,0,0.95);
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(20,20,22,0.55) 0%, rgba(10,10,12,0.45) 100%);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
   padding: 12px 0;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
 }
 .navbar.scrolled::before {
   content: '';
   position: absolute;
   inset: 0;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  z-index: -1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%);
   pointer-events: none;
+  z-index: -1;
 }
 .nav-container {
   display: flex;
@@ -1605,21 +1606,30 @@ a.area-tag { text-decoration: none; cursor: pointer; }
   display: none;
 }
 
-/* ===== STATIC CALL BAR ===== */
+/* ===== STATIC CALL BAR (liquid glass) ===== */
 .call-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 950;
-  background: #000000;
+  background: linear-gradient(135deg, rgba(20,20,22,0.55) 0%, rgba(10,10,12,0.45) 100%);
   border-top: 1px solid rgba(255,255,255,0.12);
   padding: 12px 0;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.6);
+  box-shadow: 0 -8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.10);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
   transform: translateY(100%);
   opacity: 0;
   visibility: hidden;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0s linear 0.5s;
+}
+.call-bar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 60%);
+  pointer-events: none;
 }
 .call-bar.visible {
   transform: translateY(0);

@@ -954,7 +954,7 @@ const GOOGLE_REVIEWS_CONFIG = {
 
 // ===== GEO-AWARE DYNAMIC HEADLINE =====
 (function initGeoHeadline() {
-  var SUBURBS = ['Essendon','Tullamarine','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Parkville','North Melbourne','Melbourne CBD','Melbourne'];
+  var SUBURBS = ['Tullamarine','Essendon','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Parkville','North Melbourne','Melbourne CBD','Melbourne'];
   var heroLoc = document.getElementById('heroLocation');
   var heroSub = document.getElementById('heroSubtitle');
   if (!heroLoc) return;
@@ -982,12 +982,12 @@ const GOOGLE_REVIEWS_CONFIG = {
 
   // 2) Silent IP-based geolocation (no permission prompt, no UX friction)
   //    Uses ipapi.co (free, ~1k requests/day per IP, returns city + region).
-  //    Falls back silently on any error so the default H1 (Essendon) stays.
+  //    Falls back silently on any error so the default H1 (Tullamarine) stays.
   fetch('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
       if (!data) return;
-      // Only personalise if visitor is in VIC, Australia (avoid showing Sydney users an Essendon-specific H1)
+      // Only personalise if visitor is in VIC, Australia (avoid showing Sydney users an Tullamarine-specific H1)
       if (data.country_code !== 'AU') return;
       var candidates = [data.city, data.region, data.community].filter(Boolean);
       for (var i = 0; i < candidates.length; i++) {

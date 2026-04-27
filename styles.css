@@ -2373,3 +2373,43 @@ body.call-bar-visible {
 /* Tweak coverage-card to allow inner desc text to wrap nicely */
 .coverage-card { padding: 18px 16px; min-height: 120px; }
 .coverage-card small { line-height: 1.35; }
+
+/* ===== Mobile: square vehicle tiles (compact) ===== */
+@media (max-width: 768px) {
+  .vehicle-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .vehicle-card {
+    aspect-ratio: 1 / 1;
+    padding: 14px 10px;
+    gap: 4px;
+    justify-content: center;
+    text-align: center;
+  }
+  .vehicle-card .vehicle-icon {
+    height: auto;
+    max-width: none;
+    font-size: 2.4rem;
+    margin-bottom: 6px;
+  }
+  .vehicle-card .vehicle-name {
+    font-size: 0.95rem;
+    line-height: 1.15;
+  }
+  /* Hide make/model examples on mobile - keep type + price only */
+  .vehicle-card .vehicle-example { display: none; }
+  .vehicle-card .vehicle-price {
+    font-size: 0.78rem;
+    padding: 2px 8px;
+    margin-top: 4px;
+  }
+}
+
+@media (max-width: 380px) {
+  .vehicle-grid { gap: 10px; }
+  .vehicle-card { padding: 10px 6px; }
+  .vehicle-card .vehicle-icon { font-size: 2rem; }
+  .vehicle-card .vehicle-name { font-size: 0.85rem; }
+  .vehicle-card .vehicle-price { font-size: 0.72rem; }
+}

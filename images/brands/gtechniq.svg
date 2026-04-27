@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" role="img" aria-label="Gtechniq">
+  <style>
+    .gt-text { font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: 800; letter-spacing: 0.06em; fill: #111; }
+    .gt-mark { fill: #c8102e; }
+  </style>
+  <g transform="translate(0,8)">
+    <!-- Hexagon mark -->
+    <polygon class="gt-mark" points="22,0 42,12 42,32 22,44 2,32 2,12" />
+    <text x="22" y="29" text-anchor="middle" font-family="Helvetica Neue, Arial, sans-serif" font-weight="900" font-size="22" fill="#fff">G</text>
+    <!-- Wordmark -->
+    <text x="56" y="32" class="gt-text" font-size="26">Gtechniq</text>
+  </g>
+</svg>

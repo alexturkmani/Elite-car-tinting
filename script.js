@@ -168,19 +168,19 @@
   if (!calcRoot) return;
 
   const VEHICLES = [
-    { id: 'hatchback', label: 'Hatchback',       example: 'Golf, Mazda 3, Corolla',  icon: 'fa-car-side' },
-    { id: 'sedan',     label: 'Sedan',           example: 'Camry, Accord, 3 Series', icon: 'fa-car' },
-    { id: 'suv',       label: 'SUV / 4WD',       example: 'RAV4, Tucson, Prado',     icon: 'fa-truck-monster' },
-    { id: 'wagon',     label: 'Wagon / Van',     example: 'Outback, Carnival, HiAce',icon: 'fa-van-shuttle' },
-    { id: 'ute',       label: 'Ute / Truck',     example: 'HiLux, Ranger, Triton',   icon: 'fa-truck-pickup' },
-    { id: 'luxury',    label: 'Luxury / Sports', example: 'BMW, Mercedes, Audi',     icon: 'fa-car-rear' }
+    { id: 'hatchback', label: 'Hatchback',       icon: 'fa-car-side' },
+    { id: 'sedan',     label: 'Sedan',           icon: 'fa-car' },
+    { id: 'suv',       label: 'SUV / 4WD',       icon: 'fa-truck-monster' },
+    { id: 'wagon',     label: 'Wagon / Van',     icon: 'fa-van-shuttle' },
+    { id: 'ute',       label: 'Ute / Truck',     icon: 'fa-truck-pickup' },
+    { id: 'luxury',    label: 'Luxury / Sports', icon: 'fa-car-rear' }
   ];
 
   const PROPERTIES = [
-    { id: 'apartment',  label: 'Apartment',         example: '1-2 BR unit',          icon: 'fa-building' },
-    { id: 'house',      label: 'House',             example: '3-4 BR home',          icon: 'fa-home' },
-    { id: 'large',      label: 'Large Home',        example: '5+ BR / multi-level',  icon: 'fa-house-chimney' },
-    { id: 'office',     label: 'Office / Shopfront',example: 'Glass-fronted space',  icon: 'fa-store' }
+    { id: 'apartment',  label: 'Apartment',         icon: 'fa-building' },
+    { id: 'house',      label: 'House',             icon: 'fa-home' },
+    { id: 'large',      label: 'Large Home',        icon: 'fa-house-chimney' },
+    { id: 'office',     label: 'Office / Shopfront',icon: 'fa-store' }
   ];
 
   const SERVICES = {
@@ -190,94 +190,81 @@
       icon: 'fa-car-side',
       target: 'vehicle',
       multiplier: 1.0,
+      multi: true,
       coverage: [
         { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         icon: 'fa-window-maximize' },
+        { id: 'rear2',      label: 'Rear 2 Windows',           desc: 'Both rear passenger windows',       icon: 'fa-window-restore' },
+        { id: 'rearwind',   label: 'Rear Windscreen',          desc: 'Back glass / hatch window',         icon: 'fa-square' },
+        { id: 'sunroof',    label: 'Sunroof',                  desc: 'Glass roof panel',                  icon: 'fa-square-caret-up' },
         { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' }
       ]
     },
-    ceramic: {
-      label: 'Ceramic Coating',
-      tagline: 'Long-lasting nano-ceramic paint protection with hydrophobic gloss.',
+    paint: {
+      label: 'Paint Protection & Ceramic Coatings',
+      tagline: 'Long-lasting nano-ceramic coatings & paint protection film.',
       icon: 'fa-shield-alt',
       target: 'vehicle',
       multiplier: 2.4,
       coverage: [
-        { id: 'glass',      label: 'Glass Only',          desc: 'Windscreen + side glass coating',  mult: 0.30, icon: 'fa-droplet' },
-        { id: 'tophalf',    label: 'Top Half',            desc: 'Roof, hood, mirrors',              mult: 0.65, icon: 'fa-square-caret-up' },
-        { id: 'fullbody',   label: 'Full Body',           desc: 'Complete exterior paintwork',      mult: 1.00, icon: 'fa-car' },
-        { id: 'fullplus',   label: 'Full Body + Wheels',  desc: 'Body, wheels & glass package',     mult: 1.25, icon: 'fa-circle-dot' }
+        { id: 'glass',      label: 'Glass Coating',        desc: 'Windscreen + side glass coating',  icon: 'fa-droplet' },
+        { id: 'tophalf',    label: 'High-Impact Areas',    desc: 'Front bumper, hood, mirrors',      icon: 'fa-square-caret-up' },
+        { id: 'fullbody',   label: 'Full Body Coating',    desc: 'Complete exterior paintwork',      icon: 'fa-car' },
+        { id: 'fullplus',   label: 'Full Body + Wheels',   desc: 'Body, wheels & glass package',     icon: 'fa-circle-dot' }
       ]
     },
-    wrap: {
-      label: 'Vinyl Wrap & Blackouts',
-      tagline: 'Full or partial vehicle wraps and chrome-delete blackout packages.',
-      icon: 'fa-paint-roller',
+    detailing: {
+      label: 'Detailing & Interior Protection',
+      tagline: 'Premium hand wash, machine polish, full interior detail & fabric/leather protection.',
+      icon: 'fa-spray-can-sparkles',
       target: 'vehicle',
-      multiplier: 4.0,
-      coverage: [
-        { id: 'chrome',     label: 'Chrome Delete / Blackout', desc: 'Trims, badges, mirrors',         mult: 0.20, icon: 'fa-square' },
-        { id: 'roof',       label: 'Roof Wrap',                desc: 'Roof only',                       mult: 0.30, icon: 'fa-square-caret-up' },
-        { id: 'hood',       label: 'Hood Wrap',                desc: 'Bonnet only',                     mult: 0.35, icon: 'fa-car-side' },
-        { id: 'partial',    label: 'Partial Wrap',             desc: 'Hood + roof + mirrors',           mult: 0.55, icon: 'fa-paint-brush' },
-        { id: 'full',       label: 'Full Wrap',                desc: 'Complete colour change',          mult: 1.00, icon: 'fa-car' }
-      ]
-    },
-    headlights: {
-      label: 'Headlights & Taillights Tint',
-      tagline: 'Smoked or tinted lighting film for an aggressive custom look.',
-      icon: 'fa-lightbulb',
-      target: 'vehicle',
-      multiplier: 0.55,
-      coverage: [
-        { id: 'head',  label: 'Headlights Only',           desc: 'Front lights only',               mult: 0.55, icon: 'fa-lightbulb', img: 'images/icons/headlights.png' },
-        { id: 'tail',  label: 'Taillights Only',           desc: 'Rear lights only',                mult: 0.50, icon: 'fa-circle', img: 'images/icons/taillights.png' },
-        { id: 'both',  label: 'Headlights + Taillights',   desc: 'Full lighting package',           mult: 1.00, icon: 'fa-bolt', img: 'images/icons/car.png' },
-        { id: 'all',   label: '+ Indicators / Reflectors', desc: 'Complete lighting tint',          mult: 1.25, icon: 'fa-traffic-light', img: 'images/icons/indicator.png' }
-      ]
-    },
-    home: {
-      label: 'Home & Commercial Tinting',
-      tagline: 'Residential & commercial window film &mdash; energy, UV & privacy.',
-      icon: 'fa-home',
-      target: 'property',
       multiplier: 1.0,
       coverage: [
-        { id: 'few',        label: '1-3 Windows',             desc: 'Single room or feature',         mult: 0.30, icon: 'fa-window-maximize' },
-        { id: 'many',       label: '4-10 Windows',            desc: 'Living areas / floor',           mult: 0.65, icon: 'fa-window-restore' },
-        { id: 'whole',      label: 'Whole Home',              desc: 'Every window in the property',   mult: 1.00, icon: 'fa-house' },
-        { id: 'commercial', label: 'Office / Shopfront',      desc: 'Glass-fronted commercial space', mult: 1.40, icon: 'fa-store' }
+        { id: 'interior',   label: 'Interior Detail',          desc: 'Vacuum, steam clean, leather/fabric protect',  icon: 'fa-couch' },
+        { id: 'exterior',   label: 'Exterior Detail',          desc: 'Hand wash, decontamination, machine polish',   icon: 'fa-soap' },
+        { id: 'fulldetail', label: 'Full Detail',              desc: 'Inside + outside, complete restoration',       icon: 'fa-car' },
+        { id: 'premium',    label: 'Premium Detail + Coating', desc: 'Full detail + paint sealant / ceramic boost',  icon: 'fa-gem' }
       ]
     }
   };
 
-  const state = { service: null, target: null, coverage: null, film: null, shade: null, windscreen: false, customRequest: '' };
+  const state = { service: null, target: null, coverage: null, windscreen: false, removeOldTint: false, customRequest: '' };
 
-  // Film options (only relevant for window tinting service)
+  // Film options &mdash; INFORMATIVE only (not selectable). Stats based on
+  // SunTek Pro Series automotive film range. All films come with a
+  // lifetime warranty when professionally installed.
   const FILMS = [
     {
       id: 'standard', label: 'Standard',
       tagline: 'Solid value, dyed film',
-      stats: { heat: '~30%', uv: '60%', warranty: '5 Years', signal: 'Minor' }
+      stats: { heat: '~25%', uv: '99%', warranty: 'Lifetime', signal: 'None', clarity: 'Good' }
     },
     {
       id: 'carbon', label: 'Carbon',
-      tagline: 'Most popular &mdash; deep matte look',
+      tagline: 'Deep matte look, no signal interference',
+      stats: { heat: '~45%', uv: '99%', warranty: 'Lifetime', signal: 'None', clarity: 'Very Good' }
+    },
+    {
+      id: 'cxp', label: 'CXP (Carbon Premium)',
+      tagline: 'Most popular &mdash; SunTek CXP carbon construction',
       popular: true,
-      stats: { heat: '~55%', uv: '90%', warranty: '10 Years', signal: 'None' }
+      stats: { heat: '~50%', uv: '99%', warranty: 'Lifetime', signal: 'None', clarity: 'Excellent' }
     },
     {
       id: 'ceramic', label: 'Ceramic',
-      tagline: 'Top-tier nano-ceramic',
-      stats: { heat: 'Up to 80%', uv: '99%', warranty: 'Lifetime', signal: 'None' }
+      tagline: 'Top-tier nano-ceramic, maximum heat rejection',
+      stats: { heat: 'Up to 65%', uv: '99%', warranty: 'Lifetime', signal: 'None', clarity: 'Crystal Clear' }
     }
   ];
 
-  // VLT (visible light transmission) shade options &mdash; lower % = darker
+  // Sample shade range from SunTek Pro Series &mdash; informative only.
+  // Final shade is chosen on the day of the booking.
   const SHADES = [
     { id: 'vlt5',  label: '5%',  desc: 'Limo &mdash; very dark' },
-    { id: 'vlt20', label: '20%', desc: 'Dark, premium look' },
-    { id: 'vlt35', label: '35%', desc: 'Medium &mdash; balanced' },
-    { id: 'vlt50', label: '50%', desc: 'Light &mdash; subtle' }
+    { id: 'vlt15', label: '15%', desc: 'Dark, premium look' },
+    { id: 'vlt20', label: '20%', desc: 'Dark, road-legal in most cars' },
+    { id: 'vlt35', label: '35%', desc: 'VIC legal limit (rear & sides)' },
+    { id: 'vlt50', label: '50%', desc: 'Light &mdash; subtle' },
+    { id: 'vlt70', label: '70%', desc: 'Near-clear &mdash; max heat / UV' }
   ];
 
   // --- DOM refs ---
@@ -295,10 +282,6 @@
   const qSummaryService = document.getElementById('qSummaryService');
   const qSummaryTarget = document.getElementById('qSummaryTarget');
   const qSummaryCoverage = document.getElementById('qSummaryCoverage');
-  const qSummaryFilm = document.getElementById('qSummaryFilm');
-  const qSummaryShade = document.getElementById('qSummaryShade');
-  const qSummaryFilmRow = document.getElementById('qSummaryFilmRow');
-  const qSummaryShadeRow = document.getElementById('qSummaryShadeRow');
   const toStep3Btn = document.getElementById('toStep3');
   const toStep4Btn = document.getElementById('toStep4');
   const resetBtn = document.getElementById('resetCalc');
@@ -353,7 +336,6 @@
         + '<div class="vehicle-card">'
         +   '<div class="vehicle-icon"><i class="fas ' + v.icon + '"></i></div>'
         +   '<span class="vehicle-name">' + v.label + '</span>'
-        +   '<span class="vehicle-example">' + v.example + '</span>'
         + '</div>'
         + '</label>';
     }).join('');
@@ -374,19 +356,17 @@
     var svc = SERVICES[service];
     var isProperty = svc.target === 'property';
     var isTinting = service === 'tinting';
-    if (step3Title) step3Title.textContent = isProperty
-      ? 'Where Should the Film Be Applied?'
-      : 'Where on the Vehicle Should It Be Applied?';
-    if (step3Sub) step3Sub.textContent = isProperty
-      ? 'Pick the area / scope &mdash; we offer a free on-site measure if you\'re unsure'
-      : 'Pick the panels / windows you want covered';
+    var isMulti = !!svc.multi;
+    if (step3Title) step3Title.textContent = isTinting ? 'Windows Covered?' : (isProperty ? 'Where Should the Film Be Applied?' : 'Where on the Vehicle?');
+    if (step3Sub) step3Sub.hidden = isTinting; // hide subtitle on tinting per spec
 
+    var inputType = isMulti ? 'checkbox' : 'radio';
     var coverageHtml = svc.coverage.map(function (c) {
       var iconHtml = c.img
         ? '<img class="coverage-icon-img" src="' + c.img + '" alt="" />'
         : '<i class="fas ' + c.icon + '"></i>';
       return '<label class="coverage-option" data-id="' + c.id + '">'
-        + '<input type="radio" name="calc-coverage" value="' + c.id + '" />'
+        + '<input type="' + inputType + '" name="calc-coverage" value="' + c.id + '" />'
         + '<div class="coverage-card">'
         +   iconHtml
         +   '<span>' + c.label + '</span>'
@@ -395,11 +375,11 @@
         + '</label>';
     }).join('');
 
-    // Tinting: add a "Custom Request" card (replaces the old rear-only options)
+    // Tinting: add a "Custom Request" option (multi-select compatible)
     if (isTinting) {
       coverageHtml +=
         '<label class="coverage-option coverage-option-custom" data-id="custom">'
-        + '<input type="radio" name="calc-coverage" value="custom" />'
+        + '<input type="' + inputType + '" name="calc-coverage" value="custom" />'
         + '<div class="coverage-card">'
         +   '<i class="fas fa-pen-to-square"></i>'
         +   '<span>Custom Request</span>'
@@ -410,31 +390,28 @@
 
     var extrasHtml = '';
     if (isTinting) {
+      // Informative film cards (no inputs)
       var filmCards = FILMS.map(function (f) {
-        var badge = f.popular ? '<span class="film-popular-badge">Popular</span>' : '';
-        return '<label class="film-option" data-id="' + f.id + '">'
-          + '<input type="radio" name="calc-film" value="' + f.id + '" />'
-          + '<div class="film-card">'
+        var badge = f.popular ? '<span class="film-popular-badge">Most Popular</span>' : '';
+        return '<div class="film-info-card' + (f.popular ? ' film-info-card-popular' : '') + '">'
           +   badge
           +   '<h4 class="film-name">' + f.label + '</h4>'
           +   '<p class="film-tagline">' + f.tagline + '</p>'
           +   '<ul class="film-stats">'
           +     '<li><span>Heat Rejection</span><strong>' + f.stats.heat + '</strong></li>'
           +     '<li><span>UV Protection</span><strong>' + f.stats.uv + '</strong></li>'
-          +     '<li><span>Warranty</span><strong>' + f.stats.warranty + '</strong></li>'
+          +     '<li><span>Clarity</span><strong>' + f.stats.clarity + '</strong></li>'
           +     '<li><span>Signal</span><strong>' + f.stats.signal + '</strong></li>'
+          +     '<li><span>Warranty</span><strong>' + f.stats.warranty + '</strong></li>'
           +   '</ul>'
-          + '</div>'
-          + '</label>';
+          + '</div>';
       }).join('');
+      // Informative shade samples (no inputs)
       var shadePills = SHADES.map(function (s) {
-        return '<label class="shade-option" data-id="' + s.id + '">'
-          + '<input type="radio" name="calc-shade" value="' + s.id + '" />'
-          + '<div class="shade-card">'
+        return '<div class="shade-info-card">'
           +   '<span class="shade-vlt">' + s.label + '</span>'
           +   '<small>' + s.desc + '</small>'
-          + '</div>'
-          + '</label>';
+          + '</div>';
       }).join('');
       extrasHtml =
         '<div class="tint-extras">'
@@ -443,25 +420,44 @@
         +     '<textarea id="calcCustomRequest" class="tint-custom-input" rows="3" '
         +       'placeholder="e.g. Just back windscreen, sunstrip across top, only driver door, etc."></textarea>'
         +   '</div>'
-        +   '<div class="tint-extras-block">'
-        +     '<h4 class="tint-extras-title">Choose Your Film Type</h4>'
-        +     '<div class="film-grid">' + filmCards + '</div>'
+        +   '<div class="tint-info-banner">'
+        +     '<i class="fas fa-info-circle"></i>'
+        +     '<div>'
+        +       '<strong>Not sure which film or shade?</strong> No worries &mdash; on the day of your booking, before we start, '
+        +       'we walk you through the different film types and darkness shades in person so you can see and feel the difference. '
+        +       'There&rsquo;s <strong>no extra cost</strong> for changing your mind on the day.'
+        +     '</div>'
         +   '</div>'
         +   '<div class="tint-extras-block">'
-        +     '<h4 class="tint-extras-title">Pick a Shade (VLT)</h4>'
-        +     '<p class="tint-extras-sub">Lower % = darker. We&rsquo;ll confirm legal limits with you on site.</p>'
-        +     '<div class="shade-grid">' + shadePills + '</div>'
+        +     '<h4 class="tint-extras-title">Film Types We Offer</h4>'
+        +     '<p class="tint-extras-sub">Stats are SunTek Pro Series typical values &mdash; informative only. Final film selected on the day.</p>'
+        +     '<div class="film-grid film-grid-info">' + filmCards + '</div>'
+        +   '</div>'
+        +   '<div class="tint-extras-block">'
+        +     '<h4 class="tint-extras-title">Sample Shade Range (VLT)</h4>'
+        +     '<p class="tint-extras-sub">A sample of the SunTek Pro shades you can choose from on the day. Lower % = darker. We&rsquo;ll confirm legal limits with you on site.</p>'
+        +     '<div class="shade-grid shade-grid-info">' + shadePills + '</div>'
         +   '</div>'
         +   '<div class="tint-extras-block tint-addon-block">'
         +     '<h4 class="tint-extras-title">Add-Ons (Optional)</h4>'
-        +     '<label class="tint-addon-option">'
-        +       '<input type="checkbox" id="calcWindscreen" />'
-        +       '<span class="tint-addon-card">'
-        +         '<i class="fas fa-car-side"></i>'
-        +         '<span class="tint-addon-label">Windscreen Strip / Full Windscreen Tint</span>'
-        +         '<small>Top sun-strip or full windscreen film &mdash; legal limits apply</small>'
-        +       '</span>'
-        +     '</label>'
+        +     '<div class="tint-addon-grid">'
+        +       '<label class="tint-addon-option">'
+        +         '<input type="checkbox" id="calcWindscreen" />'
+        +         '<span class="tint-addon-card">'
+        +           '<i class="fas fa-car-side"></i>'
+        +           '<span class="tint-addon-label">Windscreen Strip / Full Windscreen Tint</span>'
+        +           '<small>Top sun-strip or full windscreen film &mdash; legal limits apply</small>'
+        +         '</span>'
+        +       '</label>'
+        +       '<label class="tint-addon-option">'
+        +         '<input type="checkbox" id="calcRemoveOldTint" />'
+        +         '<span class="tint-addon-card">'
+        +           '<i class="fas fa-trash-can"></i>'
+        +           '<span class="tint-addon-label">Remove Old Tint</span>'
+        +           '<small>Strip existing film, clean adhesive &amp; prep glass before new install</small>'
+        +         '</span>'
+        +       '</label>'
+        +     '</div>'
         +   '</div>'
         + '</div>';
     }
@@ -472,12 +468,29 @@
     var customBlock = coverageGrid.querySelector('#tintCustomBlock');
     var customInput = coverageGrid.querySelector('#calcCustomRequest');
     var windscreenInput = coverageGrid.querySelector('#calcWindscreen');
-    var autoAdvanceTimer = null;
+    var removeOldTintInput = coverageGrid.querySelector('#calcRemoveOldTint');
 
+    function getSelectedCoverage() {
+      if (isMulti) {
+        return Array.prototype.map.call(
+          coverageGrid.querySelectorAll('input[name="calc-coverage"]:checked'),
+          function (i) { return i.value; }
+        );
+      }
+      var checked = coverageGrid.querySelector('input[name="calc-coverage"]:checked');
+      return checked ? checked.value : null;
+    }
+    function isCustomSelected() {
+      if (isMulti && Array.isArray(state.coverage)) return state.coverage.indexOf('custom') !== -1;
+      return state.coverage === 'custom';
+    }
     function readyToAdvance() {
-      if (!state.coverage) return false;
-      if (state.coverage === 'custom' && (!state.customRequest || state.customRequest.trim().length < 3)) return false;
-      if (isTinting) return !!state.film && !!state.shade;
+      if (isMulti) {
+        if (!Array.isArray(state.coverage) || state.coverage.length === 0) return false;
+      } else {
+        if (!state.coverage) return false;
+      }
+      if (isCustomSelected() && (!state.customRequest || state.customRequest.trim().length < 3)) return false;
       return true;
     }
     function updateNextEnabled() {
@@ -485,9 +498,12 @@
       if (toStep4Btn) toStep4Btn.disabled = !ok;
       if (step3Nav) step3Nav.hidden = !ok;
     }
+    var autoAdvanceTimer = null;
     function scheduleAdvance() {
       if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
       if (!readyToAdvance()) return;
+      // Multi-select: don't auto-advance — user may want to add more panels
+      if (isMulti) return;
       autoAdvanceTimer = setTimeout(function () {
         if (readyToAdvance() && document.activeElement !== customInput) {
           renderQuote();
@@ -498,9 +514,9 @@
 
     coverageGrid.querySelectorAll('input[name="calc-coverage"]').forEach(function (input) {
       input.addEventListener('change', function () {
-        state.coverage = input.value;
-        if (customBlock) customBlock.hidden = (input.value !== 'custom');
-        if (input.value === 'custom' && customInput) {
+        state.coverage = getSelectedCoverage();
+        if (customBlock) customBlock.hidden = !isCustomSelected();
+        if (isCustomSelected() && customInput) {
           setTimeout(function () { customInput.focus(); }, 60);
         }
         updateNextEnabled();
@@ -512,32 +528,21 @@
         state.customRequest = customInput.value;
         updateNextEnabled();
       });
-      customInput.addEventListener('blur', function () { scheduleAdvance(); });
     }
     if (windscreenInput) {
       windscreenInput.addEventListener('change', function () {
         state.windscreen = windscreenInput.checked;
       });
     }
-    coverageGrid.querySelectorAll('input[name="calc-film"]').forEach(function (input) {
-      input.addEventListener('change', function () {
-        state.film = input.value;
-        updateNextEnabled();
-        scheduleAdvance();
+    if (removeOldTintInput) {
+      removeOldTintInput.addEventListener('change', function () {
+        state.removeOldTint = removeOldTintInput.checked;
       });
-    });
-    coverageGrid.querySelectorAll('input[name="calc-shade"]').forEach(function (input) {
-      input.addEventListener('change', function () {
-        state.shade = input.value;
-        updateNextEnabled();
-        scheduleAdvance();
-      });
-    });
+    }
 
-    state.coverage = null;
-    state.film = null;
-    state.shade = null;
+    state.coverage = isMulti ? [] : null;
     state.windscreen = false;
+    state.removeOldTint = false;
     state.customRequest = '';
     if (toStep4Btn) toStep4Btn.disabled = true;
     if (step3Nav) step3Nav.hidden = true;
@@ -546,30 +551,13 @@
   // --- Render Step 4 (request quote) ---
   function renderQuote() {
     var svc = SERVICES[state.service];
-    var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
+    var list = svc && svc.target === 'property' ? PROPERTIES : VEHICLES;
     var target = list.find(function (v) { return v.id === state.target; });
-    var coverage = svc.coverage.find(function (c) { return c.id === state.coverage; });
-    var isCustom = state.coverage === 'custom';
-    if (!svc || !target || (!coverage && !isCustom)) return;
+    if (!svc || !target) return;
 
     if (qSummaryService) qSummaryService.textContent = svc.label;
     if (qSummaryTarget) qSummaryTarget.textContent = target.label;
-    if (qSummaryCoverage) {
-      if (isCustom) {
-        qSummaryCoverage.textContent = 'Custom: ' + (state.customRequest || '').trim();
-      } else {
-        var cov = coverage.label;
-        if (state.windscreen) cov += ' + Windscreen Add-On';
-        qSummaryCoverage.textContent = cov;
-      }
-    }
-
-    var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
-    var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
-    if (qSummaryFilmRow) qSummaryFilmRow.hidden = !film;
-    if (qSummaryShadeRow) qSummaryShadeRow.hidden = !shade;
-    if (film && qSummaryFilm) qSummaryFilm.textContent = film.label;
-    if (shade && qSummaryShade) qSummaryShade.textContent = shade.label;
+    if (qSummaryCoverage) qSummaryCoverage.textContent = formatCoverageSummary(svc);
 
     // Reset form state when re-entering step 4
     if (quoteForm) {
@@ -581,6 +569,20 @@
       }
     }
     if (quoteSuccess) quoteSuccess.hidden = true;
+  }
+
+  function formatCoverageSummary(svc) {
+    var ids = Array.isArray(state.coverage) ? state.coverage.slice() : (state.coverage ? [state.coverage] : []);
+    var labels = ids.map(function (id) {
+      if (id === 'custom') return 'Custom: ' + (state.customRequest || '').trim();
+      var c = svc.coverage.find(function (x) { return x.id === id; });
+      return c ? c.label : id;
+    });
+    var addons = [];
+    if (state.windscreen) addons.push('Windscreen Add-On');
+    if (state.removeOldTint) addons.push('Remove Old Tint');
+    if (addons.length) labels.push(addons.join(' + '));
+    return labels.join(' + ') || '—';
   }
 
   // --- Flow control ---
@@ -596,8 +598,9 @@
     state.service = null;
     state.target = null;
     state.coverage = null;
-    state.film = null;
-    state.shade = null;
+    state.windscreen = false;
+    state.removeOldTint = false;
+    state.customRequest = '';
     showStep(1);
     if (toStep3Btn) toStep3Btn.disabled = true;
     if (toStep4Btn) toStep4Btn.disabled = true;
@@ -626,13 +629,7 @@
       var svc = SERVICES[state.service];
       var list = svc && svc.target === 'property' ? PROPERTIES : VEHICLES;
       var target = list && list.find(function (v) { return v.id === state.target; });
-      var coverage = svc && svc.coverage.find(function (c) { return c.id === state.coverage; });
-      var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
-      var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
-      var coverageLabel = state.coverage === 'custom'
-        ? ('Custom: ' + (state.customRequest || '').trim())
-        : (coverage ? coverage.label : '');
-      if (state.windscreen && state.coverage !== 'custom') coverageLabel += ' + Windscreen Add-On';
+      var coverageLabel = svc ? formatCoverageSummary(svc) : '';
 
       var payload = {
         name: name,
@@ -640,9 +637,8 @@
         service: svc ? svc.label : '',
         target: target ? target.label : '',
         coverage: coverageLabel,
-        film: film ? film.label : '',
-        shade: shade ? shade.label : '',
         windscreen_addon: state.windscreen ? 'Yes' : 'No',
+        remove_old_tint: state.removeOldTint ? 'Yes' : 'No',
         custom_request: state.customRequest || '',
         _subject: 'New Quote Request - ' + (svc ? svc.label : 'Elite Car Tinting'),
         _template: 'table',

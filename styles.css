@@ -2751,3 +2751,91 @@ body.call-bar-visible {
 .step-nav-auto[hidden] { display: none !important; }
 .step-nav-auto { animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+
+/* === Calculator: informative film/shade + add-on layout (Nov 2025) === */
+.tint-info-banner {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border-left: 3px solid #c8a951;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: #d6d6d6;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.tint-info-banner i { color: #c8a951; font-size: 1.1rem; margin-top: 2px; flex-shrink: 0; }
+.tint-info-banner strong { color: #fff; }
+
+.film-grid-info, .shade-grid-info {
+  display: grid;
+  gap: 14px;
+}
+.film-grid-info { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shade-grid-info { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+
+.film-info-card {
+  position: relative;
+  padding: 18px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  cursor: default;
+}
+.film-info-card-popular {
+  border-color: #c8a951;
+  background: rgba(200,169,81,0.06);
+}
+.film-info-card .film-popular-badge {
+  position: absolute;
+  top: -10px;
+  right: 14px;
+  background: #c8a951;
+  color: #111;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.04em;
+}
+.film-info-card .film-name { margin: 0 0 4px; color: #fff; font-size: 1.05rem; }
+.film-info-card .film-tagline { margin: 0 0 12px; color: #aaa; font-size: 0.85rem; }
+.film-info-card .film-stats { list-style: none; margin: 0; padding: 0; }
+.film-info-card .film-stats li {
+  display: flex; justify-content: space-between;
+  padding: 5px 0;
+  border-top: 1px dashed rgba(255,255,255,0.08);
+  font-size: 0.82rem;
+}
+.film-info-card .film-stats li:first-child { border-top: none; }
+.film-info-card .film-stats span { color: #aaa; }
+.film-info-card .film-stats strong { color: #fff; font-weight: 600; }
+
+.shade-info-card {
+  padding: 14px 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.03);
+  text-align: center;
+  cursor: default;
+}
+.shade-info-card .shade-vlt {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.shade-info-card small { color: #aaa; font-size: 0.78rem; }
+
+.tint-addon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (max-width: 600px) {
+  .tint-addon-grid { grid-template-columns: 1fr; }
+}

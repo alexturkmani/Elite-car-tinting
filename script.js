@@ -912,7 +912,7 @@ const GOOGLE_REVIEWS_CONFIG = {
 
 // ===== GEO-AWARE DYNAMIC HEADLINE =====
 (function initGeoHeadline() {
-  var SUBURBS = ['Essendon','Tullamarine','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Melbourne'];
+  var SUBURBS = ['Essendon','Tullamarine','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Parkville','North Melbourne','Melbourne CBD','Melbourne'];
   var heroLoc = document.getElementById('heroLocation');
   var heroSub = document.getElementById('heroSubtitle');
   if (!heroLoc) return;

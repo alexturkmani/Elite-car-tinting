@@ -297,13 +297,11 @@ button:disabled, .btn:disabled {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(56,189,248,0.12);
-  border: 1px solid rgba(56,189,248,0.35);
   color: var(--accent);
-  padding: 8px 18px;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
   margin-bottom: 24px;
 }
 .hero h1 {
@@ -323,21 +321,24 @@ button:disabled, .btn:disabled {
 .hero-trust {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 40px;
+  gap: 8px 24px;
+  list-style: none;
+  padding: 0;
+  margin: 28px 0 36px;
   justify-content: center;
 }
+.hero-trust li,
 .trust-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
   color: var(--lighter);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 8px 16px;
-  border-radius: 50px;
+  background: transparent;
+  border: 0;
+  padding: 0;
 }
+.hero-trust li i,
 .trust-item i { color: var(--accent); font-size: 0.85rem; }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .hero-scroll-indicator {
@@ -462,13 +463,10 @@ a.service-card:hover { text-decoration: none; }
   position: absolute;
   top: 16px;
   right: 16px;
-  background: var(--accent);
-  color: var(--white);
+  color: var(--accent);
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 50px;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
 }
 .service-icon {
@@ -638,10 +636,6 @@ a.service-card:hover { text-decoration: none; }
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--lighter);
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 2px 10px;
-  border-radius: 50px;
   margin-top: 4px;
 }
 
@@ -672,15 +666,14 @@ a.service-card:hover { text-decoration: none; }
   display: inline-block;
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 50px;
+  padding: 2px 0;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
   margin-bottom: 12px;
 }
-.film-badge.standard { background: rgba(180,180,180,0.12); color: var(--light); }
-.film-badge.carbon { background: rgba(255,255,255,0.08); color: var(--lighter); }
-.film-badge.ceramic { background: rgba(255,255,255,0.12); color: var(--white); }
+.film-badge.standard { color: var(--light); background: transparent; }
+.film-badge.carbon { color: var(--lighter); background: transparent; }
+.film-badge.ceramic { color: var(--white); background: transparent; }
 .film-card h4 { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 16px; }
 .film-specs { margin-bottom: 16px; }
 .spec-bar {
@@ -763,14 +756,12 @@ a.service-card:hover { text-decoration: none; }
 .shade-desc { display: block; font-size: 0.72rem; color: var(--light); line-height: 1.3; }
 .shade-popular {
   display: inline-block;
-  background: var(--accent);
-  color: var(--white);
+  color: var(--accent);
   font-size: 0.65rem;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 50px;
   margin-top: 6px;
   text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Coverage Grid */
@@ -980,15 +971,12 @@ a.service-card:hover { text-decoration: none; }
 }
 .gallery-tag {
   display: inline-block;
-  background: var(--accent);
-  color: var(--white);
+  color: var(--accent);
   font-size: 0.7rem;
   font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 50px;
   margin-bottom: 6px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1.5px;
 }
 .gallery-overlay p { font-size: 0.85rem; color: rgba(255,255,255,0.8); }
 
@@ -1080,13 +1068,13 @@ a.service-card:hover { text-decoration: none; }
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.12);
   color: var(--lighter);
   font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 50px;
+  padding: 6px 12px;
+  border-radius: 4px;
 }
 
 /* ===== COMPARISON TABLE ===== */
@@ -1122,13 +1110,12 @@ a.service-card:hover { text-decoration: none; }
 .comparison-table .highlight-col { color: var(--white); background: rgba(255,255,255,0.03); }
 .comparison-table td:first-child { font-weight: 500; color: var(--light); }
 .badge-popular {
-  background: var(--accent);
-  color: var(--white);
+  color: var(--accent);
   font-size: 0.65rem;
   font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 50px;
   margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   vertical-align: middle;
 }
 
@@ -1332,6 +1319,7 @@ a.service-card:hover { text-decoration: none; }
   justify-content: center;
 }
 .area-tag {
+.area-tag {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1339,8 +1327,8 @@ a.service-card:hover { text-decoration: none; }
   border: 1px solid var(--border);
   color: var(--lighter);
   font-size: 0.85rem;
-  padding: 8px 16px;
-  border-radius: 50px;
+  padding: 8px 14px;
+  border-radius: 6px;
   transition: var(--transition);
 }
 .area-tag:hover { border-color: var(--white); color: var(--white); background: rgba(255,255,255,0.06); }
@@ -1976,7 +1964,7 @@ body.call-bar-visible {
   gap: 6px;
   padding: 8px 14px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: 6px;
   font-size: 0.85rem;
   color: var(--lighter);
   background: rgba(255,255,255,0.02);
@@ -2242,19 +2230,18 @@ body.call-bar-visible {
 .package-badge {
   display: inline-block;
   align-self: flex-start;
-  padding: 4px 10px;
+  padding: 0;
   margin-bottom: 8px;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  background: rgba(56,189,248,0.12);
+  background: transparent;
   color: var(--accent);
-  border-radius: 999px;
 }
 .package-badge.featured {
-  background: var(--gradient-primary);
-  color: #0b1120;
+  background: transparent;
+  color: var(--accent);
 }
 .package-card h4 {
   font-family: var(--font-heading);

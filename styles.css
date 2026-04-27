@@ -2641,3 +2641,22 @@ body.call-bar-visible {
   border-color: #ff5a5a;
   background: rgba(255, 90, 90, 0.08);
 }
+
+/* ============================================================
+   Behold.so Instagram widget — theme tweaks
+   ============================================================ */
+.instagram-feed behold-widget.behold-feed {
+  display: block;
+  width: 100%;
+  --behold-gap: 14px;
+  --behold-border-radius: 14px;
+  --behold-background: transparent;
+}
+.instagram-feed .ig-fallback-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 720px) {
+  .instagram-feed .ig-fallback-grid { grid-template-columns: repeat(2, 1fr); }
+}

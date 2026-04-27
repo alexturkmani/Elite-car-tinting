@@ -457,34 +457,42 @@
 
       <!--
         ========================================================================
-        AUTO-UPDATING INSTAGRAM FEED
+        AUTO-UPDATING INSTAGRAM FEED  (Behold.so — connected to @elitecartinting)
         ========================================================================
-        1. Go to https://behold.so and sign up (free)
-        2. Connect your @elitecartinting Instagram account
-        3. Create a widget, copy the <script> + <behold-widget> snippet
-        4. Paste it INSIDE <div class="instagram-feed"> below (replace the manual grid)
-        5. Done — posts auto-sync forever, no tokens to maintain
-        Alternatives: lightwidget.com, elfsight.com, snapwidget.com
+        To activate the live feed:
+          1. Open your Behold dashboard → Widgets → click your widget
+          2. Copy the FEED ID (the long string shown in the embed code,
+             e.g. <behold-widget feed-id="abc123..."></behold-widget>)
+          3. Replace REPLACE_WITH_YOUR_BEHOLD_FEED_ID below with that string
+          4. Save & deploy — posts auto-sync forever, no tokens to maintain
+        While the placeholder is in place, the static fallback grid renders
+        instead so the page never looks broken.
       -->
-      <div class="instagram-feed" id="instagramFeed">
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-20.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-50.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
-        <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
-          <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
-        </a>
+      <div class="instagram-feed" id="instagramFeed" data-behold-feed-id="REPLACE_WITH_YOUR_BEHOLD_FEED_ID">
+        <!-- Live Behold feed (activates once feed-id is set above) -->
+        <behold-widget class="behold-feed" feed-id=""></behold-widget>
+
+        <!-- Fallback grid (shown only if Behold feed-id is missing/invalid) -->
+        <div class="ig-fallback-grid">
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-20.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-50.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-5.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+          <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-tile" style="background-image: url('images/tint-35.jpg');">
+            <div class="ig-overlay"><i class="fab fa-instagram"></i></div>
+          </a>
+        </div>
       </div>
 
       <div class="instagram-cta">
@@ -1000,5 +1008,22 @@
   </div>
 
   <script src="script.js"></script>
+  <!-- Behold.so live Instagram feed loader (auto-syncs posts from @elitecartinting) -->
+  <script type="module" src="https://w.behold.so/widget.js"></script>
+  <script>
+    (function () {
+      var wrap = document.getElementById('instagramFeed');
+      if (!wrap) return;
+      var feedId = wrap.getAttribute('data-behold-feed-id') || '';
+      var widget = wrap.querySelector('behold-widget');
+      var fallback = wrap.querySelector('.ig-fallback-grid');
+      if (feedId && feedId !== 'REPLACE_WITH_YOUR_BEHOLD_FEED_ID' && widget) {
+        widget.setAttribute('feed-id', feedId);
+        if (fallback) fallback.style.display = 'none';
+      } else if (widget) {
+        widget.style.display = 'none';
+      }
+    })();
+  </script>
 </body>
 </html>

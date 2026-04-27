@@ -1327,6 +1327,9 @@ button:disabled, .btn:disabled {
 .area-tag:hover { border-color: var(--white); color: var(--white); background: rgba(255,255,255,0.06); }
 .area-tag.primary { border-color: rgba(255,255,255,0.2); color: var(--lighter); }
 .area-tag i { font-size: 0.75rem; color: var(--lighter); }
+a.area-tag { text-decoration: none; cursor: pointer; }
+.services-deeplinks a { color: var(--lighter); text-decoration: none; }
+.services-deeplinks a:hover { color: var(--white); text-decoration: underline; }
 
 /* ===== FAQ ===== */
 .faq-section {

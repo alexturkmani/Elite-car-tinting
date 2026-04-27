@@ -224,6 +224,16 @@
         { id: 'fulldetail', label: 'Full Detail',              desc: 'Inside + outside, complete restoration',       icon: 'fa-car' },
         { id: 'premium',    label: 'Premium Detail + Coating', desc: 'Full detail + paint sealant / ceramic boost',  icon: 'fa-gem' }
       ]
+    },
+    newcar: {
+      label: 'New Car Package',
+      tagline: 'Ceramic tint, full detailing & ceramic coating — the complete new-car protection bundle.',
+      icon: 'fa-award',
+      target: 'vehicle',
+      multiplier: 0,
+      skipToQuote: true,
+      summary: 'Ceramic Tint + Full Detailing + Ceramic Coating',
+      coverage: []
     }
   };
 
@@ -551,13 +561,13 @@
   // --- Render Step 4 (request quote) ---
   function renderQuote() {
     var svc = SERVICES[state.service];
-    var list = svc && svc.target === 'property' ? PROPERTIES : VEHICLES;
+    if (!svc) return;
+    var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
     var target = list.find(function (v) { return v.id === state.target; });
-    if (!svc || !target) return;
 
     if (qSummaryService) qSummaryService.textContent = svc.label;
-    if (qSummaryTarget) qSummaryTarget.textContent = target.label;
-    if (qSummaryCoverage) qSummaryCoverage.textContent = formatCoverageSummary(svc);
+    if (qSummaryTarget) qSummaryTarget.textContent = target ? target.label : (svc.skipToQuote ? 'Confirmed on call' : '—');
+    if (qSummaryCoverage) qSummaryCoverage.textContent = svc.skipToQuote ? (svc.summary || svc.tagline) : formatCoverageSummary(svc);
 
     // Reset form state when re-entering step 4
     if (quoteForm) {
@@ -589,6 +599,17 @@
   function selectService(key) {
     if (!SERVICES[key]) return;
     state.service = key;
+    state.target = null;
+    state.coverage = null;
+    state.windscreen = false;
+    state.removeOldTint = false;
+    state.customRequest = '';
+    if (SERVICES[key].skipToQuote) {
+      // Skip steps 2 & 3 — go straight to contact details
+      renderQuote();
+      showStep(4);
+      return;
+    }
     renderTargets(key);
     renderCoverage(key);
     showStep(2);
@@ -629,7 +650,9 @@
       var svc = SERVICES[state.service];
       var list = svc && svc.target === 'property' ? PROPERTIES : VEHICLES;
       var target = list && list.find(function (v) { return v.id === state.target; });
-      var coverageLabel = svc ? formatCoverageSummary(svc) : '';
+      var coverageLabel = svc
+        ? (svc.skipToQuote ? (svc.summary || svc.tagline) : formatCoverageSummary(svc))
+        : '';
 
       var payload = {
         name: name,
@@ -700,6 +723,9 @@
   calcRoot.querySelectorAll('.back-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var n = parseInt(btn.getAttribute('data-back'), 10);
+      // If user came via skip-to-quote service, jump back to step 1
+      var svc = state.service ? SERVICES[state.service] : null;
+      if (svc && svc.skipToQuote) n = 1;
       if (!isNaN(n)) showStep(n);
     });
   });

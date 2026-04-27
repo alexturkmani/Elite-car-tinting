@@ -223,6 +223,10 @@ button:disabled, .btn:disabled {
 .logo-img {
   height: 40px;
   width: auto;
+  max-width: 260px;
+}
+@media (max-width: 768px) {
+  .logo-img { height: 32px; max-width: 200px; }
 }
 
 .nav-links {

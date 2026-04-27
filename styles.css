@@ -1268,9 +1268,7 @@ a.service-card:hover { text-decoration: none; }
 .ig-handle:hover { opacity: 0.8; }
 
 .instagram-feed {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
+  display: block;
   margin: 40px 0 48px;
 }
 .ig-tile {
@@ -1356,10 +1354,10 @@ a.service-card:hover { text-decoration: none; }
 .btn-instagram i { font-size: 1.3rem; }
 
 @media (max-width: 900px) {
-  .instagram-feed { grid-template-columns: repeat(3, 1fr); }
+  .instagram-feed .ig-fallback-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 480px) {
-  .instagram-feed { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .instagram-feed .ig-fallback-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .btn-instagram { padding: 14px 28px; font-size: 0.9rem; }
 }
 
@@ -2643,14 +2641,20 @@ body.call-bar-visible {
 }
 
 /* ============================================================
-   Behold.so Instagram widget — theme tweaks
+   Behold.so Instagram widget ï¿½ theme tweaks
    ============================================================ */
-.instagram-feed behold-widget.behold-feed {
+.instagram-feed behold-widget.behold-feed,
+.instagram-feed behold-widget {
   display: block;
   width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
   --behold-gap: 14px;
+  --behold-row-gap: 14px;
+  --behold-col-gap: 14px;
   --behold-border-radius: 14px;
   --behold-background: transparent;
+  --behold-aspect-ratio: 1 / 1;
 }
 .instagram-feed .ig-fallback-grid {
   display: grid;

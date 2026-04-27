@@ -231,10 +231,10 @@
       target: 'vehicle',
       multiplier: 0.55,
       coverage: [
-        { id: 'head',  label: 'Headlights Only',           desc: 'Front lights only',               mult: 0.55, icon: 'fa-lightbulb' },
-        { id: 'tail',  label: 'Taillights Only',           desc: 'Rear lights only',                mult: 0.50, icon: 'fa-circle' },
+        { id: 'head',  label: 'Headlights Only',           desc: 'Front lights only',               mult: 0.55, icon: 'fa-lightbulb', img: 'images/icons/headlights.png' },
+        { id: 'tail',  label: 'Taillights Only',           desc: 'Rear lights only',                mult: 0.50, icon: 'fa-circle', img: 'images/icons/taillights.png' },
         { id: 'both',  label: 'Headlights + Taillights',   desc: 'Full lighting package',           mult: 1.00, icon: 'fa-bolt' },
-        { id: 'all',   label: '+ Indicators / Reflectors', desc: 'Complete lighting tint',          mult: 1.25, icon: 'fa-traffic-light' }
+        { id: 'all',   label: '+ Indicators / Reflectors', desc: 'Complete lighting tint',          mult: 1.25, icon: 'fa-traffic-light', img: 'images/icons/indicator.png' }
       ]
     },
     home: {
@@ -359,10 +359,13 @@
       : 'Pick the panels / windows you want covered';
 
     coverageGrid.innerHTML = svc.coverage.map(function (c) {
+      var iconHtml = c.img
+        ? '<img class="coverage-icon-img" src="' + c.img + '" alt="" />'
+        : '<i class="fas ' + c.icon + '"></i>';
       return '<label class="coverage-option" data-id="' + c.id + '">'
         + '<input type="radio" name="calc-coverage" value="' + c.id + '" />'
         + '<div class="coverage-card">'
-        +   '<i class="fas ' + c.icon + '"></i>'
+        +   iconHtml
         +   '<span>' + c.label + '</span>'
         +   '<small>' + c.desc + '</small>'
         + '</div>'

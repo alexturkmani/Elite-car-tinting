@@ -233,7 +233,7 @@
       coverage: [
         { id: 'head',  label: 'Headlights Only',           desc: 'Front lights only',               mult: 0.55, icon: 'fa-lightbulb', img: 'images/icons/headlights.png' },
         { id: 'tail',  label: 'Taillights Only',           desc: 'Rear lights only',                mult: 0.50, icon: 'fa-circle', img: 'images/icons/taillights.png' },
-        { id: 'both',  label: 'Headlights + Taillights',   desc: 'Full lighting package',           mult: 1.00, icon: 'fa-bolt' },
+        { id: 'both',  label: 'Headlights + Taillights',   desc: 'Full lighting package',           mult: 1.00, icon: 'fa-bolt', img: 'images/icons/car.png' },
         { id: 'all',   label: '+ Indicators / Reflectors', desc: 'Complete lighting tint',          mult: 1.25, icon: 'fa-traffic-light', img: 'images/icons/indicator.png' }
       ]
     },

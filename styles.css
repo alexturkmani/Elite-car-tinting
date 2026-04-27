@@ -2605,6 +2605,7 @@ body.call-bar-visible {
   gap: 14px;
   margin-bottom: 18px;
 }
+.quote-request-form[hidden] { display: none !important; }
 .quote-form-title {
   margin: 0 0 4px;
   font-size: 1.05rem;

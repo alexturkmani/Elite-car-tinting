@@ -961,3 +961,129 @@ const GOOGLE_REVIEWS_CONFIG = {
     .catch(function () {});
 })();
 
+
+// ===== Calculator: Service Tabs (Window Tint vs other services) =====
+(function () {
+  var tabs = document.querySelectorAll('.service-tabs .service-tab');
+  if (!tabs.length) return;
+
+  var flows = document.querySelectorAll('.service-flow');
+  var quoteBox = document.getElementById('serviceFlowQuote');
+  var sumService = document.getElementById('flowSummaryService');
+  var sumPackage = document.getElementById('flowSummaryPackage');
+  var sumPrice = document.getElementById('flowPriceTotal');
+
+  var SERVICE_LABELS = {
+    tinting: 'Window Tinting',
+    ceramic: 'Ceramic Coating',
+    wrap: 'Vinyl Wrap & Blackouts',
+    headlights: 'Headlights / Taillights Tint',
+    home: 'Home & Commercial Tinting'
+  };
+
+  function formatPrice(n) {
+    return '$' + Math.round(n).toLocaleString('en-AU');
+  }
+
+  function activateService(service) {
+    tabs.forEach(function (t) {
+      var on = t.getAttribute('data-service') === service;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    flows.forEach(function (f) {
+      f.classList.toggle('active', f.getAttribute('data-flow') === service);
+    });
+    if (service === 'tinting') {
+      if (quoteBox) quoteBox.classList.remove('active');
+    } else {
+      if (quoteBox) quoteBox.classList.add('active');
+      updateFlowQuote(service);
+    }
+  }
+
+  function updateFlowQuote(service) {
+    var flow = document.querySelector('.service-flow[data-flow="' + service + '"]');
+    if (!flow) return;
+    var checked = flow.querySelector('input[type="radio"]:checked');
+    if (!checked) return;
+    var price = parseFloat(checked.getAttribute('data-price') || '0');
+    var label = checked.getAttribute('data-label') || '';
+    if (sumService) sumService.textContent = SERVICE_LABELS[service] || service;
+    if (sumPackage) sumPackage.textContent = label;
+    if (sumPrice) {
+      if (service === 'home') {
+        sumPrice.textContent = formatPrice(price) + ' / m\u00b2';
+      } else {
+        sumPrice.textContent = 'From ' + formatPrice(price);
+      }
+    }
+  }
+
+  // Wire up tab clicks
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      activateService(tab.getAttribute('data-service'));
+    });
+  });
+
+  // Wire up package radio changes
+  document.querySelectorAll('.service-flow input[type="radio"]').forEach(function (input) {
+    input.addEventListener('change', function () {
+      var flow = input.closest('.service-flow');
+      if (flow) updateFlowQuote(flow.getAttribute('data-flow'));
+    });
+  });
+
+  // Read ?service= from hash like "#calculator?service=ceramic" or query string
+  function readServiceFromUrl() {
+    var hash = window.location.hash || '';
+    var qIdx = hash.indexOf('?');
+    var src = '';
+    if (qIdx !== -1) src = hash.substring(qIdx + 1);
+    else if (window.location.search) src = window.location.search.replace(/^\?/, '');
+    if (!src) return null;
+    var params = src.split('&');
+    for (var i = 0; i < params.length; i++) {
+      var kv = params[i].split('=');
+      if (kv[0] === 'service' && kv[1]) return decodeURIComponent(kv[1]);
+    }
+    return null;
+  }
+
+  function applyFromUrl() {
+    var s = readServiceFromUrl();
+    if (s && SERVICE_LABELS[s]) {
+      activateService(s);
+      var calc = document.getElementById('calculator');
+      if (calc) calc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // Initial state
+  applyFromUrl();
+  window.addEventListener('hashchange', applyFromUrl);
+
+  // Intercept clicks on homepage service-pickable cards that include ?service= in href
+  document.querySelectorAll('a.service-pickable[href*="#calculator"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var href = a.getAttribute('href') || '';
+      var qIdx = href.indexOf('?');
+      if (qIdx === -1) return; // plain #calculator -> default tinting flow
+      var src = href.substring(qIdx + 1);
+      var params = src.split('&');
+      for (var i = 0; i < params.length; i++) {
+        var kv = params[i].split('=');
+        if (kv[0] === 'service' && kv[1] && SERVICE_LABELS[kv[1]]) {
+          e.preventDefault();
+          activateService(kv[1]);
+          var calc = document.getElementById('calculator');
+          if (calc) calc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // update hash without re-firing scroll
+          history.replaceState(null, '', '#calculator?service=' + kv[1]);
+          return;
+        }
+      }
+    });
+  });
+})();

@@ -229,7 +229,7 @@
         <p>Choose the service you need. The calculator below will then ask the right questions and give you a transparent quote in under a minute.</p>
       </div>
       <div class="services-grid services-grid-picker">
-        <a href="#calculator" class="service-card service-pickable featured">
+        <a href="#calculator?service=tinting" class="service-card service-pickable featured">
           <div class="featured-badge">Most Popular</div>
           <div class="service-icon"><i class="fas fa-car-side"></i></div>
           <h3>Automotive Window Tinting</h3>
@@ -295,376 +295,96 @@
       <div class="section-header light">
         <span class="section-tag">Get a Quote</span>
         <h2>Build Your Quote<br>in 30 Seconds</h2>
-        <p>Pick a service, tell us what you need, and we'll generate a transparent estimate &mdash; no hidden costs, ever.</p>
+        <p>Service &middot; Vehicle &middot; Coverage &middot; Quote. Transparent, upfront pricing &mdash; no hidden costs, ever.</p>
       </div>
 
       <div class="calculator-card">
-        <!-- Service Selector -->
-        <div class="service-tabs" role="tablist" aria-label="Choose service">
-          <button type="button" class="service-tab active" data-service="tinting" role="tab" aria-selected="true">
-            <i class="fas fa-car-side"></i><span>Window Tinting</span>
-          </button>
-          <button type="button" class="service-tab" data-service="ceramic" role="tab" aria-selected="false">
-            <i class="fas fa-shield-alt"></i><span>Ceramic Coating</span>
-          </button>
-          <button type="button" class="service-tab" data-service="wrap" role="tab" aria-selected="false">
-            <i class="fas fa-paint-roller"></i><span>Vinyl Wrap</span>
-          </button>
-          <button type="button" class="service-tab" data-service="headlights" role="tab" aria-selected="false">
-            <i class="fas fa-lightbulb"></i><span>Headlights / Taillights</span>
-          </button>
-          <button type="button" class="service-tab" data-service="home" role="tab" aria-selected="false">
-            <i class="fas fa-home"></i><span>Home &amp; Commercial</span>
-          </button>
-        </div>
-
-        <!-- ===== TINTING FLOW (existing 4-step) ===== -->
-        <div class="service-flow active" data-flow="tinting">
-        <!-- Step 1: Vehicle Type -->
-        <div class="calc-step active" id="step1">
+        <!-- Step 1: Choose Service -->
+        <div class="calc-step active" data-step="1" id="calcStep1">
           <div class="step-header">
             <div class="step-number">1</div>
             <div class="step-info">
-              <h3>Select Your Vehicle Type</h3>
-              <p>Choose the option that best matches your car</p>
+              <h3>Choose Your Service</h3>
+              <p>Pick the service you'd like a quote for &mdash; we'll tailor the next steps</p>
             </div>
           </div>
-          <div class="vehicle-grid">
-            <label class="vehicle-option" data-type="hatchback">
-              <input type="radio" name="vehicle" value="hatchback" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-car-side"></i>
-                </div>
-                <span class="vehicle-name">Hatchback</span>
-                <span class="vehicle-example">e.g. Golf, Mazda 3, Corolla</span>
-                <span class="vehicle-price">From $299</span>
-              </div>
-            </label>
-            <label class="vehicle-option" data-type="sedan">
-              <input type="radio" name="vehicle" value="sedan" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-car"></i>
-                </div>
-                <span class="vehicle-name">Sedan</span>
-                <span class="vehicle-example">e.g. Camry, Accord, 3 Series</span>
-                <span class="vehicle-price">From $329</span>
-              </div>
-            </label>
-            <label class="vehicle-option" data-type="suv">
-              <input type="radio" name="vehicle" value="suv" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-truck-monster"></i>
-                </div>
-                <span class="vehicle-name">SUV / 4WD</span>
-                <span class="vehicle-example">e.g. RAV4, Tucson, Prado</span>
-                <span class="vehicle-price">From $379</span>
-              </div>
-            </label>
-            <label class="vehicle-option" data-type="wagon">
-              <input type="radio" name="vehicle" value="wagon" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-van-shuttle"></i>
-                </div>
-                <span class="vehicle-name">Wagon / Van</span>
-                <span class="vehicle-example">e.g. Outback, Carnival, HiAce</span>
-                <span class="vehicle-price">From $399</span>
-              </div>
-            </label>
-            <label class="vehicle-option" data-type="ute">
-              <input type="radio" name="vehicle" value="ute" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-truck-pickup"></i>
-                </div>
-                <span class="vehicle-name">Ute / Truck</span>
-                <span class="vehicle-example">e.g. HiLux, Ranger, Triton</span>
-                <span class="vehicle-price">From $349</span>
-              </div>
-            </label>
-            <label class="vehicle-option" data-type="luxury">
-              <input type="radio" name="vehicle" value="luxury" />
-              <div class="vehicle-card">
-                <div class="vehicle-icon">
-                  <i class="fas fa-car-rear"></i>
-                </div>
-                <span class="vehicle-name">Luxury / Sports</span>
-                <span class="vehicle-example">e.g. BMW, Mercedes, Audi</span>
-                <span class="vehicle-price">From $449</span>
-              </div>
-            </label>
-          </div>
-          <div class="step-nav">
-            <button class="btn btn-primary btn-lg next-step" id="toStep2" disabled>
-              Next: Choose Film Type <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
+          <div class="service-tile-grid" id="serviceTileGrid"><!-- populated by JS --></div>
         </div>
 
-        <!-- Step 2: Film Type -->
-        <div class="calc-step" id="step2">
+        <!-- Step 2: Vehicle / Property -->
+        <div class="calc-step" data-step="2" id="calcStep2">
           <div class="step-header">
-            <button class="back-btn" id="backToStep1"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="back-btn" data-back="1"><i class="fas fa-arrow-left"></i> Back</button>
             <div class="step-number">2</div>
             <div class="step-info">
-              <h3>Choose Your Film Type</h3>
-              <p>Higher grade films offer more protection and longevity</p>
+              <h3 id="step2Title">Select Your Vehicle Type</h3>
+              <p id="step2Sub">Choose the option that best matches your vehicle</p>
             </div>
           </div>
-          <div class="film-grid">
-            <label class="film-option">
-              <input type="radio" name="film" value="standard" data-price="0" />
-              <div class="film-card">
-                <div class="film-badge standard">Entry</div>
-                <h4>Standard Tint</h4>
-                <div class="film-specs">
-                  <div class="spec-bar">
-                    <span>Heat Rejection</span>
-                    <div class="bar"><div class="bar-fill" style="width:30%"></div></div>
-                    <span>30%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>UV Blocking</span>
-                    <div class="bar"><div class="bar-fill" style="width:60%"></div></div>
-                    <span>60%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>Warranty</span>
-                    <div class="bar"><div class="bar-fill" style="width:50%"></div></div>
-                    <span>5 yr</span>
-                  </div>
-                </div>
-                <ul class="film-features">
-                  <li><i class="fas fa-check"></i> Good UV protection</li>
-                  <li><i class="fas fa-check"></i> Privacy & aesthetics</li>
-                  <li><i class="fas fa-check"></i> Dyed film</li>
-                </ul>
-                <div class="film-price-add">Included</div>
-              </div>
-            </label>
-            <label class="film-option">
-              <input type="radio" name="film" value="carbon" data-price="100" />
-              <div class="film-card">
-                <div class="film-badge carbon">Popular</div>
-                <h4>Carbon Tint</h4>
-                <div class="film-specs">
-                  <div class="spec-bar">
-                    <span>Heat Rejection</span>
-                    <div class="bar"><div class="bar-fill" style="width:55%"></div></div>
-                    <span>55%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>UV Blocking</span>
-                    <div class="bar"><div class="bar-fill" style="width:90%"></div></div>
-                    <span>90%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>Warranty</span>
-                    <div class="bar"><div class="bar-fill" style="width:70%"></div></div>
-                    <span>10 yr</span>
-                  </div>
-                </div>
-                <ul class="film-features">
-                  <li><i class="fas fa-check"></i> No signal interference</li>
-                  <li><i class="fas fa-check"></i> Won't fade or purple</li>
-                  <li><i class="fas fa-check"></i> Better heat rejection</li>
-                </ul>
-                <div class="film-price-add">+ $100</div>
-              </div>
-            </label>
-            <label class="film-option">
-              <input type="radio" name="film" value="ceramic" data-price="200" />
-              <div class="film-card">
-                <div class="film-badge ceramic">Premium</div>
-                <h4>Ceramic Tint</h4>
-                <div class="film-specs">
-                  <div class="spec-bar">
-                    <span>Heat Rejection</span>
-                    <div class="bar"><div class="bar-fill" style="width:80%"></div></div>
-                    <span>80%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>UV Blocking</span>
-                    <div class="bar"><div class="bar-fill" style="width:99%"></div></div>
-                    <span>99%</span>
-                  </div>
-                  <div class="spec-bar">
-                    <span>Warranty</span>
-                    <div class="bar"><div class="bar-fill" style="width:100%"></div></div>
-                    <span>Lifetime</span>
-                  </div>
-                </div>
-                <ul class="film-features">
-                  <li><i class="fas fa-check"></i> Maximum heat rejection</li>
-                  <li><i class="fas fa-check"></i> Crystal clear visibility</li>
-                  <li><i class="fas fa-check"></i> Lifetime warranty</li>
-                </ul>
-                <div class="film-price-add">+ $200</div>
-              </div>
-            </label>
-          </div>
+          <div class="vehicle-grid" id="targetGrid"><!-- populated by JS --></div>
           <div class="step-nav">
-            <button class="btn btn-primary btn-lg next-step" id="toStep3" disabled>
-              Next: Choose Shade <i class="fas fa-arrow-right"></i>
+            <button class="btn btn-primary btn-lg" id="toStep3" disabled>
+              Next: Choose Coverage <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
 
-        <!-- Step 3: Shade / Coverage -->
-        <div class="calc-step" id="step3">
+        <!-- Step 3: Coverage / Where -->
+        <div class="calc-step" data-step="3" id="calcStep3">
           <div class="step-header">
-            <button class="back-btn" id="backToStep2"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="back-btn" data-back="2"><i class="fas fa-arrow-left"></i> Back</button>
             <div class="step-number">3</div>
             <div class="step-info">
-              <h3>Select Tint Shade &amp; Coverage</h3>
-              <p>VLT = Visible Light Transmission (lower = darker)</p>
+              <h3 id="step3Title">Where Should the Service Be Applied?</h3>
+              <p id="step3Sub">Choose the area / coverage you want</p>
             </div>
           </div>
-
-          <div class="shade-section">
-            <h4 class="shade-title">Tint Darkness</h4>
-            <div class="shade-grid">
-              <label class="shade-option">
-                <input type="radio" name="shade" value="50" data-price="0" />
-                <div class="shade-card">
-                  <div class="shade-preview">
-                    <img src="images/tint-50.jpg" alt="50% VLT light window tint installed on white sedan in Essendon Melbourne by Elite Car Tinting" class="shade-img" />
-                  </div>
-                  <span class="shade-vlt">50% VLT</span>
-                  <span class="shade-name">Light</span>
-                  <span class="shade-desc">Barely noticeable, subtle UV protection</span>
-                </div>
-              </label>
-              <label class="shade-option">
-                <input type="radio" name="shade" value="35" data-price="0" />
-                <div class="shade-card">
-                  <div class="shade-preview">
-                    <img src="images/tint-35.jpg" alt="35% VLT medium ceramic window tint on black sedan Melbourne - Elite Car Tinting Essendon" class="shade-img" />
-                  </div>
-                  <span class="shade-vlt">35% VLT</span>
-                  <span class="shade-name">Medium</span>
-                  <span class="shade-desc">Most popular, great privacy &amp; heat rejection</span>
-                  <span class="shade-popular">Most Popular</span>
-                </div>
-              </label>
-              <label class="shade-option">
-                <input type="radio" name="shade" value="20" data-price="0" />
-                <div class="shade-card">
-                  <div class="shade-preview">
-                    <img src="images/tint-20.jpg" alt="20% VLT dark ceramic window tint close-up on luxury car windows Melbourne" class="shade-img" />
-                  </div>
-                  <span class="shade-vlt">20% VLT</span>
-                  <span class="shade-name">Dark</span>
-                  <span class="shade-desc">Maximum privacy, best heat rejection</span>
-                </div>
-              </label>
-              <label class="shade-option">
-                <input type="radio" name="shade" value="5" data-price="20" />
-                <div class="shade-card">
-                  <div class="shade-preview">
-                    <img src="images/tint-5.jpg" alt="5% VLT limo dark blacked-out window tint on SUV by Elite Car Tinting Essendon Melbourne" class="shade-img" />
-                  </div>
-                  <span class="shade-vlt">5% VLT</span>
-                  <span class="shade-name">Limo Dark</span>
-                  <span class="shade-desc">Maximum darkness – rear windows only (road legal)</span>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <div class="coverage-section">
-            <h4 class="shade-title">Coverage Option</h4>
-            <div class="coverage-grid">
-              <label class="coverage-option">
-                <input type="radio" name="coverage" value="full" data-price="0" />
-                <div class="coverage-card">
-                  <i class="fas fa-car"></i>
-                  <span>Full Vehicle</span>
-                  <small>All windows including front sides</small>
-                  <div class="coverage-price">Included</div>
-                </div>
-              </label>
-              <label class="coverage-option">
-                <input type="radio" name="coverage" value="rear" data-price="-50" />
-                <div class="coverage-card">
-                  <i class="fas fa-arrow-right"></i>
-                  <span>Rear Only</span>
-                  <small>Rear door &amp; back window only</small>
-                  <div class="coverage-price">Save $50</div>
-                </div>
-              </label>
-              <label class="coverage-option">
-                <input type="radio" name="coverage" value="windscreen" data-price="80" />
-                <div class="coverage-card">
-                  <i class="fas fa-plus"></i>
-                  <span>Add Windscreen</span>
-                  <small>Full coverage + front windscreen</small>
-                  <div class="coverage-price">+ $80</div>
-                </div>
-              </label>
-            </div>
-          </div>
-
+          <div class="coverage-grid" id="coverageGrid"><!-- populated by JS --></div>
           <div class="step-nav">
-            <button class="btn btn-primary btn-lg" id="toStep4">
-              See My Quote <i class="fas fa-arrow-right"></i>
+            <button class="btn btn-primary btn-lg" id="toStep4" disabled>
+              Get My Indicative Quote <i class="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
 
-        <!-- Step 4: Quote Result -->
-        <div class="calc-step" id="step4">
+        <!-- Step 4: Indicative Quote -->
+        <div class="calc-step" data-step="4" id="calcStep4">
           <div class="step-header">
-            <button class="back-btn" id="backToStep3"><i class="fas fa-arrow-left"></i> Back</button>
+            <button class="back-btn" data-back="3"><i class="fas fa-arrow-left"></i> Back</button>
             <div class="step-number">4</div>
             <div class="step-info">
-              <h3>Your Personalised Quote</h3>
-              <p>Transparent pricing – what you see is what you pay</p>
+              <h3>Your Indicative Quote</h3>
+              <p>Transparent pricing &mdash; final price confirmed on inspection</p>
             </div>
           </div>
           <div class="quote-result">
             <div class="quote-summary">
               <div class="quote-summary-grid">
                 <div class="summary-item">
-                  <span class="summary-label">Vehicle Type</span>
-                  <span class="summary-value" id="summaryVehicle">–</span>
+                  <span class="summary-label">Service</span>
+                  <span class="summary-value" id="qSummaryService">&ndash;</span>
                 </div>
                 <div class="summary-item">
-                  <span class="summary-label">Film Type</span>
-                  <span class="summary-value" id="summaryFilm">–</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Tint Shade</span>
-                  <span class="summary-value" id="summaryShade">–</span>
+                  <span class="summary-label" id="qLabelTarget">Vehicle Type</span>
+                  <span class="summary-value" id="qSummaryTarget">&ndash;</span>
                 </div>
                 <div class="summary-item">
                   <span class="summary-label">Coverage</span>
-                  <span class="summary-value" id="summaryCoverage">–</span>
+                  <span class="summary-value" id="qSummaryCoverage">&ndash;</span>
                 </div>
               </div>
               <div class="price-breakdown">
                 <div class="breakdown-row">
                   <span>Base Price</span>
-                  <span id="priceBase">$0</span>
+                  <span id="qPriceBase">$0</span>
                 </div>
                 <div class="breakdown-row">
-                  <span>Film Upgrade</span>
-                  <span id="priceFilm">$0</span>
-                </div>
-                <div class="breakdown-row">
-                  <span>Coverage Adjustment</span>
-                  <span id="priceCoverage">$0</span>
-                </div>
-                <div class="breakdown-row">
-                  <span>Shade Adjustment</span>
-                  <span id="priceShade">$0</span>
+                  <span id="qCoverageRowLabel">Coverage Adjustment</span>
+                  <span id="qPriceCoverage">$0</span>
                 </div>
                 <div class="breakdown-total">
-                  <span>Total Estimate</span>
-                  <span id="priceTotal">$0</span>
+                  <span>Indicative Estimate</span>
+                  <span id="qPriceTotal">$0</span>
                 </div>
               </div>
             </div>
@@ -676,7 +396,7 @@
                   <small>We'll beat any written quote</small>
                 </div>
               </div>
-              <p class="quote-disclaimer">This is an estimate. Final pricing confirmed on-site. GST included. No hidden fees.</p>
+              <p class="quote-disclaimer">This is an indicative estimate. Final pricing confirmed on-site after inspection. GST included. No hidden fees.</p>
               <div class="quote-actions">
                 <a href="tel:+61411017040" class="btn btn-primary btn-lg">
                   <i class="fas fa-phone-alt"></i> Call to Book: 0411 017 040
@@ -699,292 +419,24 @@
 
         <!-- Progress Bar -->
         <div class="calc-progress">
-          <div class="progress-step active" data-step="1">
+          <div class="progress-step active" data-pstep="1">
             <div class="progress-dot"></div>
-            <span>Vehicle</span>
+            <span>Service</span>
           </div>
           <div class="progress-line"></div>
-          <div class="progress-step" data-step="2">
+          <div class="progress-step" data-pstep="2">
             <div class="progress-dot"></div>
-            <span>Film</span>
+            <span id="progressTargetLabel">Vehicle</span>
           </div>
           <div class="progress-line"></div>
-          <div class="progress-step" data-step="3">
+          <div class="progress-step" data-pstep="3">
             <div class="progress-dot"></div>
-            <span>Options</span>
+            <span>Coverage</span>
           </div>
           <div class="progress-line"></div>
-          <div class="progress-step" data-step="4">
+          <div class="progress-step" data-pstep="4">
             <div class="progress-dot"></div>
             <span>Quote</span>
-          </div>
-        </div>
-        </div><!-- /service-flow tinting -->
-
-        <!-- ===== CERAMIC COATING FLOW ===== -->
-        <div class="service-flow" data-flow="ceramic">
-          <div class="step-header">
-            <div class="step-number"><i class="fas fa-shield-alt"></i></div>
-            <div class="step-info">
-              <h3>Ceramic Coating &mdash; Choose a Package</h3>
-              <p>Long-lasting nano-ceramic paint protection. Pricing varies by vehicle size &mdash; we'll confirm on inspection.</p>
-            </div>
-          </div>
-          <div class="package-grid">
-            <label class="package-option">
-              <input type="radio" name="ceramic-pkg" value="essential" data-price="499" data-label="Essential 1-Year" />
-              <div class="package-card">
-                <div class="package-badge">Essential</div>
-                <h4>1-Year Protection</h4>
-                <p>Single-layer ceramic, full machine prep &amp; decontamination.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> 12 months durability</li>
-                  <li><i class="fas fa-check"></i> Hydrophobic finish</li>
-                  <li><i class="fas fa-check"></i> 6-step paint prep</li>
-                </ul>
-                <div class="package-price">From $499</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="ceramic-pkg" value="premium" data-price="899" data-label="Premium 3-Year" checked />
-              <div class="package-card">
-                <div class="package-badge featured">Most Popular</div>
-                <h4>3-Year Protection</h4>
-                <p>Premium dual-layer ceramic, paint correction included.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> 36 months durability</li>
-                  <li><i class="fas fa-check"></i> Light paint correction</li>
-                  <li><i class="fas fa-check"></i> Gloss boost</li>
-                </ul>
-                <div class="package-price">From $899</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="ceramic-pkg" value="elite" data-price="1499" data-label="Elite 5-Year" />
-              <div class="package-card">
-                <div class="package-badge">Elite</div>
-                <h4>5-Year Protection</h4>
-                <p>Top-tier graphene-infused ceramic, full multi-stage paint correction.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> 60 months durability</li>
-                  <li><i class="fas fa-check"></i> Multi-stage correction</li>
-                  <li><i class="fas fa-check"></i> Showroom finish</li>
-                </ul>
-                <div class="package-price">From $1,499</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- ===== VINYL WRAP FLOW ===== -->
-        <div class="service-flow" data-flow="wrap">
-          <div class="step-header">
-            <div class="step-number"><i class="fas fa-paint-roller"></i></div>
-            <div class="step-info">
-              <h3>Vinyl Wrap &amp; Blackouts &mdash; Choose a Package</h3>
-              <p>Premium cast vinyl. All wraps reversible &amp; paint-safe.</p>
-            </div>
-          </div>
-          <div class="package-grid">
-            <label class="package-option">
-              <input type="radio" name="wrap-pkg" value="blackout" data-price="399" data-label="Chrome Delete / Blackout" checked />
-              <div class="package-card">
-                <div class="package-badge">Blackout</div>
-                <h4>Chrome Delete / Blackout</h4>
-                <p>Window trims, badges, mirrors, grilles &mdash; gloss or satin black.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Window trims &amp; badges</li>
-                  <li><i class="fas fa-check"></i> Gloss or satin finish</li>
-                  <li><i class="fas fa-check"></i> Half-day install</li>
-                </ul>
-                <div class="package-price">From $399</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="wrap-pkg" value="partial" data-price="699" data-label="Partial Wrap" />
-              <div class="package-card">
-                <div class="package-badge featured">Most Popular</div>
-                <h4>Partial Wrap</h4>
-                <p>Hood, roof, mirrors or accent panels &mdash; refresh the look without a full wrap.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Hood / roof / accents</li>
-                  <li><i class="fas fa-check"></i> Premium cast vinyl</li>
-                  <li><i class="fas fa-check"></i> Reversible</li>
-                </ul>
-                <div class="package-price">From $699</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="wrap-pkg" value="full" data-price="2999" data-label="Full Wrap" />
-              <div class="package-card">
-                <div class="package-badge">Full Wrap</div>
-                <h4>Full Vehicle Wrap</h4>
-                <p>Complete colour change. Hundreds of finishes &mdash; gloss, satin, matte, chrome, chameleon.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Complete colour change</li>
-                  <li><i class="fas fa-check"></i> 5-7 year durability</li>
-                  <li><i class="fas fa-check"></i> Paint protection bonus</li>
-                </ul>
-                <div class="package-price">From $2,999</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- ===== HEADLIGHTS / TAILLIGHTS FLOW ===== -->
-        <div class="service-flow" data-flow="headlights">
-          <div class="step-header">
-            <div class="step-number"><i class="fas fa-lightbulb"></i></div>
-            <div class="step-info">
-              <h3>Headlight &amp; Taillight Tint &mdash; Choose Coverage</h3>
-              <p>Smoked or tinted lighting film. Light, medium &amp; dark shades available &mdash; we'll keep it road-legal.</p>
-            </div>
-          </div>
-          <div class="package-grid">
-            <label class="package-option">
-              <input type="radio" name="lights-pkg" value="headlights" data-price="149" data-label="Headlights Only" />
-              <div class="package-card">
-                <div class="package-badge">Headlights</div>
-                <h4>Headlights Only</h4>
-                <p>Front headlights tinted in your choice of shade.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Light, medium or dark</li>
-                  <li><i class="fas fa-check"></i> Bubble-free finish</li>
-                  <li><i class="fas fa-check"></i> Removable</li>
-                </ul>
-                <div class="package-price">From $149</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="lights-pkg" value="taillights" data-price="129" data-label="Taillights Only" />
-              <div class="package-card">
-                <div class="package-badge">Taillights</div>
-                <h4>Taillights Only</h4>
-                <p>Rear lighting smoked for that aggressive custom look.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Light, medium or dark</li>
-                  <li><i class="fas fa-check"></i> Road-legal options</li>
-                  <li><i class="fas fa-check"></i> Reversible</li>
-                </ul>
-                <div class="package-price">From $129</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="lights-pkg" value="both" data-price="249" data-label="Headlights + Taillights" checked />
-              <div class="package-card">
-                <div class="package-badge featured">Best Value</div>
-                <h4>Headlights + Taillights</h4>
-                <p>Complete front &amp; rear lighting tint package &mdash; matched shade.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> All lights matched</li>
-                  <li><i class="fas fa-check"></i> Save vs separate</li>
-                  <li><i class="fas fa-check"></i> Same-day install</li>
-                </ul>
-                <div class="package-price">From $249</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- ===== HOME & COMMERCIAL FLOW ===== -->
-        <div class="service-flow" data-flow="home">
-          <div class="step-header">
-            <div class="step-number"><i class="fas fa-home"></i></div>
-            <div class="step-info">
-              <h3>Home &amp; Commercial Tinting &mdash; Choose Film Type</h3>
-              <p>Pricing depends on glass area &mdash; we offer free on-site measure &amp; quote in your suburb.</p>
-            </div>
-          </div>
-          <div class="package-grid">
-            <label class="package-option">
-              <input type="radio" name="home-pkg" value="solar" data-price="55" data-label="Solar Control Film" checked />
-              <div class="package-card">
-                <div class="package-badge featured">Most Requested</div>
-                <h4>Solar Control Film</h4>
-                <p>Maximum heat &amp; UV rejection &mdash; keeps homes cool, cuts cooling bills.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Up to 80% heat rejection</li>
-                  <li><i class="fas fa-check"></i> 99% UV protection</li>
-                  <li><i class="fas fa-check"></i> Lifetime warranty</li>
-                </ul>
-                <div class="package-price">From $55/m&sup2;</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="home-pkg" value="privacy" data-price="65" data-label="Privacy / Frosted Film" />
-              <div class="package-card">
-                <div class="package-badge">Privacy</div>
-                <h4>Privacy &amp; Frosted</h4>
-                <p>Decorative frost, gradient or one-way reflective options.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Daytime privacy</li>
-                  <li><i class="fas fa-check"></i> Frosted / decorative</li>
-                  <li><i class="fas fa-check"></i> Custom designs</li>
-                </ul>
-                <div class="package-price">From $65/m&sup2;</div>
-              </div>
-            </label>
-            <label class="package-option">
-              <input type="radio" name="home-pkg" value="security" data-price="85" data-label="Security / Anti-Graffiti" />
-              <div class="package-card">
-                <div class="package-badge">Security</div>
-                <h4>Security &amp; Anti-Graffiti</h4>
-                <p>Anti-shatter safety film for homes &amp; storefronts.</p>
-                <ul class="package-features">
-                  <li><i class="fas fa-check"></i> Holds glass on impact</li>
-                  <li><i class="fas fa-check"></i> Anti-graffiti option</li>
-                  <li><i class="fas fa-check"></i> Storm &amp; break-in protection</li>
-                </ul>
-                <div class="package-price">From $85/m&sup2;</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Shared Quote Result for non-tinting flows -->
-        <div class="service-flow-quote" id="serviceFlowQuote">
-          <div class="quote-result">
-            <div class="quote-summary">
-              <div class="quote-summary-grid">
-                <div class="summary-item">
-                  <span class="summary-label">Service</span>
-                  <span class="summary-value" id="flowSummaryService">&ndash;</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Selected Package</span>
-                  <span class="summary-value" id="flowSummaryPackage">&ndash;</span>
-                </div>
-              </div>
-              <div class="price-breakdown">
-                <div class="breakdown-total">
-                  <span>Indicative Estimate</span>
-                  <span id="flowPriceTotal">$0</span>
-                </div>
-              </div>
-            </div>
-            <div class="quote-cta-box">
-              <div class="quote-badge">
-                <i class="fas fa-shield-alt"></i>
-                <div>
-                  <strong>Price Match Guarantee</strong>
-                  <small>We'll beat any written quote</small>
-                </div>
-              </div>
-              <p class="quote-disclaimer">Estimate only &mdash; final price confirmed on inspection. GST included. No hidden fees.</p>
-              <div class="quote-actions">
-                <a href="tel:+61411017040" class="btn btn-primary btn-lg">
-                  <i class="fas fa-phone-alt"></i> Call to Book: 0411 017 040
-                </a>
-                <a href="#contact" class="btn btn-outline btn-lg">
-                  <i class="fas fa-envelope"></i> Send Enquiry
-                </a>
-              </div>
-              <div class="quote-trust">
-                <span><i class="fas fa-check-circle"></i> No deposit required</span>
-                <span><i class="fas fa-check-circle"></i> Free inspection</span>
-                <span><i class="fas fa-check-circle"></i> Same-day available</span>
-              </div>
-            </div>
           </div>
         </div>
       </div>

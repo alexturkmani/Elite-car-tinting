@@ -776,7 +776,7 @@ a.service-card:hover { text-decoration: none; }
 /* Coverage Grid */
 .coverage-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
 }
 .coverage-option input { display: none; }
@@ -2297,3 +2297,79 @@ body.call-bar-visible {
 @media (max-width: 640px) {
   .service-tab { flex: 1 1 100%; }
 }
+
+/* ===== Calculator: Service Tile Grid (Step 1) ===== */
+.service-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.service-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 10px;
+  padding: 22px 20px;
+  background: var(--gradient-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.service-tile:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+.service-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.service-tile-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(56,189,248,0.12);
+  color: var(--accent);
+  font-size: 1.3rem;
+  margin-bottom: 4px;
+}
+.service-tile h4 {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+.service-tile p {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+.service-tile-arrow {
+  margin-top: auto;
+  padding-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.service-tile-arrow i { transition: transform 0.25s ease; }
+.service-tile:hover .service-tile-arrow i { transform: translateX(4px); }
+
+/* Tweak coverage-card to allow inner desc text to wrap nicely */
+.coverage-card { padding: 18px 16px; min-height: 120px; }
+.coverage-card small { line-height: 1.35; }

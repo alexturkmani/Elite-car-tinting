@@ -4,59 +4,6 @@
 
 'use strict';
 
-// ===== PRICING DATA =====
-const BASE_PRICES = {
-  hatchback: 299,
-  sedan: 329,
-  suv: 379,
-  wagon: 399,
-  ute: 349,
-  luxury: 449
-};
-
-const FILM_PRICES = {
-  standard: 0,
-  carbon: 100,
-  ceramic: 200
-};
-
-const FILM_LABELS = {
-  standard: 'Standard Tint',
-  carbon: 'Carbon Tint',
-  ceramic: 'Ceramic Tint'
-};
-
-const VEHICLE_LABELS = {
-  hatchback: 'Hatchback',
-  sedan: 'Sedan',
-  suv: 'SUV / 4WD',
-  wagon: 'Wagon / Van',
-  ute: 'Ute / Truck',
-  luxury: 'Luxury / Sports'
-};
-
-const SHADE_LABELS = {
-  '50': '50% VLT – Light',
-  '35': '35% VLT – Medium',
-  '20': '20% VLT – Dark',
-  '5': '5% VLT – Limo Dark'
-};
-
-const COVERAGE_LABELS = {
-  full: 'Full Vehicle',
-  rear: 'Rear Only',
-  windscreen: 'Full + Windscreen'
-};
-
-// ===== CALCULATOR STATE =====
-const calcState = {
-  currentStep: 1,
-  vehicle: null,
-  film: null,
-  shade: null,
-  coverage: null
-};
-
 // ===== NAVBAR =====
 (function initNavbar() {
   const navbar = document.getElementById('navbar');
@@ -215,230 +162,325 @@ const calcState = {
   checkReveal();
 })();
 
-// ===== CALCULATOR =====
+// ===== CALCULATOR (Service -> Vehicle/Property -> Coverage -> Quote) =====
 (function initCalculator() {
+  const calcRoot = document.getElementById('calculator');
+  if (!calcRoot) return;
 
-  // Helpers
-  function showStep(stepNum) {
-    document.querySelectorAll('.calc-step').forEach(function (step) {
-      step.classList.remove('active');
-    });
-    const target = document.getElementById('step' + stepNum);
-    if (target) {
-      target.classList.add('active');
-      // Scroll to calculator top
-      const calc = document.getElementById('calculator');
-      if (calc) {
-        const navbar = document.getElementById('navbar');
-        const offset = navbar ? navbar.offsetHeight + 16 : 80;
-        const top = calc.getBoundingClientRect().top + window.scrollY - offset;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
+  const VEHICLES = [
+    { id: 'hatchback', label: 'Hatchback',       example: 'Golf, Mazda 3, Corolla',  base: 299, icon: 'fa-car-side' },
+    { id: 'sedan',     label: 'Sedan',           example: 'Camry, Accord, 3 Series', base: 329, icon: 'fa-car' },
+    { id: 'suv',       label: 'SUV / 4WD',       example: 'RAV4, Tucson, Prado',     base: 379, icon: 'fa-truck-monster' },
+    { id: 'wagon',     label: 'Wagon / Van',     example: 'Outback, Carnival, HiAce',base: 399, icon: 'fa-van-shuttle' },
+    { id: 'ute',       label: 'Ute / Truck',     example: 'HiLux, Ranger, Triton',   base: 349, icon: 'fa-truck-pickup' },
+    { id: 'luxury',    label: 'Luxury / Sports', example: 'BMW, Mercedes, Audi',     base: 449, icon: 'fa-car-rear' }
+  ];
+
+  const PROPERTIES = [
+    { id: 'apartment',  label: 'Apartment',         example: '1-2 BR unit',          base: 600,  icon: 'fa-building' },
+    { id: 'house',      label: 'House',             example: '3-4 BR home',          base: 1200, icon: 'fa-home' },
+    { id: 'large',      label: 'Large Home',        example: '5+ BR / multi-level',  base: 2000, icon: 'fa-house-chimney' },
+    { id: 'office',     label: 'Office / Shopfront',example: 'Glass-fronted space',  base: 1500, icon: 'fa-store' }
+  ];
+
+  const SERVICES = {
+    tinting: {
+      label: 'Window Tinting',
+      tagline: 'Premium ceramic, carbon & standard films for your vehicle.',
+      icon: 'fa-car-side',
+      target: 'vehicle',
+      multiplier: 1.0,
+      coverage: [
+        { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         mult: 0.40, icon: 'fa-window-maximize' },
+        { id: 'rear5',      label: 'Rear 5 Windows',           desc: 'All rear windows incl. back glass', mult: 0.75, icon: 'fa-window-restore' },
+        { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           mult: 1.00, icon: 'fa-car' },
+        { id: 'windscreen', label: 'Full Car + Windscreen',    desc: 'Includes windscreen strip / film',  mult: 1.20, icon: 'fa-car-side' }
+      ]
+    },
+    ceramic: {
+      label: 'Ceramic Coating',
+      tagline: 'Long-lasting nano-ceramic paint protection with hydrophobic gloss.',
+      icon: 'fa-shield-alt',
+      target: 'vehicle',
+      multiplier: 2.4,
+      coverage: [
+        { id: 'glass',      label: 'Glass Only',          desc: 'Windscreen + side glass coating',  mult: 0.30, icon: 'fa-droplet' },
+        { id: 'tophalf',    label: 'Top Half',            desc: 'Roof, hood, mirrors',              mult: 0.65, icon: 'fa-square-caret-up' },
+        { id: 'fullbody',   label: 'Full Body',           desc: 'Complete exterior paintwork',      mult: 1.00, icon: 'fa-car' },
+        { id: 'fullplus',   label: 'Full Body + Wheels',  desc: 'Body, wheels & glass package',     mult: 1.25, icon: 'fa-circle-dot' }
+      ]
+    },
+    wrap: {
+      label: 'Vinyl Wrap & Blackouts',
+      tagline: 'Full or partial vehicle wraps and chrome-delete blackout packages.',
+      icon: 'fa-paint-roller',
+      target: 'vehicle',
+      multiplier: 4.0,
+      coverage: [
+        { id: 'chrome',     label: 'Chrome Delete / Blackout', desc: 'Trims, badges, mirrors',         mult: 0.20, icon: 'fa-square' },
+        { id: 'roof',       label: 'Roof Wrap',                desc: 'Roof only',                       mult: 0.30, icon: 'fa-square-caret-up' },
+        { id: 'hood',       label: 'Hood Wrap',                desc: 'Bonnet only',                     mult: 0.35, icon: 'fa-car-side' },
+        { id: 'partial',    label: 'Partial Wrap',             desc: 'Hood + roof + mirrors',           mult: 0.55, icon: 'fa-paint-brush' },
+        { id: 'full',       label: 'Full Wrap',                desc: 'Complete colour change',          mult: 1.00, icon: 'fa-car' }
+      ]
+    },
+    headlights: {
+      label: 'Headlights & Taillights Tint',
+      tagline: 'Smoked or tinted lighting film for an aggressive custom look.',
+      icon: 'fa-lightbulb',
+      target: 'vehicle',
+      multiplier: 0.55,
+      coverage: [
+        { id: 'head',  label: 'Headlights Only',           desc: 'Front lights only',               mult: 0.55, icon: 'fa-lightbulb' },
+        { id: 'tail',  label: 'Taillights Only',           desc: 'Rear lights only',                mult: 0.50, icon: 'fa-circle' },
+        { id: 'both',  label: 'Headlights + Taillights',   desc: 'Full lighting package',           mult: 1.00, icon: 'fa-bolt' },
+        { id: 'all',   label: '+ Indicators / Reflectors', desc: 'Complete lighting tint',          mult: 1.25, icon: 'fa-traffic-light' }
+      ]
+    },
+    home: {
+      label: 'Home & Commercial Tinting',
+      tagline: 'Residential & commercial window film &mdash; energy, UV & privacy.',
+      icon: 'fa-home',
+      target: 'property',
+      multiplier: 1.0,
+      coverage: [
+        { id: 'few',        label: '1-3 Windows',             desc: 'Single room or feature',         mult: 0.30, icon: 'fa-window-maximize' },
+        { id: 'many',       label: '4-10 Windows',            desc: 'Living areas / floor',           mult: 0.65, icon: 'fa-window-restore' },
+        { id: 'whole',      label: 'Whole Home',              desc: 'Every window in the property',   mult: 1.00, icon: 'fa-house' },
+        { id: 'commercial', label: 'Office / Shopfront',      desc: 'Glass-fronted commercial space', mult: 1.40, icon: 'fa-store' }
+      ]
     }
-    calcState.currentStep = stepNum;
-    updateProgress(stepNum);
-  }
+  };
 
-  function updateProgress(stepNum) {
-    document.querySelectorAll('.progress-step').forEach(function (step) {
-      const num = parseInt(step.getAttribute('data-step'), 10);
-      step.classList.remove('active', 'completed');
-      if (num === stepNum) {
-        step.classList.add('active');
-      } else if (num < stepNum) {
-        step.classList.add('completed');
-        // Add checkmark
-        const dot = step.querySelector('.progress-dot');
-        if (dot && !dot.innerHTML.includes('fa-check')) {
-          dot.innerHTML = '<i class="fas fa-check" style="font-size:0.7rem;color:#fff"></i>';
-        }
-      } else {
-        const dot = step.querySelector('.progress-dot');
-        if (dot) dot.innerHTML = '';
-      }
-    });
+  const state = { service: null, target: null, coverage: null };
 
-    // Update progress lines
-    const lines = document.querySelectorAll('.progress-line');
-    lines.forEach(function (line, i) {
-      if (i < stepNum - 1) {
-        line.classList.add('completed');
-      } else {
-        line.classList.remove('completed');
-      }
-    });
-  }
-
-  function formatPrice(price) {
-    const abs = price < 0 ? -price : price;
-    return '$' + abs.toLocaleString();
-  }
-
-  function calculateTotal() {
-    const base = BASE_PRICES[calcState.vehicle] || 0;
-    const film = FILM_PRICES[calcState.film] || 0;
-    const shade = parseInt(
-      (document.querySelector('input[name="shade"]:checked') || {}).getAttribute('data-price') || '0', 10
-    );
-    const coverage = parseInt(
-      (document.querySelector('input[name="coverage"]:checked') || {}).getAttribute('data-price') || '0', 10
-    );
-    return { base, film, shade, coverage, total: base + film + shade + coverage };
-  }
-
-  function updateQuote() {
-    const prices = calculateTotal();
-
-    // Summary values
-    const summaryVehicle = document.getElementById('summaryVehicle');
-    const summaryFilm = document.getElementById('summaryFilm');
-    const summaryShade = document.getElementById('summaryShade');
-    const summaryCoverage = document.getElementById('summaryCoverage');
-    const priceBase = document.getElementById('priceBase');
-    const priceFilm = document.getElementById('priceFilm');
-    const priceCoverage = document.getElementById('priceCoverage');
-    const priceShade = document.getElementById('priceShade');
-    const priceTotal = document.getElementById('priceTotal');
-
-    if (summaryVehicle) summaryVehicle.textContent = VEHICLE_LABELS[calcState.vehicle] || '–';
-    if (summaryFilm) summaryFilm.textContent = FILM_LABELS[calcState.film] || '–';
-    if (summaryShade) summaryShade.textContent = SHADE_LABELS[calcState.shade] || '–';
-    if (summaryCoverage) summaryCoverage.textContent = COVERAGE_LABELS[calcState.coverage] || '–';
-
-    if (priceBase) priceBase.textContent = formatPrice(prices.base);
-    if (priceFilm) priceFilm.textContent = prices.film > 0 ? '+' + formatPrice(prices.film) : formatPrice(0);
-    if (priceCoverage) {
-      const cv = prices.coverage;
-      priceCoverage.textContent = cv < 0 ? '−' + formatPrice(cv) : cv > 0 ? '+' + formatPrice(cv) : formatPrice(0);
-    }
-    if (priceShade) priceShade.textContent = prices.shade > 0 ? '+' + formatPrice(prices.shade) : formatPrice(0);
-    if (priceTotal) priceTotal.textContent = formatPrice(prices.total);
-  }
-
-  // Step 1: Vehicle Selection
-  const vehicleInputs = document.querySelectorAll('input[name="vehicle"]');
-  const toStep2Btn = document.getElementById('toStep2');
-
-  vehicleInputs.forEach(function (input) {
-    input.addEventListener('change', function () {
-      calcState.vehicle = this.value;
-      if (toStep2Btn) toStep2Btn.disabled = false;
-    });
-  });
-
-  if (toStep2Btn) {
-    toStep2Btn.addEventListener('click', function () {
-      if (calcState.vehicle) showStep(2);
-    });
-  }
-
-  // Step 2: Film Selection
-  const filmInputs = document.querySelectorAll('input[name="film"]');
+  // --- DOM refs ---
+  const steps = calcRoot.querySelectorAll('.calc-step');
+  const progressSteps = calcRoot.querySelectorAll('.progress-step');
+  const serviceGrid = document.getElementById('serviceTileGrid');
+  const targetGrid = document.getElementById('targetGrid');
+  const coverageGrid = document.getElementById('coverageGrid');
+  const step2Title = document.getElementById('step2Title');
+  const step2Sub = document.getElementById('step2Sub');
+  const step3Title = document.getElementById('step3Title');
+  const step3Sub = document.getElementById('step3Sub');
+  const progressTargetLabel = document.getElementById('progressTargetLabel');
+  const qLabelTarget = document.getElementById('qLabelTarget');
+  const qSummaryService = document.getElementById('qSummaryService');
+  const qSummaryTarget = document.getElementById('qSummaryTarget');
+  const qSummaryCoverage = document.getElementById('qSummaryCoverage');
+  const qPriceBase = document.getElementById('qPriceBase');
+  const qPriceCoverage = document.getElementById('qPriceCoverage');
+  const qPriceTotal = document.getElementById('qPriceTotal');
+  const qCoverageRowLabel = document.getElementById('qCoverageRowLabel');
   const toStep3Btn = document.getElementById('toStep3');
-
-  filmInputs.forEach(function (input) {
-    input.addEventListener('change', function () {
-      calcState.film = this.value;
-      if (toStep3Btn) toStep3Btn.disabled = false;
-    });
-  });
-
-  if (toStep3Btn) {
-    toStep3Btn.addEventListener('click', function () {
-      if (calcState.film) showStep(3);
-    });
-  }
-
-  const backToStep1 = document.getElementById('backToStep1');
-  if (backToStep1) {
-    backToStep1.addEventListener('click', function () { showStep(1); });
-  }
-
-  // Step 3: Shade + Coverage
-  const shadeInputs = document.querySelectorAll('input[name="shade"]');
-  const coverageInputs = document.querySelectorAll('input[name="coverage"]');
   const toStep4Btn = document.getElementById('toStep4');
+  const resetBtn = document.getElementById('resetCalc');
 
-  function checkStep3Complete() {
-    if (calcState.shade && calcState.coverage && toStep4Btn) {
-      toStep4Btn.disabled = false;
+  // --- Helpers ---
+  function formatPrice(n) {
+    return '$' + Math.round(n).toLocaleString('en-AU');
+  }
+  function roundTo(n, step) {
+    return Math.round(n / step) * step;
+  }
+  function showStep(num) {
+    steps.forEach(function (s) {
+      s.classList.toggle('active', parseInt(s.getAttribute('data-step'), 10) === num);
+    });
+    progressSteps.forEach(function (p) {
+      var n = parseInt(p.getAttribute('data-pstep'), 10);
+      p.classList.toggle('active', n === num);
+      p.classList.toggle('done', n < num);
+    });
+    var card = calcRoot.querySelector('.calculator-card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // --- Render Step 1 (service tiles) ---
+  function renderServices() {
+    serviceGrid.innerHTML = Object.keys(SERVICES).map(function (key) {
+      var s = SERVICES[key];
+      return '<button type="button" class="service-tile" data-service="' + key + '">'
+        + '<div class="service-tile-icon"><i class="fas ' + s.icon + '"></i></div>'
+        + '<h4>' + s.label + '</h4>'
+        + '<p>' + s.tagline + '</p>'
+        + '<span class="service-tile-arrow">Choose <i class="fas fa-arrow-right"></i></span>'
+        + '</button>';
+    }).join('');
+    serviceGrid.querySelectorAll('.service-tile').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        selectService(btn.getAttribute('data-service'));
+      });
+    });
+  }
+
+  // --- Render Step 2 (target: vehicle or property) ---
+  function renderTargets(service) {
+    var svc = SERVICES[service];
+    var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
+    var isProperty = svc.target === 'property';
+    if (step2Title) step2Title.textContent = isProperty ? 'Select Your Property Type' : 'Select Your Vehicle Type';
+    if (step2Sub) step2Sub.textContent = isProperty ? 'Choose what best matches the building or space' : 'Choose the option that best matches your vehicle';
+    if (qLabelTarget) qLabelTarget.textContent = isProperty ? 'Property Type' : 'Vehicle Type';
+    if (progressTargetLabel) progressTargetLabel.textContent = isProperty ? 'Property' : 'Vehicle';
+
+    targetGrid.innerHTML = list.map(function (v) {
+      var indicative = formatPrice(roundTo(v.base * svc.multiplier, 10));
+      return '<label class="vehicle-option" data-type="' + v.id + '">'
+        + '<input type="radio" name="calc-target" value="' + v.id + '" />'
+        + '<div class="vehicle-card">'
+        +   '<div class="vehicle-icon"><i class="fas ' + v.icon + '"></i></div>'
+        +   '<span class="vehicle-name">' + v.label + '</span>'
+        +   '<span class="vehicle-example">' + v.example + '</span>'
+        +   '<span class="vehicle-price">From ' + indicative + '</span>'
+        + '</div>'
+        + '</label>';
+    }).join('');
+    targetGrid.querySelectorAll('input[name="calc-target"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        state.target = input.value;
+        if (toStep3Btn) toStep3Btn.disabled = false;
+      });
+    });
+    if (toStep3Btn) toStep3Btn.disabled = true;
+    state.target = null;
+  }
+
+  // --- Render Step 3 (coverage / where) ---
+  function renderCoverage(service) {
+    var svc = SERVICES[service];
+    var isProperty = svc.target === 'property';
+    if (step3Title) step3Title.textContent = isProperty
+      ? 'Where Should the Film Be Applied?'
+      : 'Where on the Vehicle Should It Be Applied?';
+    if (step3Sub) step3Sub.textContent = isProperty
+      ? 'Pick the area / scope &mdash; we offer a free on-site measure if you\'re unsure'
+      : 'Pick the panels / windows you want covered';
+
+    coverageGrid.innerHTML = svc.coverage.map(function (c) {
+      return '<label class="coverage-option" data-id="' + c.id + '">'
+        + '<input type="radio" name="calc-coverage" value="' + c.id + '" />'
+        + '<div class="coverage-card">'
+        +   '<i class="fas ' + c.icon + '"></i>'
+        +   '<span>' + c.label + '</span>'
+        +   '<small>' + c.desc + '</small>'
+        + '</div>'
+        + '</label>';
+    }).join('');
+    coverageGrid.querySelectorAll('input[name="calc-coverage"]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        state.coverage = input.value;
+        if (toStep4Btn) toStep4Btn.disabled = false;
+      });
+    });
+    if (toStep4Btn) toStep4Btn.disabled = true;
+    state.coverage = null;
+  }
+
+  // --- Render Step 4 (quote) ---
+  function renderQuote() {
+    var svc = SERVICES[state.service];
+    var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
+    var target = list.find(function (v) { return v.id === state.target; });
+    var coverage = svc.coverage.find(function (c) { return c.id === state.coverage; });
+    if (!svc || !target || !coverage) return;
+
+    var basePrice = target.base * svc.multiplier;
+    var coverageAdj = basePrice * (coverage.mult - 1);
+    var total = basePrice * coverage.mult;
+
+    var basePriceR = roundTo(basePrice, 10);
+    var totalR = roundTo(total, 10);
+    var coverageAdjR = totalR - basePriceR;
+
+    if (qSummaryService) qSummaryService.textContent = svc.label;
+    if (qSummaryTarget) qSummaryTarget.textContent = target.label;
+    if (qSummaryCoverage) qSummaryCoverage.textContent = coverage.label;
+    if (qPriceBase) qPriceBase.textContent = formatPrice(basePriceR);
+    if (qCoverageRowLabel) qCoverageRowLabel.textContent = (coverage.mult >= 1 ? 'Coverage Adjustment (+' : 'Coverage Adjustment (-') + Math.round(Math.abs(coverage.mult - 1) * 100) + '%)';
+    if (qPriceCoverage) qPriceCoverage.textContent = (coverageAdjR >= 0 ? '+' : '-') + formatPrice(Math.abs(coverageAdjR));
+    if (qPriceTotal) qPriceTotal.textContent = formatPrice(totalR);
+  }
+
+  // --- Flow control ---
+  function selectService(key) {
+    if (!SERVICES[key]) return;
+    state.service = key;
+    renderTargets(key);
+    renderCoverage(key);
+    showStep(2);
+  }
+
+  function reset() {
+    state.service = null;
+    state.target = null;
+    state.coverage = null;
+    showStep(1);
+    if (toStep3Btn) toStep3Btn.disabled = true;
+    if (toStep4Btn) toStep4Btn.disabled = true;
+  }
+
+  // --- Wire navigation ---
+  if (toStep3Btn) toStep3Btn.addEventListener('click', function () { showStep(3); });
+  if (toStep4Btn) toStep4Btn.addEventListener('click', function () { renderQuote(); showStep(4); });
+  calcRoot.querySelectorAll('.back-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var n = parseInt(btn.getAttribute('data-back'), 10);
+      if (!isNaN(n)) showStep(n);
+    });
+  });
+  if (resetBtn) resetBtn.addEventListener('click', reset);
+
+  // --- Deep-link via #calculator?service=... ---
+  function readServiceFromUrl() {
+    var hash = window.location.hash || '';
+    var qIdx = hash.indexOf('?');
+    var src = '';
+    if (qIdx !== -1) src = hash.substring(qIdx + 1);
+    else if (window.location.search) src = window.location.search.replace(/^\?/, '');
+    if (!src) return null;
+    var params = src.split('&');
+    for (var i = 0; i < params.length; i++) {
+      var kv = params[i].split('=');
+      if (kv[0] === 'service' && kv[1]) return decodeURIComponent(kv[1]);
     }
+    return null;
+  }
+  function applyFromUrl() {
+    var s = readServiceFromUrl();
+    if (s && SERVICES[s]) selectService(s);
   }
 
-  shadeInputs.forEach(function (input) {
-    input.addEventListener('change', function () {
-      calcState.shade = this.value;
-      checkStep3Complete();
-    });
-  });
-
-  coverageInputs.forEach(function (input) {
-    input.addEventListener('change', function () {
-      calcState.coverage = this.value;
-      checkStep3Complete();
-    });
-  });
-
-  // Pre-select most popular shade (35% VLT)
-  const defaultShade = document.querySelector('input[name="shade"][value="35"]');
-  if (defaultShade) {
-    defaultShade.checked = true;
-    calcState.shade = '35';
-  }
-  // Pre-select full coverage
-  const defaultCoverage = document.querySelector('input[name="coverage"][value="full"]');
-  if (defaultCoverage) {
-    defaultCoverage.checked = true;
-    calcState.coverage = 'full';
-  }
-
-  if (toStep4Btn) {
-    toStep4Btn.disabled = false; // defaults are set
-    toStep4Btn.addEventListener('click', function () {
-      if (calcState.shade && calcState.coverage) {
-        updateQuote();
-        showStep(4);
+  // --- Intercept homepage service-pickable card clicks ---
+  document.querySelectorAll('a.service-pickable[href*="#calculator"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var href = a.getAttribute('href') || '';
+      var qIdx = href.indexOf('?');
+      var key = null;
+      if (qIdx !== -1) {
+        var params = href.substring(qIdx + 1).split('&');
+        for (var i = 0; i < params.length; i++) {
+          var kv = params[i].split('=');
+          if (kv[0] === 'service' && kv[1] && SERVICES[kv[1]]) { key = kv[1]; break; }
+        }
       }
+      e.preventDefault();
+      if (key) {
+        selectService(key);
+        history.replaceState(null, '', '#calculator?service=' + key);
+      } else {
+        showStep(1);
+        history.replaceState(null, '', '#calculator');
+      }
+      calcRoot.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-  }
+  });
 
-  const backToStep2 = document.getElementById('backToStep2');
-  if (backToStep2) {
-    backToStep2.addEventListener('click', function () { showStep(2); });
-  }
-
-  const backToStep3 = document.getElementById('backToStep3');
-  if (backToStep3) {
-    backToStep3.addEventListener('click', function () { showStep(3); });
-  }
-
-  // Reset
-  const resetCalc = document.getElementById('resetCalc');
-  if (resetCalc) {
-    resetCalc.addEventListener('click', function () {
-      // Reset state
-      calcState.vehicle = null;
-      calcState.film = null;
-      calcState.shade = '35';
-      calcState.coverage = 'full';
-      calcState.currentStep = 1;
-
-      // Uncheck all vehicle and film inputs
-      vehicleInputs.forEach(function (i) { i.checked = false; });
-      filmInputs.forEach(function (i) { i.checked = false; });
-
-      // Re-apply defaults for shade and coverage
-      if (defaultShade) defaultShade.checked = true;
-      if (defaultCoverage) defaultCoverage.checked = true;
-
-      // Disable next buttons
-      if (toStep2Btn) toStep2Btn.disabled = true;
-      if (toStep3Btn) toStep3Btn.disabled = true;
-
-      showStep(1);
-    });
-  }
-
+  // --- Init ---
+  renderServices();
+  applyFromUrl();
+  window.addEventListener('hashchange', applyFromUrl);
 })();
 
 // ===== FAQ ACCORDION =====
@@ -959,131 +1001,4 @@ const GOOGLE_REVIEWS_CONFIG = {
       }
     })
     .catch(function () {});
-})();
-
-
-// ===== Calculator: Service Tabs (Window Tint vs other services) =====
-(function () {
-  var tabs = document.querySelectorAll('.service-tabs .service-tab');
-  if (!tabs.length) return;
-
-  var flows = document.querySelectorAll('.service-flow');
-  var quoteBox = document.getElementById('serviceFlowQuote');
-  var sumService = document.getElementById('flowSummaryService');
-  var sumPackage = document.getElementById('flowSummaryPackage');
-  var sumPrice = document.getElementById('flowPriceTotal');
-
-  var SERVICE_LABELS = {
-    tinting: 'Window Tinting',
-    ceramic: 'Ceramic Coating',
-    wrap: 'Vinyl Wrap & Blackouts',
-    headlights: 'Headlights / Taillights Tint',
-    home: 'Home & Commercial Tinting'
-  };
-
-  function formatPrice(n) {
-    return '$' + Math.round(n).toLocaleString('en-AU');
-  }
-
-  function activateService(service) {
-    tabs.forEach(function (t) {
-      var on = t.getAttribute('data-service') === service;
-      t.classList.toggle('active', on);
-      t.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    flows.forEach(function (f) {
-      f.classList.toggle('active', f.getAttribute('data-flow') === service);
-    });
-    if (service === 'tinting') {
-      if (quoteBox) quoteBox.classList.remove('active');
-    } else {
-      if (quoteBox) quoteBox.classList.add('active');
-      updateFlowQuote(service);
-    }
-  }
-
-  function updateFlowQuote(service) {
-    var flow = document.querySelector('.service-flow[data-flow="' + service + '"]');
-    if (!flow) return;
-    var checked = flow.querySelector('input[type="radio"]:checked');
-    if (!checked) return;
-    var price = parseFloat(checked.getAttribute('data-price') || '0');
-    var label = checked.getAttribute('data-label') || '';
-    if (sumService) sumService.textContent = SERVICE_LABELS[service] || service;
-    if (sumPackage) sumPackage.textContent = label;
-    if (sumPrice) {
-      if (service === 'home') {
-        sumPrice.textContent = formatPrice(price) + ' / m\u00b2';
-      } else {
-        sumPrice.textContent = 'From ' + formatPrice(price);
-      }
-    }
-  }
-
-  // Wire up tab clicks
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      activateService(tab.getAttribute('data-service'));
-    });
-  });
-
-  // Wire up package radio changes
-  document.querySelectorAll('.service-flow input[type="radio"]').forEach(function (input) {
-    input.addEventListener('change', function () {
-      var flow = input.closest('.service-flow');
-      if (flow) updateFlowQuote(flow.getAttribute('data-flow'));
-    });
-  });
-
-  // Read ?service= from hash like "#calculator?service=ceramic" or query string
-  function readServiceFromUrl() {
-    var hash = window.location.hash || '';
-    var qIdx = hash.indexOf('?');
-    var src = '';
-    if (qIdx !== -1) src = hash.substring(qIdx + 1);
-    else if (window.location.search) src = window.location.search.replace(/^\?/, '');
-    if (!src) return null;
-    var params = src.split('&');
-    for (var i = 0; i < params.length; i++) {
-      var kv = params[i].split('=');
-      if (kv[0] === 'service' && kv[1]) return decodeURIComponent(kv[1]);
-    }
-    return null;
-  }
-
-  function applyFromUrl() {
-    var s = readServiceFromUrl();
-    if (s && SERVICE_LABELS[s]) {
-      activateService(s);
-      var calc = document.getElementById('calculator');
-      if (calc) calc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-  // Initial state
-  applyFromUrl();
-  window.addEventListener('hashchange', applyFromUrl);
-
-  // Intercept clicks on homepage service-pickable cards that include ?service= in href
-  document.querySelectorAll('a.service-pickable[href*="#calculator"]').forEach(function (a) {
-    a.addEventListener('click', function (e) {
-      var href = a.getAttribute('href') || '';
-      var qIdx = href.indexOf('?');
-      if (qIdx === -1) return; // plain #calculator -> default tinting flow
-      var src = href.substring(qIdx + 1);
-      var params = src.split('&');
-      for (var i = 0; i < params.length; i++) {
-        var kv = params[i].split('=');
-        if (kv[0] === 'service' && kv[1] && SERVICE_LABELS[kv[1]]) {
-          e.preventDefault();
-          activateService(kv[1]);
-          var calc = document.getElementById('calculator');
-          if (calc) calc.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // update hash without re-firing scroll
-          history.replaceState(null, '', '#calculator?service=' + kv[1]);
-          return;
-        }
-      }
-    });
-  });
 })();

@@ -909,3 +909,57 @@ const GOOGLE_REVIEWS_CONFIG = {
     update();
   })();
 })();
+
+// ===== GEO-AWARE DYNAMIC HEADLINE =====
+(function initGeoHeadline() {
+  var SUBURBS = ['Essendon','Tullamarine','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Melbourne'];
+  var heroLoc = document.getElementById('heroLocation');
+  var heroSub = document.getElementById('heroSubtitle');
+  if (!heroLoc) return;
+
+  function applyLocation(name) {
+    if (!name) return;
+    heroLoc.textContent = name;
+    document.title = 'Top-Rated Car Window Tinting in ' + name + ' & Melbourne | Elite Car Tinting';
+    if (heroSub) {
+      heroSub.textContent = 'Premium quality films, expert installation, lifetime warranty \u2014 trusted car window tinting for ' + name + ' and all surrounding Melbourne suburbs.';
+    }
+  }
+
+  // 1) Manual override via ?loc= or stored choice
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var qs = params.get('loc');
+    if (qs) {
+      var match = SUBURBS.find(function (s) { return s.toLowerCase() === qs.toLowerCase(); });
+      if (match) { applyLocation(match); localStorage.setItem('ect_loc', match); return; }
+    }
+    var stored = localStorage.getItem('ect_loc');
+    if (stored && SUBURBS.indexOf(stored) !== -1) { applyLocation(stored); return; }
+  } catch (e) {}
+
+  // 2) Geolocation (with consent prompt) - only if user clicks an opt-in or supports automatic
+  if (!('geolocation' in navigator)) return;
+  if (!navigator.permissions || !navigator.permissions.query) return;
+  navigator.permissions.query({ name: 'geolocation' }).then(function (status) {
+    if (status.state !== 'granted') return; // do not prompt automatically
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      var lat = pos.coords.latitude, lng = pos.coords.longitude;
+      var url = 'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lng + '&zoom=14&addressdetails=1';
+      fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var addr = data && data.address ? data.address : {};
+          var candidate = addr.suburb || addr.neighbourhood || addr.town || addr.city || addr.city_district;
+          if (!candidate) return;
+          var match = SUBURBS.find(function (s) { return s.toLowerCase() === candidate.toLowerCase(); });
+          if (match) {
+            applyLocation(match);
+            try { localStorage.setItem('ect_loc', match); } catch (e) {}
+          }
+        })
+        .catch(function () {});
+    }, function () {}, { maximumAge: 600000, timeout: 5000 });
+  }).catch(function () {});
+})();
+

@@ -1097,14 +1097,19 @@ a.service-card:hover { text-decoration: none; }
 .cert-badge {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.05);
+  gap: 8px;
+  background: #fff;
   border: 1px solid rgba(255,255,255,0.12);
-  color: var(--lighter);
+  color: #1a1a1a;
   font-size: 0.78rem;
   font-weight: 600;
-  padding: 6px 14px;
+  padding: 8px 14px;
   border-radius: 6px;
+}
+.cert-badge .cert-logo {
+  height: 20px;
+  width: auto;
+  display: block;
 }
 
 /* ===== COMPARISON TABLE ===== */

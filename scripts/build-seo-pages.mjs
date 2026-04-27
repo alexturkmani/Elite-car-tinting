@@ -270,7 +270,7 @@ const NAV = `
 <nav class="navbar" id="navbar">
   <div class="container nav-container">
     <a href="/" class="logo" aria-label="Elite Car Tinting Home">
-      <img src="/images/logo.webp" alt="Elite Car Tinting" class="logo-img" />
+      <img src="/images/logo.svg" alt="Elite Car Tinting" class="logo-img" />
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="/#services">Services</a></li>
@@ -295,7 +295,7 @@ const FOOTER = `
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="/" class="logo logo-footer" aria-label="Elite Car Tinting">
-          <img src="/images/logo.webp" alt="Elite Car Tinting" class="logo-img" />
+          <img src="/images/logo.svg" alt="Elite Car Tinting" class="logo-img" />
         </a>
         <p>Tullamarine's trusted experts in car window tinting, paint protection &amp; ceramic coatings, detailing and complete new-car packages. Premium films, expert installation, lifetime warranty.</p>
         <div class="footer-social">
@@ -385,7 +385,7 @@ const localBusinessSchema = (page) => {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "AutoRepair"],
   "name": ${JSON.stringify(name)},
-  "image": "${SITE}/images/logo.webp",
+  "image": "${SITE}/images/logo.svg",
   "@id": "${SITE}/#business",
   "url": "${SITE}/${page.slug}/",
   "telephone": "+61411017040",

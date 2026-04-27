@@ -328,17 +328,35 @@ button:disabled, .btn:disabled {
   justify-content: center;
 }
 .trust-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
   color: var(--lighter);
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  padding: 8px 16px;
-  border-radius: 6px;
+  background: transparent;
+  border: 0;
+  padding: 0;
 }
-.trust-item i { color: var(--accent); font-size: 0.85rem; }
+.trust-item i { font-size: 0.95rem; }
+/* Color icons by meaning */
+.trust-item .fa-shield-alt,
+.trust-item .fa-shield { color: #38bdf8; }      /* warranty - blue */
+.trust-item .fa-clock { color: #fbbf24; }        /* speed - amber */
+.trust-item .fa-medal,
+.trust-item .fa-star { color: #fbbf24; }         /* reviews - gold */
+.trust-item .fa-map-marker-alt,
+.trust-item .fa-location-dot { color: #f87171; } /* location - red */
+.trust-item .fa-leaf { color: #34d399; }         /* energy - green */
+.trust-item .fa-eye-slash { color: #a78bfa; }    /* privacy - purple */
+.trust-item .fa-tools,
+.trust-item .fa-wrench { color: #38bdf8; }       /* tools - blue */
+.trust-item .fa-award,
+.trust-item .fa-certificate { color: #fbbf24; }  /* award - gold */
+.trust-item .fa-home,
+.trust-item .fa-house { color: #34d399; }        /* home - green */
+.trust-item .fa-envelope { color: #38bdf8; }     /* contact - blue */
+.trust-item .fa-images,
+.trust-item .fa-camera { color: #a78bfa; }       /* gallery - purple */
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .hero-scroll-indicator {
   position: absolute;

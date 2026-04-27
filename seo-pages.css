@@ -89,7 +89,6 @@ body.seo-page-body {
   font-size: 0.9rem;
   color: var(--lighter);
 }
-.seo-hero-trust .trust-item i { color: var(--accent); }
 .seo-hero-cta {
   display: flex;
   flex-wrap: wrap;

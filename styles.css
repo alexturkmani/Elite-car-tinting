@@ -2664,3 +2664,90 @@ body.call-bar-visible {
 @media (max-width: 720px) {
   .instagram-feed .ig-fallback-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============================================================
+   April 2026 updates: bigger brand badges, tint custom request,
+   windscreen add-on, auto-advance step nav
+   ============================================================ */
+.cert-badges-xl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  justify-content: center;
+}
+.cert-badges-xl .cert-badge {
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 22px 30px;
+  border-radius: 14px;
+  gap: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+.cert-badges-xl .cert-badge .cert-logo { height: 56px; }
+@media (max-width: 720px) {
+  .cert-badges-xl { gap: 12px; }
+  .cert-badges-xl .cert-badge { padding: 14px 18px; font-size: 0.9rem; }
+  .cert-badges-xl .cert-badge .cert-logo { height: 38px; }
+}
+
+/* Custom Request textarea inside step 3 */
+.tint-custom-input {
+  width: 100%;
+  min-height: 90px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  color: var(--white);
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.tint-custom-input::placeholder { color: rgba(255,255,255,0.35); }
+.tint-custom-input:focus {
+  outline: none;
+  border-color: var(--white);
+  background: rgba(255,255,255,0.07);
+}
+
+/* Windscreen / tint add-ons */
+.tint-addon-block { width: 100%; }
+.tint-addon-option { display: block; cursor: pointer; }
+.tint-addon-option input { display: none; }
+.tint-addon-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 14px;
+  row-gap: 4px;
+  padding: 16px 18px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--gradient-card);
+  transition: all 0.2s ease;
+}
+.tint-addon-card i {
+  grid-row: 1 / span 2;
+  font-size: 1.6rem;
+  color: var(--lighter);
+}
+.tint-addon-label {
+  font-weight: 700;
+  color: var(--white);
+}
+.tint-addon-card small {
+  grid-column: 2;
+  color: var(--light);
+  font-size: 0.8rem;
+}
+.tint-addon-option input:checked ~ .tint-addon-card {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.06);
+}
+.tint-addon-option:hover .tint-addon-card { border-color: rgba(255,255,255,0.3); }
+
+/* Step nav fade-in when auto-advance is active */
+.step-nav-auto[hidden] { display: none !important; }
+.step-nav-auto { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

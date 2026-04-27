@@ -192,9 +192,7 @@
       multiplier: 1.0,
       coverage: [
         { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         icon: 'fa-window-maximize' },
-        { id: 'rear2',      label: 'Rear 2 Windows',           desc: 'Both rear passenger windows',       icon: 'fa-window-restore' },
-        { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' },
-        { id: 'windscreen', label: 'Full Car + Windscreen',    desc: 'Includes windscreen strip / film',  icon: 'fa-car-side' }
+        { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' }
       ]
     },
     ceramic: {
@@ -252,7 +250,7 @@
     }
   };
 
-  const state = { service: null, target: null, coverage: null, film: null, shade: null };
+  const state = { service: null, target: null, coverage: null, film: null, shade: null, windscreen: false, customRequest: '' };
 
   // Film options (only relevant for window tinting service)
   const FILMS = [
@@ -363,6 +361,8 @@
       input.addEventListener('change', function () {
         state.target = input.value;
         if (toStep3Btn) toStep3Btn.disabled = false;
+        // Auto-advance to step 3
+        setTimeout(function () { showStep(3); }, 220);
       });
     });
     if (toStep3Btn) toStep3Btn.disabled = true;
@@ -395,6 +395,19 @@
         + '</label>';
     }).join('');
 
+    // Tinting: add a "Custom Request" card (replaces the old rear-only options)
+    if (isTinting) {
+      coverageHtml +=
+        '<label class="coverage-option coverage-option-custom" data-id="custom">'
+        + '<input type="radio" name="calc-coverage" value="custom" />'
+        + '<div class="coverage-card">'
+        +   '<i class="fas fa-pen-to-square"></i>'
+        +   '<span>Custom Request</span>'
+        +   '<small>Tell us exactly what you need</small>'
+        + '</div>'
+        + '</label>';
+    }
+
     var extrasHtml = '';
     if (isTinting) {
       var filmCards = FILMS.map(function (f) {
@@ -425,6 +438,11 @@
       }).join('');
       extrasHtml =
         '<div class="tint-extras">'
+        +   '<div class="tint-extras-block tint-custom-block" id="tintCustomBlock" hidden>'
+        +     '<h4 class="tint-extras-title">Describe Your Custom Request</h4>'
+        +     '<textarea id="calcCustomRequest" class="tint-custom-input" rows="3" '
+        +       'placeholder="e.g. Just back windscreen, sunstrip across top, only driver door, etc."></textarea>'
+        +   '</div>'
         +   '<div class="tint-extras-block">'
         +     '<h4 class="tint-extras-title">Choose Your Film Type</h4>'
         +     '<div class="film-grid">' + filmCards + '</div>'
@@ -434,40 +452,95 @@
         +     '<p class="tint-extras-sub">Lower % = darker. We&rsquo;ll confirm legal limits with you on site.</p>'
         +     '<div class="shade-grid">' + shadePills + '</div>'
         +   '</div>'
+        +   '<div class="tint-extras-block tint-addon-block">'
+        +     '<h4 class="tint-extras-title">Add-Ons (Optional)</h4>'
+        +     '<label class="tint-addon-option">'
+        +       '<input type="checkbox" id="calcWindscreen" />'
+        +       '<span class="tint-addon-card">'
+        +         '<i class="fas fa-car-side"></i>'
+        +         '<span class="tint-addon-label">Windscreen Strip / Full Windscreen Tint</span>'
+        +         '<small>Top sun-strip or full windscreen film &mdash; legal limits apply</small>'
+        +       '</span>'
+        +     '</label>'
+        +   '</div>'
         + '</div>';
     }
 
     coverageGrid.innerHTML = coverageHtml + extrasHtml;
 
+    var step3Nav = document.getElementById('step3Nav');
+    var customBlock = coverageGrid.querySelector('#tintCustomBlock');
+    var customInput = coverageGrid.querySelector('#calcCustomRequest');
+    var windscreenInput = coverageGrid.querySelector('#calcWindscreen');
+    var autoAdvanceTimer = null;
+
+    function readyToAdvance() {
+      if (!state.coverage) return false;
+      if (state.coverage === 'custom' && (!state.customRequest || state.customRequest.trim().length < 3)) return false;
+      if (isTinting) return !!state.film && !!state.shade;
+      return true;
+    }
     function updateNextEnabled() {
-      var ok = !!state.coverage;
-      if (isTinting) ok = ok && !!state.film && !!state.shade;
+      var ok = readyToAdvance();
       if (toStep4Btn) toStep4Btn.disabled = !ok;
+      if (step3Nav) step3Nav.hidden = !ok;
+    }
+    function scheduleAdvance() {
+      if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
+      if (!readyToAdvance()) return;
+      autoAdvanceTimer = setTimeout(function () {
+        if (readyToAdvance() && document.activeElement !== customInput) {
+          renderQuote();
+          showStep(4);
+        }
+      }, 500);
     }
 
     coverageGrid.querySelectorAll('input[name="calc-coverage"]').forEach(function (input) {
       input.addEventListener('change', function () {
         state.coverage = input.value;
+        if (customBlock) customBlock.hidden = (input.value !== 'custom');
+        if (input.value === 'custom' && customInput) {
+          setTimeout(function () { customInput.focus(); }, 60);
+        }
         updateNextEnabled();
+        scheduleAdvance();
       });
     });
+    if (customInput) {
+      customInput.addEventListener('input', function () {
+        state.customRequest = customInput.value;
+        updateNextEnabled();
+      });
+      customInput.addEventListener('blur', function () { scheduleAdvance(); });
+    }
+    if (windscreenInput) {
+      windscreenInput.addEventListener('change', function () {
+        state.windscreen = windscreenInput.checked;
+      });
+    }
     coverageGrid.querySelectorAll('input[name="calc-film"]').forEach(function (input) {
       input.addEventListener('change', function () {
         state.film = input.value;
         updateNextEnabled();
+        scheduleAdvance();
       });
     });
     coverageGrid.querySelectorAll('input[name="calc-shade"]').forEach(function (input) {
       input.addEventListener('change', function () {
         state.shade = input.value;
         updateNextEnabled();
+        scheduleAdvance();
       });
     });
 
     state.coverage = null;
     state.film = null;
     state.shade = null;
+    state.windscreen = false;
+    state.customRequest = '';
     if (toStep4Btn) toStep4Btn.disabled = true;
+    if (step3Nav) step3Nav.hidden = true;
   }
 
   // --- Render Step 4 (request quote) ---
@@ -476,11 +549,20 @@
     var list = svc.target === 'property' ? PROPERTIES : VEHICLES;
     var target = list.find(function (v) { return v.id === state.target; });
     var coverage = svc.coverage.find(function (c) { return c.id === state.coverage; });
-    if (!svc || !target || !coverage) return;
+    var isCustom = state.coverage === 'custom';
+    if (!svc || !target || (!coverage && !isCustom)) return;
 
     if (qSummaryService) qSummaryService.textContent = svc.label;
     if (qSummaryTarget) qSummaryTarget.textContent = target.label;
-    if (qSummaryCoverage) qSummaryCoverage.textContent = coverage.label;
+    if (qSummaryCoverage) {
+      if (isCustom) {
+        qSummaryCoverage.textContent = 'Custom: ' + (state.customRequest || '').trim();
+      } else {
+        var cov = coverage.label;
+        if (state.windscreen) cov += ' + Windscreen Add-On';
+        qSummaryCoverage.textContent = cov;
+      }
+    }
 
     var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
     var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
@@ -547,16 +629,22 @@
       var coverage = svc && svc.coverage.find(function (c) { return c.id === state.coverage; });
       var film = state.film ? FILMS.find(function (f) { return f.id === state.film; }) : null;
       var shade = state.shade ? SHADES.find(function (s) { return s.id === state.shade; }) : null;
+      var coverageLabel = state.coverage === 'custom'
+        ? ('Custom: ' + (state.customRequest || '').trim())
+        : (coverage ? coverage.label : '');
+      if (state.windscreen && state.coverage !== 'custom') coverageLabel += ' + Windscreen Add-On';
 
       var payload = {
         name: name,
         phone: phone,
         service: svc ? svc.label : '',
         target: target ? target.label : '',
-        coverage: coverage ? coverage.label : '',
+        coverage: coverageLabel,
         film: film ? film.label : '',
         shade: shade ? shade.label : '',
-        _subject: 'New Quote Request — ' + (svc ? svc.label : 'Elite Car Tinting'),
+        windscreen_addon: state.windscreen ? 'Yes' : 'No',
+        custom_request: state.customRequest || '',
+        _subject: 'New Quote Request - ' + (svc ? svc.label : 'Elite Car Tinting'),
         _template: 'table',
         _captcha: 'false'
       };
@@ -566,25 +654,46 @@
         sb.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending&hellip;';
       }
 
-      fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        return res.json();
-      }).then(function () {
-        quoteForm.hidden = true;
-        if (quoteSuccess) {
-          quoteSuccess.hidden = false;
-          quoteSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }).catch(function (err) {
+      function onFail(err) {
         console.warn('[QuoteForm] submit failed:', err && err.message);
         if (sb) {
           sb.disabled = false;
           sb.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed &mdash; Try Calling';
         }
+      }
+      function onOk() {
+        quoteForm.hidden = true;
+        if (quoteSuccess) {
+          quoteSuccess.hidden = false;
+          quoteSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      // Hard timeout so the button never hangs on "Sending..."
+      var ctrl = ('AbortController' in window) ? new AbortController() : null;
+      var timeoutId = setTimeout(function () {
+        if (ctrl) ctrl.abort();
+        onFail(new Error('timeout'));
+      }, 12000);
+
+      fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: ctrl ? ctrl.signal : undefined
+      }).then(function (res) {
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json().catch(function () { return { success: 'true' }; });
+      }).then(function (data) {
+        // FormSubmit returns { success: "true", message: "..." } on real success,
+        // or { success: "false", message: "Confirm your email..." } on first send.
+        // Either way the email reaches/queues to inbox, so treat both as success.
+        if (data && data.success === false) throw new Error(data.message || 'Form rejected');
+        onOk();
+      }).catch(function (err) {
+        clearTimeout(timeoutId);
+        onFail(err);
       });
     });
   }

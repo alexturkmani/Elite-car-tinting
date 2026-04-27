@@ -202,7 +202,7 @@
   <section class="stats-bar">
     <div class="container stats-grid">
       <div class="stat-item">
-        <span class="stat-number" data-target="5000">0</span><span class="stat-suffix">+</span>
+        <span class="stat-number" data-target="7500">0</span><span class="stat-suffix">+</span>
         <span class="stat-label">Cars Tinted</span>
       </div>
       <div class="stat-item">
@@ -322,11 +322,6 @@
             </div>
           </div>
           <div class="vehicle-grid" id="targetGrid"><!-- populated by JS --></div>
-          <div class="step-nav">
-            <button class="btn btn-primary btn-lg" id="toStep3" disabled>
-              Next: Choose Coverage <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
         </div>
 
         <!-- Step 3: Coverage / Where -->
@@ -340,7 +335,7 @@
             </div>
           </div>
           <div class="coverage-grid" id="coverageGrid"><!-- populated by JS --></div>
-          <div class="step-nav">
+          <div class="step-nav step-nav-auto" id="step3Nav" hidden>
             <button class="btn btn-primary btn-lg" id="toStep4" disabled>
               Continue to Your Details <i class="fas fa-arrow-right"></i>
             </button>
@@ -451,7 +446,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag"><i class="fab fa-instagram"></i> Our Work</span>
-        <h2>See Our Latest Tint Jobs Live on Instagram</h2>
+        <h2>See Our Latest Jobs Live on Instagram</h2>
         <p>Real installs from our Tullamarine workshop &mdash; updated automatically as we post. <a href="https://www.instagram.com/elitecartinting" target="_blank" rel="noopener" class="ig-handle">@elitecartinting</a></p>
       </div>
 
@@ -558,23 +553,7 @@
           </div>
         </div>
         <div class="why-us-visual">
-          <div class="visual-card visual-card-stats">
-            <div class="visual-stats visual-stats-lg">
-              <div class="v-stat">
-                <span class="v-stat-number">99%</span>
-                <span class="v-stat-label">UV Blocked</span>
-              </div>
-              <div class="v-stat">
-                <span class="v-stat-number">80%</span>
-                <span class="v-stat-label">Heat Rejected</span>
-              </div>
-              <div class="v-stat">
-                <span class="v-stat-number">∞</span>
-                <span class="v-stat-label">Warranty</span>
-              </div>
-            </div>
-          </div>
-          <div class="cert-badges cert-badges-lg">
+          <div class="cert-badges cert-badges-xl">
             <div class="cert-badge"><img src="images/brands/3m.svg" alt="3M" class="cert-logo" /> Certified</div>
             <div class="cert-badge"><img src="images/brands/llumar.png" alt="LLumar" class="cert-logo" /> Dealer</div>
             <div class="cert-badge"><img src="images/brands/suntek.svg" alt="SunTek" class="cert-logo" /> Pro</div>

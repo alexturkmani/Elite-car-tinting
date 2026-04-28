@@ -1260,7 +1260,7 @@ const GOOGLE_REVIEWS_CONFIG = {
     heroLoc.textContent = name;
     document.title = 'Top-Rated Car Window Tinting in ' + name + ' & Melbourne | Elite Car Tinting';
     if (heroSub) {
-      heroSub.textContent = 'Premium quality films, expert installation, lifetime warranty \u2014 trusted car window tinting for ' + name + ' and all surrounding Melbourne suburbs.';
+      heroSub.textContent = 'Trusted Car Window Tinting in ' + name + '.';
     }
   }
 

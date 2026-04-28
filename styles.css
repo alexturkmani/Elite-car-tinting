@@ -362,7 +362,8 @@ button:disabled, .btn:disabled {
 .trust-item .fa-envelope { color: #38bdf8; }     /* contact - blue */
 .trust-item .fa-images,
 .trust-item .fa-camera { color: #a78bfa; }       /* gallery - purple */
-.hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.hero-cta { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; align-items: center; }
+.hero-cta .hero-cta-btn { min-width: 220px; justify-content: center; }
 .hero-scroll-indicator {
   position: absolute;
   bottom: 32px;
@@ -1554,6 +1555,13 @@ a.area-tag { text-decoration: none; cursor: pointer; }
   padding: 80px 0 0;
   text-align: center;
 }
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.footer-brand .logo-footer { display: inline-flex; justify-content: center; }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -1768,7 +1776,8 @@ a.area-tag { text-decoration: none; cursor: pointer; }
   .hero-content { padding: 100px 20px 60px; }
   .hero-trust { gap: 10px; }
   .trust-item { font-size: 0.8rem; padding: 6px 12px; }
-  .hero-cta { flex-direction: column; align-items: flex-start; }
+  .hero-cta { flex-direction: row; align-items: center; justify-content: center; }
+  .hero-cta .hero-cta-btn { min-width: 0; flex: 1 1 0; }
 
   .services-grid { grid-template-columns: 1fr; }
   .vehicle-grid { grid-template-columns: repeat(2, 1fr); }

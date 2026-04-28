@@ -192,10 +192,7 @@
       multiplier: 1.0,
       multi: true,
       coverage: [
-        { id: 'front2',     label: 'Front 2 Windows',          desc: 'Driver + passenger fronts',         icon: 'fa-window-maximize' },
-        { id: 'rear2',      label: 'Rear 2 Windows',           desc: 'Both rear passenger windows',       icon: 'fa-window-restore' },
-        { id: 'rearwind',   label: 'Rear Windscreen',          desc: 'Back glass / hatch window',         icon: 'fa-square' },
-        { id: 'sunroof',    label: 'Sunroof',                  desc: 'Glass roof panel',                  icon: 'fa-square-caret-up' },
+        { id: '2windows',   label: '2 Windows',                desc: 'Any 2 windows of your choice',      icon: 'fa-window-maximize' },
         { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' }
       ]
     },
@@ -425,6 +422,27 @@
       }).join('');
       extrasHtml =
         '<div class="tint-extras">'
+        +   '<div class="tint-extras-block tint-addon-block">'
+        +     '<h4 class="tint-extras-title">Add-Ons (Optional)</h4>'
+        +     '<div class="tint-addon-grid">'
+        +       '<label class="tint-addon-option">'
+        +         '<input type="checkbox" id="calcWindscreen" />'
+        +         '<span class="tint-addon-card">'
+        +           '<i class="fas fa-car-side"></i>'
+        +           '<span class="tint-addon-label">Windscreen Strip / Full Windscreen Tint</span>'
+        +           '<small>Top sun-strip or full windscreen film &mdash; legal limits apply</small>'
+        +         '</span>'
+        +       '</label>'
+        +       '<label class="tint-addon-option">'
+        +         '<input type="checkbox" id="calcRemoveOldTint" />'
+        +         '<span class="tint-addon-card">'
+        +           '<i class="fas fa-trash-can"></i>'
+        +           '<span class="tint-addon-label">Remove Old Tint</span>'
+        +           '<small>Strip existing film, clean adhesive &amp; prep glass before new install</small>'
+        +         '</span>'
+        +       '</label>'
+        +     '</div>'
+        +   '</div>'
         +   '<div class="tint-extras-block tint-custom-block" id="tintCustomBlock" hidden>'
         +     '<h4 class="tint-extras-title">Describe Your Custom Request</h4>'
         +     '<textarea id="calcCustomRequest" class="tint-custom-input" rows="3" '
@@ -447,27 +465,6 @@
         +     '<h4 class="tint-extras-title">Sample Shade Range (VLT)</h4>'
         +     '<p class="tint-extras-sub">A sample of the SunTek Pro shades you can choose from on the day. Lower % = darker. We&rsquo;ll confirm legal limits with you on site.</p>'
         +     '<div class="shade-grid shade-grid-info">' + shadePills + '</div>'
-        +   '</div>'
-        +   '<div class="tint-extras-block tint-addon-block">'
-        +     '<h4 class="tint-extras-title">Add-Ons (Optional)</h4>'
-        +     '<div class="tint-addon-grid">'
-        +       '<label class="tint-addon-option">'
-        +         '<input type="checkbox" id="calcWindscreen" />'
-        +         '<span class="tint-addon-card">'
-        +           '<i class="fas fa-car-side"></i>'
-        +           '<span class="tint-addon-label">Windscreen Strip / Full Windscreen Tint</span>'
-        +           '<small>Top sun-strip or full windscreen film &mdash; legal limits apply</small>'
-        +         '</span>'
-        +       '</label>'
-        +       '<label class="tint-addon-option">'
-        +         '<input type="checkbox" id="calcRemoveOldTint" />'
-        +         '<span class="tint-addon-card">'
-        +           '<i class="fas fa-trash-can"></i>'
-        +           '<span class="tint-addon-label">Remove Old Tint</span>'
-        +           '<small>Strip existing film, clean adhesive &amp; prep glass before new install</small>'
-        +         '</span>'
-        +       '</label>'
-        +     '</div>'
         +   '</div>'
         + '</div>';
     }
@@ -512,8 +509,8 @@
     function scheduleAdvance() {
       if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
       if (!readyToAdvance()) return;
-      // Multi-select: don't auto-advance — user may want to add more panels
-      if (isMulti) return;
+      // Multi-select: only auto-advance once 2 options have been selected
+      if (isMulti && (!Array.isArray(state.coverage) || state.coverage.length < 2)) return;
       autoAdvanceTimer = setTimeout(function () {
         if (readyToAdvance() && document.activeElement !== customInput) {
           renderQuote();

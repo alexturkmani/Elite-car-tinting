@@ -958,7 +958,8 @@ a.service-card:hover { text-decoration: none; }
   background: var(--accent);
   box-shadow: 0 0 15px rgba(56,189,248,0.3);
 }
-.progress-step.completed .progress-dot {
+.progress-step.completed .progress-dot,
+.progress-step.done .progress-dot {
   border-color: var(--success);
   background: var(--success);
 }
@@ -1238,7 +1239,7 @@ a.service-card:hover { text-decoration: none; }
 /* ===== INSTAGRAM FEED ===== */
 .instagram-section {
   padding: 90px 0;
-  background: var(--dark-1);
+  background: var(--dark);
   position: relative;
   overflow: hidden;
 }
@@ -2736,6 +2737,11 @@ body.call-bar-visible {
   border-color: var(--white);
   background: rgba(255,255,255,0.07);
 }
+.tint-custom-next {
+  margin-top: 14px;
+  width: 100%;
+  justify-content: center;
+}
 
 /* Windscreen / tint add-ons */
 .tint-addon-block { width: 100%; }
@@ -2775,8 +2781,8 @@ body.call-bar-visible {
 
 /* Step nav fade-in when auto-advance is active */
 .step-nav-auto[hidden] { display: none !important; }
-.step-nav-auto { animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.step-nav-auto { animation: stepNavIn 0.3s ease; }
+@keyframes stepNavIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 
 /* === Calculator: informative film/shade + add-on layout (Nov 2025) === */

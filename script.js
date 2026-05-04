@@ -447,6 +447,9 @@
         +     '<h4 class="tint-extras-title">Describe Your Custom Request</h4>'
         +     '<textarea id="calcCustomRequest" class="tint-custom-input" rows="3" '
         +       'placeholder="e.g. Just back windscreen, sunstrip across top, only driver door, etc."></textarea>'
+        +     '<button type="button" class="btn btn-primary btn-lg tint-custom-next" id="tintCustomNext" disabled hidden>'
+        +       'Continue to Your Details <i class="fas fa-arrow-right"></i>'
+        +     '</button>'
         +   '</div>'
         +   '<div class="tint-info-banner">'
         +     '<i class="fas fa-info-circle"></i>'
@@ -503,14 +506,24 @@
     function updateNextEnabled() {
       var ok = readyToAdvance();
       if (toStep4Btn) toStep4Btn.disabled = !ok;
-      if (step3Nav) step3Nav.hidden = !ok;
+      if (isTinting) {
+        if (step3Nav) step3Nav.hidden = true;
+        var customNext = coverageGrid.querySelector('#tintCustomNext');
+        if (customNext) {
+          var customOk = isCustomSelected() && ok;
+          customNext.disabled = !customOk;
+          customNext.hidden = !customOk;
+        }
+      } else {
+        if (step3Nav) step3Nav.hidden = !ok;
+      }
     }
     var autoAdvanceTimer = null;
     function scheduleAdvance() {
       if (autoAdvanceTimer) clearTimeout(autoAdvanceTimer);
       if (!readyToAdvance()) return;
-      // Multi-select: only auto-advance once 2 options have been selected
-      if (isMulti && (!Array.isArray(state.coverage) || state.coverage.length < 2)) return;
+      // For tinting: never auto-advance if custom is selected (user clicks in-block Next button)
+      if (isCustomSelected()) return;
       autoAdvanceTimer = setTimeout(function () {
         if (readyToAdvance() && document.activeElement !== customInput) {
           renderQuote();
@@ -544,6 +557,13 @@
     if (removeOldTintInput) {
       removeOldTintInput.addEventListener('change', function () {
         state.removeOldTint = removeOldTintInput.checked;
+      });
+    }
+    var customNextBtn = coverageGrid.querySelector('#tintCustomNext');
+    if (customNextBtn) {
+      customNextBtn.addEventListener('click', function () {
+        renderQuote();
+        showStep(4);
       });
     }
 

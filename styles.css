@@ -295,7 +295,7 @@ button:disabled, .btn:disabled {
   position: relative;
   z-index: 2;
   max-width: 800px;
-  padding: 160px 20px 110px;
+  padding: 180px 20px 130px;
   text-align: center;
   margin: 0 auto;
 }

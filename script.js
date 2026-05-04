@@ -190,7 +190,6 @@
       icon: 'fa-car-side',
       target: 'vehicle',
       multiplier: 1.0,
-      multi: true,
       coverage: [
         { id: '2windows',   label: '2 Windows',                desc: 'Any 2 windows of your choice',      icon: 'fa-window-maximize' },
         { id: 'full',       label: 'Full Car',                 desc: 'All side & rear windows',           icon: 'fa-car' }

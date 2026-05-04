@@ -295,7 +295,7 @@ button:disabled, .btn:disabled {
   position: relative;
   z-index: 2;
   max-width: 800px;
-  padding: 120px 20px 80px;
+  padding: 80px 20px 50px;
   text-align: center;
   margin: 0 auto;
 }
@@ -1776,7 +1776,7 @@ span.area-tag { cursor: default; }
   .call-bar-text span { display: none; }
   .call-bar-info .call-bar-icon { display: none; }
 
-  .hero-content { padding: 100px 20px 60px; }
+  .hero-content { padding: 70px 20px 40px; }
   .hero-trust { gap: 10px; }
   .trust-item { font-size: 0.8rem; padding: 6px 12px; }
   .hero-cta { flex-direction: row; align-items: center; justify-content: center; }

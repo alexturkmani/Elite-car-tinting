@@ -270,7 +270,7 @@ button:disabled, .btn:disabled {
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  min-height: 65vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -295,7 +295,7 @@ button:disabled, .btn:disabled {
   position: relative;
   z-index: 2;
   max-width: 800px;
-  padding: 130px 20px 80px;
+  padding: 160px 20px 110px;
   text-align: center;
   margin: 0 auto;
 }

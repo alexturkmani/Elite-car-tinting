@@ -21,13 +21,31 @@ jobs:
       - name: Install Playwright
         run: |
           npm init -y >/dev/null
-          npm i -D playwright@^1.47.0
+          npm i -D playwright@^1.52.0
           npx playwright install --with-deps chromium
 
-      - name: Run scraper
-        id: scrape
+      - name: Run scraper (attempt 1)
+        id: scrape1
         continue-on-error: true
         run: node scripts/scrape-google-reviews.mjs
+
+      - name: Run scraper (attempt 2 – retry on first failure)
+        id: scrape2
+        if: steps.scrape1.outcome == 'failure'
+        continue-on-error: true
+        run: |
+          echo "::warning::First scrape attempt failed — retrying after 30s"
+          sleep 30
+          node scripts/scrape-google-reviews.mjs
+
+      - name: Upload debug screenshot (if present)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrape-debug-screenshot
+          path: debug-screenshot.png
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: Commit updated reviews.json
         if: always()
@@ -39,11 +57,11 @@ jobs:
             git commit -m "chore: refresh Google reviews [skip ci]"
             git push
           else
-            echo "No changes."
+            echo "No changes to reviews.json."
           fi
 
-      - name: Fail if scrape returned a low review count
-        if: steps.scrape.outcome == 'failure'
+      - name: Fail job if both scrape attempts failed
+        if: steps.scrape1.outcome == 'failure' && steps.scrape2.outcome == 'failure'
         run: |
-          echo "::error::Scrape produced fewer than 3 reviews — Google DOM may have changed."
+          echo "::error::Both scrape attempts failed — Google DOM may have changed or bot detection triggered."
           exit 1

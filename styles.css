@@ -1704,7 +1704,7 @@ span.area-tag { cursor: default; }
   align-items: center;
   text-align: center;
 }
-.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; }
+.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; transform: translateX(6px); }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;

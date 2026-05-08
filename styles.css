@@ -476,7 +476,8 @@ button:disabled, .btn:disabled {
 /* Pickable service cards (entire card is a link) */
 a.service-card,
 a.service-pickable {
-  display: block;
+  display: flex;
+  flex-direction: column;
   text-decoration: none;
   color: inherit;
   cursor: pointer;
@@ -550,6 +551,7 @@ a.service-card:hover { text-decoration: none; }
 }
 .service-features {
   margin-bottom: 24px;
+  flex: 1;
 }
 .service-features li {
   display: flex;

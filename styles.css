@@ -1054,23 +1054,19 @@ a.service-card:hover { text-decoration: none; }
   padding: 100px 0;
   background: var(--dark);
 }
-.why-us-grid {
+.why-us-grid { display: none; }
+.why-features {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 48px;
+  margin-bottom: 48px;
 }
-.why-us-content .section-tag { display: inline-block; margin-bottom: 12px; }
-.why-us-content h2 {
-  font-family: var(--font-heading);
-  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-  font-weight: 800;
-  color: var(--white);
-  line-height: 1.2;
-  margin-bottom: 16px;
+.why-cert-row {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
 }
-.why-intro { color: var(--light); margin-bottom: 36px; font-size: 1.05rem; }
-.why-features { display: flex; flex-direction: column; gap: 24px; }
 .why-feature {
   display: flex;
   gap: 16px;
@@ -1858,8 +1854,6 @@ span.area-tag { cursor: default; }
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .vehicle-grid { grid-template-columns: repeat(3, 1fr); }
   .film-grid { grid-template-columns: repeat(3, 1fr); }
-  .why-us-grid { grid-template-columns: 1fr; gap: 40px; }
-  .why-us-visual { max-width: 480px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .contact-details { grid-template-columns: 1fr; gap: 20px; }
   .contact-item { flex-direction: column; align-items: center; text-align: center; }
@@ -1868,6 +1862,7 @@ span.area-tag { cursor: default; }
 
 /* Mobile Large */
 @media (max-width: 768px) {
+  .why-features { grid-template-columns: 1fr; }
   .nav-links { 
     position: fixed;
     top: 0;

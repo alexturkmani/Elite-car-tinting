@@ -815,3 +815,19 @@ const GOOGLE_REVIEWS_CONFIG = {
     })
     .catch(function () {});
 })();
+
+(function initFilmTabs() {
+  var tabs = document.querySelectorAll('.film-tab');
+  var panels = document.querySelectorAll('.film-tab-panel');
+  if (!tabs.length) return;
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
+      panels.forEach(function (p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      var panel = document.getElementById('tab-' + tab.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+}());

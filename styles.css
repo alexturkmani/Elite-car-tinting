@@ -85,6 +85,15 @@ input, select, textarea { font-family: inherit; }
   margin-bottom: 16px;
   letter-spacing: -0.5px;
 }
+.faq-heading-blue {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1.15;
+  margin-bottom: 16px;
+  letter-spacing: -0.5px;
+}
 .section-header p {
   font-size: 1.05rem;
   max-width: 600px;

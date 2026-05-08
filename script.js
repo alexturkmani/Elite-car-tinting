@@ -176,6 +176,7 @@
     });
   });
 
+  quoteForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var nameEl = document.getElementById('qName');
     var phoneEl = document.getElementById('qPhone');
@@ -351,15 +352,52 @@
     // Simulate form submission (replace with actual API call)
     const submitBtn = form.querySelector('[type="submit"]');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sendingâ€¦';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending\u2026';
 
-    setTimeout(function () {
+    const emailEl = form.querySelector('#contactEmail');
+    const payload = {
+      email: emailEl ? emailEl.value.trim() : '',
+      _subject: 'New Quote Request (email) - Elite Car Tinting',
+      _template: 'table',
+      _captcha: 'false'
+    };
+
+    function onOk() {
       form.hidden = true;
       if (formSuccess) {
         formSuccess.hidden = false;
-        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        requestAnimationFrame(function () {
+          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
       }
-    }, 1500);
+    }
+    function onFail() {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
+    }
+
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timeoutId = setTimeout(function () {
+      if (ctrl) ctrl.abort();
+      onFail();
+    }, 12000);
+
+    fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: ctrl ? ctrl.signal : undefined
+    }).then(function (res) {
+      clearTimeout(timeoutId);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json().catch(function () { return { success: 'true' }; });
+    }).then(function (data) {
+      if (data && data.success === false) throw new Error(data.message || 'rejected');
+      onOk();
+    }).catch(function () {
+      clearTimeout(timeoutId);
+      onFail();
+    });
   });
 })();
 

@@ -1705,7 +1705,8 @@ span.area-tag { cursor: default; }
   align-items: center;
   text-align: center;
 }
-.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; transform: translateX(var(--footer-logo-offset)); }
+.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; }
+.footer-brand .logo-footer .logo-img { margin-left: var(--footer-logo-offset); }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;

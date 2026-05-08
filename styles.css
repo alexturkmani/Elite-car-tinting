@@ -1704,7 +1704,7 @@ span.area-tag { cursor: default; }
   align-items: center;
   text-align: center;
 }
-.footer-brand .logo-footer { display: inline-flex; justify-content: center; }
+.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; }
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -1731,9 +1731,13 @@ span.area-tag { cursor: default; }
 .footer-links ul { display: flex; flex-direction: column; gap: 8px; }
 .footer-links a { font-size: 0.85rem; color: var(--light); transition: var(--transition); }
 .footer-links a:hover { color: var(--white); padding-left: 4px; }
+.footer-contact {
+  text-align: center;
+}
 .footer-contact p {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   font-size: 0.85rem;
   color: var(--light);

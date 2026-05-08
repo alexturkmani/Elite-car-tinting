@@ -143,6 +143,7 @@
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#why-us">Why Us</a></li>
         <li><a href="#reviews">Reviews</a></li>
+        <li><a href="#faq">FAQs</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="tel:+61411017040" class="btn btn-nav">
@@ -246,8 +247,8 @@
           </ul>
           <span class="btn btn-primary">Request a Quote <i class="fas fa-arrow-right"></i></span>
         </a>
-        <a href="#calculator" class="service-card service-pickable" data-service="New Car Package">
-          <h3>New Car Package</h3>
+        <a href="#calculator" class="service-card service-pickable" data-service="New Car Protection Package">
+          <h3>New Car Protection Package</h3>
           <p>Ceramic tint, full detailing &amp; ceramic coating &mdash; the complete protection bundle for your brand-new vehicle.</p>
           <ul class="service-features">
             <li><i class="fas fa-check"></i> Premium ceramic window tint</li>
@@ -277,6 +278,16 @@
           <div class="quote-form-row">
             <label for="qPhone">Phone Number</label>
             <input type="tel" id="qPhone" name="phone" placeholder="0400 000 000" required autocomplete="tel" inputmode="tel" />
+          </div>
+          <div class="quote-form-row">
+            <label for="qService">Service</label>
+            <select id="qService" name="service">
+              <option value="" disabled selected>Select a service&hellip;</option>
+              <option value="Window Tinting">Window Tinting</option>
+              <option value="Paint Protection &amp; Ceramic Coating">Paint Protection &amp; Ceramic Coating</option>
+              <option value="Detailing &amp; Interior Protection">Detailing &amp; Interior Protection</option>
+              <option value="New Car Protection Package">New Car Protection Package</option>
+            </select>
           </div>
           <div class="quote-form-row">
             <label for="qCar">Your Car <span class="optional-label">(optional)</span></label>
@@ -545,22 +556,6 @@
             <div class="film-warranty"><i class="fas fa-shield-alt"></i> Lifetime warranty</div>
           </div>
 
-        </div>
-      </div>
-
-      <!-- Book CTA -->
-      <div class="tint-guide-cta">
-        <h3>Ready to Book?</h3>
-        <p>Choose your service below and we&rsquo;ll get back to you with a free quote within 2 business hours.</p>
-        <div class="tint-cta-row">
-          <select id="qService" name="service" class="tint-service-select">
-            <option value="" disabled selected>Select a service&hellip;</option>
-            <option value="Window Tinting">Window Tinting</option>
-            <option value="Paint Protection &amp; Ceramic Coating">Paint Protection &amp; Ceramic Coating</option>
-            <option value="Detailing &amp; Interior Protection">Detailing &amp; Interior Protection</option>
-            <option value="New Car Package">New Car Package</option>
-          </select>
-          <a href="#calculator" class="btn btn-primary btn-lg"><i class="fas fa-paper-plane"></i> Get a Free Quote</a>
         </div>
       </div>
 

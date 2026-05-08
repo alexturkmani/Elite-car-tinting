@@ -1796,8 +1796,8 @@ span.area-tag { cursor: default; }
 .call-bar-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  gap: 12px;
 }
 .call-bar-info {
   display: flex;
@@ -1830,30 +1830,33 @@ span.area-tag { cursor: default; }
 .call-bar-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-width: 180px;
   background: var(--accent);
   color: var(--white);
   font-weight: 700;
   font-size: 0.9rem;
-  padding: 10px 24px;
+  padding: 11px 24px;
   border-radius: 8px;
+  border: 2px solid var(--accent);
   white-space: nowrap;
   transition: var(--transition);
   flex-shrink: 0;
 }
 .call-bar-btn-quote {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.35);
-  color: var(--white);
+  border-color: rgba(255,255,255,0.45);
 }
 .call-bar-btn-quote:hover {
   background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.6);
+  border-color: rgba(255,255,255,0.75);
   transform: translateY(-1px);
   box-shadow: none;
 }
-.call-bar-btn:hover {
+.call-bar-btn:not(.call-bar-btn-quote):hover {
   background: var(--accent-dark);
+  border-color: var(--accent-dark);
   transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(56,189,248,0.3);
 }

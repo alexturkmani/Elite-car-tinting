@@ -1474,7 +1474,7 @@ span.area-tag { cursor: default; }
 .contact-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
 .contact-centered .contact-info > p { max-width: 600px; margin: 0 auto 32px; }
 .contact-centered .social-links { justify-content: center; }
-.contact-item { display: flex; gap: 14px; align-items: flex-start; }
+.contact-item { display: flex; flex-direction: row; gap: 12px; align-items: center; justify-content: flex-start; }
 .contact-icon {
   width: 40px;
   height: 40px;
@@ -1487,8 +1487,7 @@ span.area-tag { cursor: default; }
   color: var(--lighter);
   flex-shrink: 0;
 }
-.contact-item strong { display: block; color: var(--white); font-size: 0.85rem; margin-bottom: 2px; }
-.contact-item a, .contact-item span { font-size: 0.9rem; color: var(--light); }
+.contact-item a, .contact-item span { font-size: 0.95rem; color: var(--light); }
 .contact-item a:hover { color: var(--white); }
 .social-links { display: flex; gap: 12px; }
 .social-link {

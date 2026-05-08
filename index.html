@@ -279,16 +279,6 @@
             <input type="tel" id="qPhone" name="phone" placeholder="0400 000 000" required autocomplete="tel" inputmode="tel" />
           </div>
           <div class="quote-form-row">
-            <label for="qService">Service</label>
-            <select id="qService" name="service">
-              <option value="" disabled selected>Select a service&hellip;</option>
-              <option value="Window Tinting">Window Tinting</option>
-              <option value="Paint Protection &amp; Ceramic Coating">Paint Protection &amp; Ceramic Coating</option>
-              <option value="Detailing &amp; Interior Protection">Detailing &amp; Interior Protection</option>
-              <option value="New Car Package">New Car Package</option>
-            </select>
-          </div>
-          <div class="quote-form-row">
             <label for="qCar">Your Car <span class="optional-label">(optional)</span></label>
             <input type="text" id="qCar" name="car" placeholder="e.g. 2022 Toyota RAV4" autocomplete="off" />
           </div>
@@ -555,6 +545,22 @@
             <div class="film-warranty"><i class="fas fa-shield-alt"></i> Lifetime warranty</div>
           </div>
 
+        </div>
+      </div>
+
+      <!-- Book CTA -->
+      <div class="tint-guide-cta">
+        <h3>Ready to Book?</h3>
+        <p>Choose your service below and we&rsquo;ll get back to you with a free quote within 2 business hours.</p>
+        <div class="tint-cta-row">
+          <select id="qService" name="service" class="tint-service-select">
+            <option value="" disabled selected>Select a service&hellip;</option>
+            <option value="Window Tinting">Window Tinting</option>
+            <option value="Paint Protection &amp; Ceramic Coating">Paint Protection &amp; Ceramic Coating</option>
+            <option value="Detailing &amp; Interior Protection">Detailing &amp; Interior Protection</option>
+            <option value="New Car Package">New Car Package</option>
+          </select>
+          <a href="#calculator" class="btn btn-primary btn-lg"><i class="fas fa-paper-plane"></i> Get a Free Quote</a>
         </div>
       </div>
 

@@ -485,11 +485,8 @@ a.service-pickable {
 a.service-card:hover { text-decoration: none; }
 .services-grid-picker {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
-}
-.services-grid-picker .service-pickable:nth-child(4) {
-  grid-column: 2;
 }
 .service-pickable .btn {
   width: 100%;
@@ -1724,8 +1721,6 @@ span.area-tag { cursor: default; }
 /* Tablet */
 @media (max-width: 1024px) {
   .services-grid { grid-template-columns: repeat(2, 1fr); }
-  .services-grid-picker { grid-template-columns: repeat(2, 1fr); }
-  .services-grid-picker .service-pickable:nth-child(4) { grid-column: auto; }
   .vehicle-grid { grid-template-columns: repeat(3, 1fr); }
   .film-grid { grid-template-columns: repeat(3, 1fr); }
   .why-us-grid { grid-template-columns: 1fr; gap: 40px; }

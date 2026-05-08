@@ -168,7 +168,14 @@
   var quoteSuccess = document.getElementById('quoteSuccess');
   if (!quoteForm) return;
 
-  quoteForm.addEventListener('submit', function (e) {
+  // Prefill service dropdown when arriving from a service card
+  document.querySelectorAll('a.service-pickable[data-service]').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var serviceEl = document.getElementById('qService');
+      if (serviceEl) serviceEl.value = card.getAttribute('data-service');
+    });
+  });
+
     e.preventDefault();
     var nameEl = document.getElementById('qName');
     var phoneEl = document.getElementById('qPhone');

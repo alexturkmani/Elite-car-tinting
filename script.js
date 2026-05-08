@@ -269,8 +269,8 @@
     { id: 'vlt15', label: '15%', desc: 'Dark, premium look' },
     { id: 'vlt20', label: '20%', desc: 'Dark, road-legal in most cars' },
     { id: 'vlt35', label: '35%', desc: 'VIC legal limit (rear & sides)' },
-    { id: 'vlt50', label: '50%', desc: 'Light &mdash; subtle' },
-    { id: 'vlt70', label: '70%', desc: 'Near-clear &mdash; max heat / UV' }
+    { id: 'vlt45', label: '45%', desc: 'Light &mdash; subtle' },
+    { id: 'vlt80', label: '80%', desc: 'Near-clear &mdash; max heat / UV' }
   ];
 
   // --- DOM refs ---

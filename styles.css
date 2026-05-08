@@ -29,6 +29,7 @@
   --shadow-glow: 0 0 30px rgba(56,189,248,0.12);
   --border: rgba(255,255,255,0.1);
   --border-hover: rgba(56,189,248,0.4);
+  --footer-logo-offset: 6px;
   --call-bar-height: 68px;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -1704,7 +1705,14 @@ span.area-tag { cursor: default; }
   align-items: center;
   text-align: center;
 }
-.footer-brand .logo-footer { display: flex; justify-content: center; margin: 0 auto; }
+.footer-brand .logo-footer {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+.footer-brand .logo-footer .logo-img {
+  margin-left: var(--footer-logo-offset);
+}
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;

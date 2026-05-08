@@ -1459,11 +1459,8 @@ span.area-tag { cursor: default; }
   padding: 100px 0;
   background: var(--dark-2);
 }
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: 80px;
-  align-items: start;
+.contact-centered {
+  text-align: center;
 }
 .contact-info .section-tag { display: inline-block; margin-bottom: 12px; }
 .contact-info h2 {
@@ -1474,7 +1471,9 @@ span.area-tag { cursor: default; }
   margin-bottom: 16px;
 }
 .contact-info > p { color: var(--light); margin-bottom: 32px; }
-.contact-details { display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px; }
+.contact-details { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+.contact-centered .contact-info > p { max-width: 600px; margin: 0 auto 32px; }
+.contact-centered .social-links { justify-content: center; }
 .contact-item { display: flex; gap: 14px; align-items: flex-start; }
 .contact-icon {
   width: 40px;
@@ -1603,7 +1602,6 @@ span.area-tag { cursor: default; }
 .footer-contact p {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   font-size: 0.85rem;
   color: var(--light);
@@ -1727,7 +1725,7 @@ span.area-tag { cursor: default; }
   .why-us-grid { grid-template-columns: 1fr; gap: 40px; }
   .why-us-visual { max-width: 480px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+  .contact-details { grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
 }
 
@@ -1824,6 +1822,7 @@ span.area-tag { cursor: default; }
   .progress-dot { width: 24px; height: 24px; }
   .progress-step span { font-size: 0.65rem; }
   .hero h1 { font-size: 1.8rem; }
+  .contact-details { grid-template-columns: 1fr; }
 }
 
 /* ===== ANIMATIONS ===== */

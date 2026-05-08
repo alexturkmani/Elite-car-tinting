@@ -216,7 +216,7 @@
         <h2>Our <span class="gradient-text">Services</span></h2>
       </div>
       <div class="services-grid services-grid-picker">
-        <a href="#calculator?service=tinting" class="service-card service-pickable featured">
+        <a href="#calculator" class="service-card service-pickable featured">
           <div class="featured-badge">Most Popular</div>
           <div class="service-icon"><i class="fas fa-car-side"></i></div>
           <h3>Automotive Window Tinting</h3>
@@ -228,7 +228,7 @@
           </ul>
           <span class="btn btn-primary">Request a Quote <i class="fas fa-arrow-right"></i></span>
         </a>
-        <a href="#calculator?service=paint" class="service-card service-pickable">
+        <a href="#calculator" class="service-card service-pickable">
           <div class="service-icon"><i class="fas fa-shield-alt"></i></div>
           <h3>Paint Protection &amp; Ceramic Coatings</h3>
           <p>Long-lasting nano-ceramic coatings and paint protection film. Hydrophobic, scratch-resistant, showroom gloss for years.</p>
@@ -239,7 +239,7 @@
           </ul>
           <span class="btn btn-ghost">Request a Quote <i class="fas fa-arrow-right"></i></span>
         </a>
-        <a href="#calculator?service=detailing" class="service-card service-pickable">
+        <a href="#calculator" class="service-card service-pickable">
           <div class="service-icon"><i class="fas fa-spray-can-sparkles"></i></div>
           <h3>Detailing &amp; Interior Protection</h3>
           <p>Premium hand wash, machine polish, full interior detail and leather/fabric protection &mdash; bring your car back to showroom condition.</p>
@@ -250,7 +250,7 @@
           </ul>
           <span class="btn btn-ghost">Request a Quote <i class="fas fa-arrow-right"></i></span>
         </a>
-        <a href="#calculator?service=newcar" class="service-card service-pickable">
+        <a href="#calculator" class="service-card service-pickable">
           <div class="service-icon"><i class="fas fa-award"></i></div>
           <h3>New Car Package</h3>
           <p>Ceramic tint, full detailing &amp; ceramic coating &mdash; the complete protection bundle for your brand-new vehicle.</p>
@@ -265,144 +265,62 @@
     </div>
   </section>
 
-  <!-- ===== PRICE CALCULATOR ===== -->
+  <!-- ===== REQUEST A QUOTE ===== -->
   <section class="calculator-section" id="calculator">
     <div class="container">
       <div class="section-header light">
         <h2>Request a Quote</h2>
+        <p>Fill in your details and we'll get back to you within 2 business hours.</p>
       </div>
 
-      <div class="calculator-card">
-        <!-- Step 1: Choose Service -->
-        <div class="calc-step active" data-step="1" id="calcStep1">
-          <div class="step-header">
-            <div class="step-number">1</div>
-            <div class="step-info">
-              <h3>Choose Your Service</h3>
-              <p>Pick the service you'd like a quote for &mdash; we'll tailor the next steps</p>
-            </div>
+      <div class="calculator-card quote-form-card">
+        <form class="quote-request-form" id="quoteRequestForm" novalidate>
+          <div class="quote-form-row">
+            <label for="qName">Full Name</label>
+            <input type="text" id="qName" name="name" placeholder="Jane Smith" required autocomplete="name" />
           </div>
-          <div class="service-tile-grid" id="serviceTileGrid"><!-- populated by JS --></div>
-        </div>
-
-        <!-- Step 2: Vehicle / Property -->
-        <div class="calc-step" data-step="2" id="calcStep2">
-          <div class="step-header">
-            <button class="back-btn" data-back="1"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="step-number">2</div>
-            <div class="step-info">
-              <h3 id="step2Title">Select Your Vehicle Type</h3>
-              <p id="step2Sub">Choose the option that best matches your vehicle</p>
-            </div>
+          <div class="quote-form-row">
+            <label for="qPhone">Phone Number</label>
+            <input type="tel" id="qPhone" name="phone" placeholder="0400 000 000" required autocomplete="tel" inputmode="tel" />
           </div>
-          <div class="vehicle-grid" id="targetGrid"><!-- populated by JS --></div>
-        </div>
-
-        <!-- Step 3: Coverage / Where -->
-        <div class="calc-step" data-step="3" id="calcStep3">
-          <div class="step-header">
-            <button class="back-btn" data-back="2"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="step-number">3</div>
-            <div class="step-info">
-              <h3 id="step3Title">Windows Covered?</h3>
-              <p id="step3Sub" hidden></p>
-            </div>
+          <div class="quote-form-row">
+            <label for="qService">Service</label>
+            <select id="qService" name="service">
+              <option value="" disabled selected>Select a service&hellip;</option>
+              <option value="Window Tinting">Window Tinting</option>
+              <option value="Paint Protection &amp; Ceramic Coating">Paint Protection &amp; Ceramic Coating</option>
+              <option value="Detailing &amp; Interior Protection">Detailing &amp; Interior Protection</option>
+              <option value="New Car Package">New Car Package</option>
+            </select>
           </div>
-          <div class="coverage-grid" id="coverageGrid"><!-- populated by JS --></div>
-          <div class="step-nav step-nav-auto" id="step3Nav" hidden>
-            <button class="btn btn-primary btn-lg" id="toStep4" disabled>
-              Continue to Your Details <i class="fas fa-arrow-right"></i>
+          <div class="quote-form-row">
+            <label for="qCar">Your Car <span class="optional-label">(optional)</span></label>
+            <input type="text" id="qCar" name="car" placeholder="e.g. 2022 Toyota RAV4" autocomplete="off" />
+          </div>
+          <div class="quote-form-row">
+            <label for="qMessage">Anything else? <span class="optional-label">(optional)</span></label>
+            <textarea id="qMessage" name="message" rows="3" placeholder="e.g. preferred date, specific shade, questions&hellip;"></textarea>
+          </div>
+          <div class="quote-actions">
+            <button type="submit" class="btn btn-primary btn-lg btn-full" id="qSubmitBtn">
+              <i class="fas fa-paper-plane"></i> Send Quote Request
             </button>
+            <a href="tel:+61411017040" class="btn btn-outline btn-lg btn-full">
+              <i class="fas fa-phone-alt"></i> Or Call: 0411 017 040
+            </a>
           </div>
+          <p class="quote-disclaimer"><i class="fas fa-lock"></i> Your details go straight to our inbox &mdash; no spam, no third parties.</p>
+        </form>
+        <div class="form-success" id="quoteSuccess" hidden>
+          <i class="fas fa-check-circle"></i>
+          <h3>Thanks &mdash; we've got it!</h3>
+          <p>Your request has been sent. We typically reply within 2 business hours. For anything urgent, call <a href="tel:+61411017040">0411 017 040</a>.</p>
+          <a href="#faq" class="btn btn-primary" style="margin-top:14px;border-radius:999px;">Frequently Asked Questions</a>
         </div>
-
-        <!-- Step 4: Request Quote -->
-        <div class="calc-step" data-step="4" id="calcStep4">
-          <div class="step-header">
-            <button class="back-btn" data-back="3"><i class="fas fa-arrow-left"></i> Back</button>
-            <div class="step-number">4</div>
-            <div class="step-info">
-              <h3>Almost Done &mdash; Send Us Your Details</h3>
-              <p>We'll review your selection and get back with a personalised quote within 2 business hours.</p>
-            </div>
-          </div>
-          <div class="quote-result">
-            <div class="quote-summary">
-              <div class="quote-summary-grid">
-                <div class="summary-item">
-                  <span class="summary-label">Service</span>
-                  <span class="summary-value" id="qSummaryService">&ndash;</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label" id="qLabelTarget">Vehicle Type</span>
-                  <span class="summary-value" id="qSummaryTarget">&ndash;</span>
-                </div>
-                <div class="summary-item">
-                  <span class="summary-label">Coverage</span>
-                  <span class="summary-value" id="qSummaryCoverage">&ndash;</span>
-                </div>
-              </div>
-            </div>
-            <div class="quote-cta-box">
-              <form class="quote-request-form" id="quoteRequestForm" novalidate>
-                <h4 class="quote-form-title">Your Details</h4>
-                <div class="quote-form-row">
-                  <label for="qName">Full Name</label>
-                  <input type="text" id="qName" name="name" placeholder="Jane Smith" required autocomplete="name" />
-                </div>
-                <div class="quote-form-row">
-                  <label for="qPhone">Phone Number</label>
-                  <input type="tel" id="qPhone" name="phone" placeholder="0400 000 000" required autocomplete="tel" inputmode="tel" />
-                </div>
-                <div class="quote-actions">
-                  <button type="submit" class="btn btn-primary btn-lg" id="qSubmitBtn">
-                    <i class="fas fa-paper-plane"></i> Submit Quote Request
-                  </button>
-                  <a href="tel:+61411017040" class="btn btn-outline btn-lg">
-                    <i class="fas fa-phone-alt"></i> Or Call: 0411 017 040
-                  </a>
-                </div>
-                <p class="quote-disclaimer"><i class="fas fa-lock"></i> Your details go straight to our inbox &mdash; no spam, no third parties.</p>
-              </form>
-              <div class="form-success" id="quoteSuccess" hidden>
-                <i class="fas fa-check-circle"></i>
-                <h3>Thanks &mdash; we've got it!</h3>
-                <p>Your request has been sent. We typically reply within 2 business hours. For anything urgent, call <a href="tel:+61411017040">0411 017 040</a>.</p>
-                <a href="#faq" class="btn btn-primary" style="margin-top:14px;border-radius:999px;">Frequently Asked Questions</a>
-              </div>
-              <div class="quote-trust">
-                <span><i class="fas fa-check-circle"></i> No deposit required</span>
-                <span><i class="fas fa-check-circle"></i> Free inspection</span>
-                <span><i class="fas fa-check-circle"></i> Same-day available</span>
-              </div>
-              <button class="btn btn-ghost btn-sm reset-btn" id="resetCalc">
-                <i class="fas fa-redo"></i> Start Over
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="calc-progress">
-          <div class="progress-step active" data-pstep="1">
-            <div class="progress-dot"></div>
-            <span>Service</span>
-          </div>
-          <div class="progress-line"></div>
-          <div class="progress-step" data-pstep="2">
-            <div class="progress-dot"></div>
-            <span id="progressTargetLabel">Vehicle</span>
-          </div>
-          <div class="progress-line"></div>
-          <div class="progress-step" data-pstep="3">
-            <div class="progress-dot"></div>
-            <span>Coverage</span>
-          </div>
-          <div class="progress-line"></div>
-          <div class="progress-step" data-pstep="4">
-            <div class="progress-dot"></div>
-            <span>Details</span>
-          </div>
+        <div class="quote-trust">
+          <span><i class="fas fa-check-circle"></i> No deposit required</span>
+          <span><i class="fas fa-check-circle"></i> Free inspection</span>
+          <span><i class="fas fa-check-circle"></i> Same-day available</span>
         </div>
       </div>
     </div>

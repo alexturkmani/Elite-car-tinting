@@ -1549,7 +1549,7 @@ span.area-tag { cursor: default; }
 .form-success i { font-size: 3rem; color: var(--success); margin-bottom: 16px; }
 .form-success h3 { font-size: 1.4rem; color: var(--white); margin-bottom: 8px; }
 .form-success p { color: var(--light); }
-.form-success a { color: var(--lighter); }
+.form-success a:not(.btn) { color: var(--lighter); }
 
 /* ===== FOOTER ===== */
 .footer {

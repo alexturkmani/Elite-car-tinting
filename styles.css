@@ -1725,7 +1725,8 @@ span.area-tag { cursor: default; }
   .why-us-grid { grid-template-columns: 1fr; gap: 40px; }
   .why-us-visual { max-width: 480px; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-  .contact-details { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .contact-details { grid-template-columns: 1fr; gap: 20px; }
+  .contact-item { flex-direction: column; align-items: center; text-align: center; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
 }
 
@@ -1822,7 +1823,7 @@ span.area-tag { cursor: default; }
   .progress-dot { width: 24px; height: 24px; }
   .progress-step span { font-size: 0.65rem; }
   .hero h1 { font-size: 1.8rem; }
-  .contact-details { grid-template-columns: 1fr; }
+}
 }
 
 /* ===== ANIMATIONS ===== */

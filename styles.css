@@ -1366,16 +1366,6 @@ a.service-card:hover { text-decoration: none; }
 /* VLT cell */
 .vlt-cell { display: flex; align-items: center; gap: 8px; }
 .vlt-num  { font-weight: 700; color: var(--white); font-size: 0.95rem; min-width: 26px; }
-.vlt-badge {
-  font-size: 0.66rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 99px;
-  white-space: nowrap;
-  letter-spacing: 0.3px;
-}
-.vlt-badge.legal { background: rgba(16,185,129,0.14); color: #34d399; border: 1px solid rgba(16,185,129,0.25); }
-.vlt-badge.rear  { background: rgba(245,158,11,0.12); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
 
 /* Footnote */
 .specs-footnote {

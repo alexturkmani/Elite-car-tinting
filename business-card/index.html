@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elite Car Tinting — Business Card Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Page ────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:    #0b1120;
+      --dark-2:  #0f172a;
+      --dark-3:  #1e293b;
+      --accent:  #38bdf8;
+      --purple:  #818cf8;
+      --white:   #ffffff;
+      --light:   #94a3b8;
+      --lighter: #cbd5e1;
+      --grad:    linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #111827;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px 80px;
+      gap: 60px;
+    }
+
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--lighter);
+    }
+
+    .label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .card-set {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ── Card shell ──────────────────────────────────────────────── */
+    /*  Standard business card: 85 mm × 55 mm — rendered at 3.78px/mm → 321 × 208 px  */
+    .card {
+      width: 321px;
+      height: 208px;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+
+    /* ── FRONT ───────────────────────────────────────────────────── */
+    .card-front {
+      background: var(--dark);
+    }
+
+    /* Decorative gradient arc — top-right */
+    .card-front::before {
+      content: '';
+      position: absolute;
+      top: -70px;
+      right: -70px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,189,248,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* Bottom gradient bar */
+    .card-front::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--grad);
+    }
+
+    /* Subtle grid texture */
+    .front-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(56,189,248,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56,189,248,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .front-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 24px 26px 20px;
+    }
+
+    /* Logo text */
+    .logo-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+      letter-spacing: 1.5px;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .logo-accent {
+      /* gradient underline strip */
+      display: block;
+      width: 38px;
+      height: 2.5px;
+      margin-top: 6px;
+      background: var(--grad);
+      border-radius: 2px;
+    }
+
+    .front-tagline {
+      font-size: 0.62rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+
+    .front-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .pill {
+      font-size: 0.52rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(56,189,248,0.35);
+      color: var(--accent);
+      background: rgba(56,189,248,0.06);
+      white-space: nowrap;
+    }
+
+    .front-url {
+      font-size: 0.6rem;
+      letter-spacing: 1px;
+      color: rgba(255,255,255,0.35);
+      text-transform: lowercase;
+      align-self: flex-end;
+    }
+
+    /* ── BACK ────────────────────────────────────────────────────── */
+    .card-back {
+      background: var(--dark-2);
+    }
+
+    /* Left accent bar */
+    .card-back::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 16px;
+      bottom: 16px;
+      width: 3px;
+      background: var(--grad);
+      border-radius: 0 2px 2px 0;
+    }
+
+    /* Top-right glow */
+    .card-back::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(129,140,248,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .back-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+      padding: 18px 22px 18px 30px;
+      gap: 7px;
+    }
+
+    .back-name {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      font-size: 0.78rem;
+      letter-spacing: 1.5px;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .info-icon {
+      width: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+      color: var(--accent);
+    }
+
+    .info-text {
+      font-size: 0.595rem;
+      color: var(--lighter);
+      line-height: 1.45;
+    }
+
+    .info-text a {
+      color: var(--lighter);
+      text-decoration: none;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 3px 0;
+    }
+
+    .back-socials {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .social-handle {
+      font-size: 0.53rem;
+      color: rgba(56,189,248,0.7);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Print styles ──────────────────────────────────────────────── */
+    @media print {
+      body {
+        background: #fff;
+        padding: 10mm;
+        gap: 20mm;
+      }
+      h1, .label { color: #333; }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        /* force exact size at 96dpi */
+        width: 85mm;
+        height: 55mm;
+      }
+    }
+
+    /* ── Responsive preview scaling ─────────────────────────────── */
+    @media (max-width: 400px) {
+      .card { transform: scale(0.88); transform-origin: top center; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Elite Car Tinting — Business Card Design</h1>
+
+  <!-- ════════════ FRONT ════════════ -->
+  <div class="card-set">
+    <p class="label">Front</p>
+    <div class="card card-front">
+      <div class="front-grid"></div>
+      <div class="front-content">
+        <!-- Logo -->
+        <div>
+          <div class="logo-text">ELITE CAR TINTING</div>
+          <span class="logo-accent"></span>
+          <p class="front-tagline">Melbourne's Premier Tinting Specialists</p>
+        </div>
+
+        <!-- Service pills -->
+        <div class="front-services">
+          <span class="pill">Window Tinting</span>
+          <span class="pill">Ceramic Coating</span>
+          <span class="pill">Paint Protection</span>
+          <span class="pill">Vinyl Wrap</span>
+          <span class="pill">Home Tinting</span>
+        </div>
+
+        <!-- URL -->
+        <span class="front-url">elitecartinting.com.au</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════ BACK ════════════ -->
+  <div class="card-set">
+    <p class="label">Back</p>
+    <div class="card card-back">
+      <div class="back-content">
+        <div class="back-name">Elite Car Tinting</div>
+
+        <!-- Phone -->
+        <div class="info-row">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11.5a19.79 19.79 0 01-3.07-8.67A2 2 0 012.18 1h3a2 2 0 012 1.72c.13 1 .37 1.97.72 2.9a2 2 0 01-.45 2.11l-1.27 1.27a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.93.35 1.9.59 2.9.72A2 2 0 0122 16.92z"/>
+          </svg>
+          <span class="info-text">0411 017 040</span>
+        </div>
+
+        <!-- Email -->
+        <div class="info-row">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="M2 7l10 7 10-7"/>
+          </svg>
+          <span class="info-text">contact@elitecartinting.com.au</span>
+        </div>
+
+        <!-- Address -->
+        <div class="info-row">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span class="info-text">Unit 9/9 Lindaway Pl, Tullamarine VIC 3043</span>
+        </div>
+
+        <!-- Hours -->
+        <div class="info-row">
+          <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="info-text">Mon–Fri 8am–5pm &nbsp;·&nbsp; Sat 10am–2pm</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Social handles -->
+        <div class="back-socials">
+          <span class="social-handle">fb /elitecartinting</span>
+          <span class="social-handle">ig @elitecartinting</span>
+          <span class="social-handle">tt @elitecartinting</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

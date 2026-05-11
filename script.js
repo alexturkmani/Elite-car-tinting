@@ -205,14 +205,15 @@
     if (!valid) return;
 
     var payload = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: 'New Quote Request - Elite Car Tinting',
+      from_name: 'Elite Car Tinting Website',
       name: name,
       phone: phone,
       service: serviceEl ? serviceEl.value : '',
       car: carEl ? carEl.value.trim() : '',
       message: messageEl ? messageEl.value.trim() : '',
-      _subject: 'New Quote Request - Elite Car Tinting',
-      _template: 'table',
-      _captcha: 'false'
+      botcheck: ''
     };
 
     if (sb) {
@@ -234,19 +235,18 @@
       }
     }
 
+    if (!WEB3FORMS_ACCESS_KEY) {
+      onFail();
+      return;
+    }
+
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
     var timeoutId = setTimeout(function () {
       if (ctrl) ctrl.abort();
       onFail();
     }, 12000);
 
-    var submitUrl = getWorkerSubmitUrl();
-    if (!submitUrl) {
-      clearTimeout(timeoutId);
-      onFail();
-      return;
-    }
-    fetch(submitUrl, {
+    fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload),
@@ -254,9 +254,9 @@
     }).then(function (res) {
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: true }; });
+      return res.json().catch(function () { return { success: false }; });
     }).then(function (data) {
-      if (data && data.success === false) throw new Error(data.error || 'Form rejected');
+      if (!data || !data.success) throw new Error((data && data.message) || 'Form rejected');
       onOk();
     }).catch(function () {
       clearTimeout(timeoutId);
@@ -355,7 +355,7 @@
       return;
     }
 
-    // Send to Cloudflare Worker
+    // Send via Web3Forms
     const submitBtn = form.querySelector('[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending\u2026';
@@ -365,11 +365,14 @@
     const emailEl = form.querySelector('#contactEmail');
     const msgEl   = form.querySelector('#contactMessage');
     const payload = {
-      name:     nameEl  ? nameEl.value.trim()  : '',
-      phone:    phoneEl ? phoneEl.value.trim() : '',
-      email:    emailEl ? emailEl.value.trim() : '',
-      message:  msgEl   ? msgEl.value.trim()   : '',
-      _subject: 'New Contact Enquiry - Elite Car Tinting'
+      access_key:  WEB3FORMS_ACCESS_KEY,
+      subject:     'New Contact Enquiry - Elite Car Tinting',
+      from_name:   'Elite Car Tinting Website',
+      name:        nameEl  ? nameEl.value.trim()  : '',
+      phone:       phoneEl ? phoneEl.value.trim() : '',
+      email:       emailEl ? emailEl.value.trim() : '',
+      message:     msgEl   ? msgEl.value.trim()   : '',
+      botcheck:    ''
     };
 
     function onOk() {
@@ -386,19 +389,18 @@
       submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
     }
 
+    if (!WEB3FORMS_ACCESS_KEY) {
+      onFail();
+      return;
+    }
+
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
     var timeoutId = setTimeout(function () {
       if (ctrl) ctrl.abort();
       onFail();
     }, 12000);
 
-    var submitUrl = getWorkerSubmitUrl();
-    if (!submitUrl) {
-      clearTimeout(timeoutId);
-      onFail();
-      return;
-    }
-    fetch(submitUrl, {
+    fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload),
@@ -406,9 +408,9 @@
     }).then(function (res) {
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: true }; });
+      return res.json().catch(function () { return { success: false }; });
     }).then(function (data) {
-      if (data && data.success === false) throw new Error(data.error || 'rejected');
+      if (!data || !data.success) throw new Error((data && data.message) || 'rejected');
       onOk();
     }).catch(function () {
       clearTimeout(timeoutId);
@@ -442,10 +444,18 @@
   window.addEventListener('scroll', updateActiveLink, { passive: true });
 })();
 
+// ===== WEB3FORMS — form submission service =====
+// Web3Forms is a free, server-free alternative to FormSubmit.co (250 submissions/month free).
+// It requires ONE setup step you only do once:
+//   1. Go to https://web3forms.com
+//   2. Enter "contact@elitecartinting.com.au" and click "Create Access Key"
+//   3. Check your inbox and click the confirm link
+//   4. Paste the access key (a UUID) below
+var WEB3FORMS_ACCESS_KEY = ''; // ← paste access key from https://web3forms.com
+
 // ===== CLOUDFLARE WORKER URL =====
-// Set this to your deployed worker URL (e.g. 'https://elite-reviews-proxy.yoursub.workers.dev').
-// Both form submission (/submit) and Google Reviews proxy use this base URL.
-// Leave blank to disable the worker-backed features (forms will show an error).
+// Optional: deploy the worker in /worker and set this to the deployed URL.
+// Used only for the Google Reviews proxy. Leave blank if the worker is not deployed.
 var WORKER_BASE_URL = ''; // ← fill in after `wrangler deploy`
 
 function getWorkerSubmitUrl() {

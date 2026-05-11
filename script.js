@@ -451,7 +451,7 @@
 //   2. Enter "contact@elitecartinting.com.au" and click "Create Access Key"
 //   3. Check your inbox and click the confirm link
 //   4. Paste the access key (a UUID) below
-var WEB3FORMS_ACCESS_KEY = ''; // ← paste access key from https://web3forms.com
+var WEB3FORMS_ACCESS_KEY = '6c35c01f-6643-49d1-a025-5ba2c648b3c2';
 
 // ===== CLOUDFLARE WORKER URL =====
 // Optional: deploy the worker in /worker and set this to the deployed URL.

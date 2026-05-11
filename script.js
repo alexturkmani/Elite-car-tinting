@@ -240,7 +240,13 @@
       onFail();
     }, 12000);
 
-    fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
+    var submitUrl = getWorkerSubmitUrl();
+    if (!submitUrl) {
+      clearTimeout(timeoutId);
+      onFail();
+      return;
+    }
+    fetch(submitUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload),
@@ -248,9 +254,9 @@
     }).then(function (res) {
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: 'true' }; });
+      return res.json().catch(function () { return { success: true }; });
     }).then(function (data) {
-      if (data && data.success === false) throw new Error(data.message || 'Form rejected');
+      if (data && data.success === false) throw new Error(data.error || 'Form rejected');
       onOk();
     }).catch(function () {
       clearTimeout(timeoutId);
@@ -349,17 +355,21 @@
       return;
     }
 
-    // Simulate form submission (replace with actual API call)
+    // Send to Cloudflare Worker
     const submitBtn = form.querySelector('[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending\u2026';
 
+    const nameEl  = form.querySelector('#contactName');
+    const phoneEl = form.querySelector('#contactPhone');
     const emailEl = form.querySelector('#contactEmail');
+    const msgEl   = form.querySelector('#contactMessage');
     const payload = {
-      email: emailEl ? emailEl.value.trim() : '',
-      _subject: 'New Quote Request (email) - Elite Car Tinting',
-      _template: 'table',
-      _captcha: 'false'
+      name:     nameEl  ? nameEl.value.trim()  : '',
+      phone:    phoneEl ? phoneEl.value.trim() : '',
+      email:    emailEl ? emailEl.value.trim() : '',
+      message:  msgEl   ? msgEl.value.trim()   : '',
+      _subject: 'New Contact Enquiry - Elite Car Tinting'
     };
 
     function onOk() {
@@ -382,7 +392,13 @@
       onFail();
     }, 12000);
 
-    fetch('https://formsubmit.co/ajax/contact@elitecartinting.com.au', {
+    var submitUrl = getWorkerSubmitUrl();
+    if (!submitUrl) {
+      clearTimeout(timeoutId);
+      onFail();
+      return;
+    }
+    fetch(submitUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify(payload),
@@ -390,9 +406,9 @@
     }).then(function (res) {
       clearTimeout(timeoutId);
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: 'true' }; });
+      return res.json().catch(function () { return { success: true }; });
     }).then(function (data) {
-      if (data && data.success === false) throw new Error(data.message || 'rejected');
+      if (data && data.success === false) throw new Error(data.error || 'rejected');
       onOk();
     }).catch(function () {
       clearTimeout(timeoutId);
@@ -426,6 +442,15 @@
   window.addEventListener('scroll', updateActiveLink, { passive: true });
 })();
 
+// ===== CLOUDFLARE WORKER URL =====
+// Set this to your deployed worker URL (e.g. 'https://elite-reviews-proxy.yoursub.workers.dev').
+// Both form submission (/submit) and Google Reviews proxy use this base URL.
+// Leave blank to disable the worker-backed features (forms will show an error).
+var WORKER_BASE_URL = ''; // ← fill in after `wrangler deploy`
+
+function getWorkerSubmitUrl() {
+  return WORKER_BASE_URL ? WORKER_BASE_URL.replace(/\/$/, '') + '/submit' : null;
+}
 // ===== GOOGLE REVIEWS (live from Google Business Profile) =====
 // PREFERRED: deploy the Cloudflare Worker in /worker and set `proxyUrl` below.
 // The worker keeps your API key private and caches responses at the edge.
@@ -440,7 +465,7 @@ const GOOGLE_REVIEWS_CONFIG = {
   // scripts/scrape-google-reviews.mjs + .github/workflows/scrape-reviews.yml).
   // Refreshed automatically every day â€“ no credentials required.
   staticUrl: './reviews.json?v=' + Date.now(),
-  proxyUrl: '',    // e.g. 'https://elite-reviews-proxy.yoursub.workers.dev'
+  get proxyUrl() { return WORKER_BASE_URL || ''; },
   apiKey: '',      // e.g. 'AIzaSy...' (only if not using a proxy)
   // Google Places "ChIJâ€¦" ID (required by the writereview deep link)
   placeId: 'ChIJ1xfGFjla1moROjdj6Ls47TQ',

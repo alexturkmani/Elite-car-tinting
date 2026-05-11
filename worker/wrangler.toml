@@ -6,7 +6,11 @@ compatibility_date = "2025-01-01"
 # to refresh faster or slower. Lower = more API calls = more cost.
 [vars]
 REVIEWS_CACHE_SECONDS = "600"
+# Optional overrides (can also be set as secrets):
+#   RESEND_FROM      = "noreply@elitecartinting.com.au"
+#   FORM_TO_EMAIL    = "contact@elitecartinting.com.au"
 
-# Secrets (set via `wrangler secret put`):
+# Secrets (set via `wrangler secret put <NAME>`):
 #   GOOGLE_API_KEY   → your Places API (New) key
 #   GOOGLE_PLACE_ID  → your Google Place ID (e.g. ChIJ...)
+#   RESEND_API_KEY   → Resend API key — sign up free at https://resend.com

@@ -235,51 +235,12 @@
       }
     }
 
-    var workerUrl = getWorkerSubmitUrl();
-    var submitUrl, submitBody;
-
-    if (workerUrl) {
-      // Use Cloudflare Worker → Resend
-      submitUrl = workerUrl;
-      submitBody = JSON.stringify({
-        _subject: 'New Quote Request - Elite Car Tinting',
-        name:     payload.name,
-        phone:    payload.phone,
-        service:  payload.service,
-        car:      payload.car,
-        message:  payload.message
-      });
-    } else if (WEB3FORMS_ACCESS_KEY) {
-      // Fallback: Web3Forms
-      submitUrl = 'https://api.web3forms.com/submit';
-      submitBody = JSON.stringify(payload);
-    } else {
-      onFail();
-      return;
-    }
-
-    var ctrl = ('AbortController' in window) ? new AbortController() : null;
-    var timeoutId = setTimeout(function () {
-      if (ctrl) ctrl.abort();
-      onFail();
-    }, 12000);
-
-    fetch(submitUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: submitBody,
-      signal: ctrl ? ctrl.signal : undefined
-    }).then(function (res) {
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: false }; });
-    }).then(function (data) {
-      if (!data || !data.success) throw new Error((data && data.message) || 'Form rejected');
-      onOk();
-    }).catch(function () {
-      clearTimeout(timeoutId);
-      onFail();
-    });
+    submitForm(
+      { _subject: 'New Quote Request - Elite Car Tinting', name: payload.name, phone: payload.phone, service: payload.service, car: payload.car, message: payload.message },
+      payload,
+      onOk,
+      onFail
+    );
   });
 })();
 
@@ -407,50 +368,12 @@
       submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
     }
 
-    var workerUrl = getWorkerSubmitUrl();
-    var submitUrl, submitBody;
-
-    if (workerUrl) {
-      // Use Cloudflare Worker → Resend
-      submitUrl = workerUrl;
-      submitBody = JSON.stringify({
-        _subject: payload.subject,
-        name:     payload.name,
-        phone:    payload.phone,
-        email:    payload.email,
-        message:  payload.message
-      });
-    } else if (WEB3FORMS_ACCESS_KEY) {
-      // Fallback: Web3Forms
-      submitUrl = 'https://api.web3forms.com/submit';
-      submitBody = JSON.stringify(payload);
-    } else {
-      onFail();
-      return;
-    }
-
-    var ctrl = ('AbortController' in window) ? new AbortController() : null;
-    var timeoutId = setTimeout(function () {
-      if (ctrl) ctrl.abort();
-      onFail();
-    }, 12000);
-
-    fetch(submitUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: submitBody,
-      signal: ctrl ? ctrl.signal : undefined
-    }).then(function (res) {
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: false }; });
-    }).then(function (data) {
-      if (!data || !data.success) throw new Error((data && data.message) || 'rejected');
-      onOk();
-    }).catch(function () {
-      clearTimeout(timeoutId);
-      onFail();
-    });
+    submitForm(
+      { _subject: payload.subject, name: payload.name, phone: payload.phone, email: payload.email, message: payload.message },
+      payload,
+      onOk,
+      onFail
+    );
   });
 })();
 
@@ -489,12 +412,55 @@
 var WEB3FORMS_ACCESS_KEY = '6c35c01f-6643-49d1-a025-5ba2c648b3c2';
 
 // ===== CLOUDFLARE WORKER URL =====
-// Optional: deploy the worker in /worker and set this to the deployed URL.
-// Used only for the Google Reviews proxy. Leave blank if the worker is not deployed.
+// Deploy the worker in /worker and set this to its deployed URL.
+// When set, contact/quote forms submit via the worker (→ Resend) instead of Web3Forms,
+// and the Google Reviews proxy is used automatically.
 var WORKER_BASE_URL = ''; // ← fill in after `wrangler deploy`
 
 function getWorkerSubmitUrl() {
   return WORKER_BASE_URL ? WORKER_BASE_URL.replace(/\/$/, '') + '/submit' : null;
+}
+
+// Shared form-submission helper.
+// workerPayload → sent to the Cloudflare Worker (/submit → Resend)
+// web3Payload   → sent to Web3Forms (fallback when WORKER_BASE_URL is empty)
+function submitForm(workerPayload, web3Payload, onOk, onFail) {
+  var workerUrl = getWorkerSubmitUrl();
+  var submitUrl, submitBody;
+
+  if (workerUrl) {
+    submitUrl = workerUrl;
+    submitBody = JSON.stringify(workerPayload);
+  } else if (WEB3FORMS_ACCESS_KEY) {
+    submitUrl = 'https://api.web3forms.com/submit';
+    submitBody = JSON.stringify(web3Payload);
+  } else {
+    onFail();
+    return;
+  }
+
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timeoutId = setTimeout(function () {
+    if (ctrl) ctrl.abort();
+    onFail();
+  }, 12000);
+
+  fetch(submitUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: submitBody,
+    signal: ctrl ? ctrl.signal : undefined
+  }).then(function (res) {
+    clearTimeout(timeoutId);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json().catch(function () { return { success: false }; });
+  }).then(function (data) {
+    if (!data || !data.success) throw new Error((data && data.message) || 'Form rejected');
+    onOk();
+  }).catch(function () {
+    clearTimeout(timeoutId);
+    onFail();
+  });
 }
 // ===== GOOGLE REVIEWS (live from Google Business Profile) =====
 // PREFERRED: deploy the Cloudflare Worker in /worker and set `proxyUrl` below.

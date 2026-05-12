@@ -205,9 +205,6 @@
     if (!valid) return;
 
     var payload = {
-      access_key: WEB3FORMS_ACCESS_KEY,
-      subject: 'New Quote Request - Elite Car Tinting',
-      from_name: 'Elite Car Tinting Website',
       name: name,
       phone: phone,
       service: serviceEl ? serviceEl.value : '',
@@ -343,9 +340,7 @@
     const emailEl = form.querySelector('#contactEmail');
     const msgEl   = form.querySelector('#contactMessage');
     const payload = {
-      access_key:  WEB3FORMS_ACCESS_KEY,
       subject:     'New Contact Enquiry - Elite Car Tinting',
-      from_name:   'Elite Car Tinting Website',
       name:        nameEl  ? nameEl.value.trim()  : '',
       phone:       phoneEl ? phoneEl.value.trim() : '',
       email:       emailEl ? emailEl.value.trim() : '',

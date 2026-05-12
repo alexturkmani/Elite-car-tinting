@@ -235,7 +235,25 @@
       }
     }
 
-    if (!WEB3FORMS_ACCESS_KEY) {
+    var workerUrl = getWorkerSubmitUrl();
+    var submitUrl, submitBody;
+
+    if (workerUrl) {
+      // Use Cloudflare Worker → Resend
+      submitUrl = workerUrl;
+      submitBody = JSON.stringify({
+        _subject: 'New Quote Request - Elite Car Tinting',
+        name:     payload.name,
+        phone:    payload.phone,
+        service:  payload.service,
+        car:      payload.car,
+        message:  payload.message
+      });
+    } else if (WEB3FORMS_ACCESS_KEY) {
+      // Fallback: Web3Forms
+      submitUrl = 'https://api.web3forms.com/submit';
+      submitBody = JSON.stringify(payload);
+    } else {
       onFail();
       return;
     }
@@ -246,10 +264,10 @@
       onFail();
     }, 12000);
 
-    fetch('https://api.web3forms.com/submit', {
+    fetch(submitUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload),
+      body: submitBody,
       signal: ctrl ? ctrl.signal : undefined
     }).then(function (res) {
       clearTimeout(timeoutId);
@@ -389,7 +407,24 @@
       submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
     }
 
-    if (!WEB3FORMS_ACCESS_KEY) {
+    var workerUrl = getWorkerSubmitUrl();
+    var submitUrl, submitBody;
+
+    if (workerUrl) {
+      // Use Cloudflare Worker → Resend
+      submitUrl = workerUrl;
+      submitBody = JSON.stringify({
+        _subject: payload.subject,
+        name:     payload.name,
+        phone:    payload.phone,
+        email:    payload.email,
+        message:  payload.message
+      });
+    } else if (WEB3FORMS_ACCESS_KEY) {
+      // Fallback: Web3Forms
+      submitUrl = 'https://api.web3forms.com/submit';
+      submitBody = JSON.stringify(payload);
+    } else {
       onFail();
       return;
     }
@@ -400,10 +435,10 @@
       onFail();
     }, 12000);
 
-    fetch('https://api.web3forms.com/submit', {
+    fetch(submitUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload),
+      body: submitBody,
       signal: ctrl ? ctrl.signal : undefined
     }).then(function (res) {
       clearTimeout(timeoutId);

@@ -26,13 +26,20 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
 
 3. **Create a Cloudflare account** (free) at https://dash.cloudflare.com
 
-4. **Install Wrangler** and deploy:
+4. **Get a Resend API key** for contact form email delivery
+   - Sign in at https://resend.com (GitHub OAuth works)
+   - Go to **API Keys** → **Create API Key** (Sending access only)
+   - In **Domains** → **Add Domain**, add `elitecartinting.com.au` and add the DNS records it shows you
+   - Once the domain is verified, emails send from `noreply@elitecartinting.com.au` to `contact@elitecartinting.com.au`
+
+5. **Install Wrangler** and deploy:
    ```bash
    cd worker
    npm install
    npx wrangler login                             # opens browser
-   npx wrangler secret put GOOGLE_API_KEY         # paste the key
+   npx wrangler secret put GOOGLE_API_KEY         # paste the Google API key
    npx wrangler secret put GOOGLE_PLACE_ID        # paste the Place ID
+   npx wrangler secret put RESEND_API_KEY         # paste the Resend API key
    npx wrangler deploy
    ```
 
@@ -41,16 +48,14 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
    https://elite-reviews-proxy.<your-subdomain>.workers.dev
    ```
 
-5. **Wire up the site** — open [`../script.js`](../script.js) and set:
+6. **Wire up the site** — open [`../script.js`](../script.js) and set:
    ```js
-   const GOOGLE_REVIEWS_CONFIG = {
-     proxyUrl: 'https://elite-reviews-proxy.<your-subdomain>.workers.dev',
-     ...
-   };
+   var WORKER_BASE_URL = 'https://elite-reviews-proxy.<your-subdomain>.workers.dev';
    ```
+   That's all — both the Google Reviews proxy and the contact/quote forms will use the worker automatically.
 
-That's it. The worker will return fresh reviews to every visitor, refreshing
-from Google at most once every 10 minutes.
+The worker will return fresh reviews to every visitor (refreshing from Google at most once every
+10 minutes) and will relay contact form submissions to `contact@elitecartinting.com.au` via Resend.
 
 ## Adjusting refresh frequency
 

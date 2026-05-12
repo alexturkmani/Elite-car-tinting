@@ -31,7 +31,7 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
    cd worker
    npm install
    npx wrangler login                             # opens browser
-   npx wrangler secret put GOOGLE_API_KEY         # paste the key
+   npx wrangler secret put GOOGLE_API_KEY         # paste the Google API key
    npx wrangler secret put GOOGLE_PLACE_ID        # paste the Place ID
    npx wrangler deploy
    ```
@@ -43,14 +43,12 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
 
 5. **Wire up the site** — open [`../script.js`](../script.js) and set:
    ```js
-   const GOOGLE_REVIEWS_CONFIG = {
-     proxyUrl: 'https://elite-reviews-proxy.<your-subdomain>.workers.dev',
-     ...
-   };
+   var WORKER_BASE_URL = 'https://elite-reviews-proxy.<your-subdomain>.workers.dev';
    ```
+   That's all — the Google Reviews proxy will use the worker automatically.
 
-That's it. The worker will return fresh reviews to every visitor, refreshing
-from Google at most once every 10 minutes.
+The worker returns fresh reviews to every visitor (refreshing from Google at most once every
+10 minutes).
 
 ## Adjusting refresh frequency
 

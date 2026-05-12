@@ -235,33 +235,11 @@
       }
     }
 
-    if (!WEB3FORMS_ACCESS_KEY) {
-      onFail();
-      return;
-    }
-
-    var ctrl = ('AbortController' in window) ? new AbortController() : null;
-    var timeoutId = setTimeout(function () {
-      if (ctrl) ctrl.abort();
-      onFail();
-    }, 12000);
-
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: ctrl ? ctrl.signal : undefined
-    }).then(function (res) {
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: false }; });
-    }).then(function (data) {
-      if (!data || !data.success) throw new Error((data && data.message) || 'Form rejected');
-      onOk();
-    }).catch(function () {
-      clearTimeout(timeoutId);
-      onFail();
-    });
+    submitForm(
+      { _subject: 'New Quote Request - Elite Car Tinting', name: payload.name, phone: payload.phone, service: payload.service, car: payload.car, message: payload.message },
+      onOk,
+      onFail
+    );
   });
 })();
 
@@ -389,33 +367,11 @@
       submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
     }
 
-    if (!WEB3FORMS_ACCESS_KEY) {
-      onFail();
-      return;
-    }
-
-    var ctrl = ('AbortController' in window) ? new AbortController() : null;
-    var timeoutId = setTimeout(function () {
-      if (ctrl) ctrl.abort();
-      onFail();
-    }, 12000);
-
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: ctrl ? ctrl.signal : undefined
-    }).then(function (res) {
-      clearTimeout(timeoutId);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      return res.json().catch(function () { return { success: false }; });
-    }).then(function (data) {
-      if (!data || !data.success) throw new Error((data && data.message) || 'rejected');
-      onOk();
-    }).catch(function () {
-      clearTimeout(timeoutId);
-      onFail();
-    });
+    submitForm(
+      { _subject: payload.subject, name: payload.name, phone: payload.phone, email: payload.email, message: payload.message },
+      onOk,
+      onFail
+    );
   });
 })();
 
@@ -444,22 +400,45 @@
   window.addEventListener('scroll', updateActiveLink, { passive: true });
 })();
 
-// ===== WEB3FORMS — form submission service =====
-// Web3Forms is a free, server-free alternative to FormSubmit.co (250 submissions/month free).
-// It requires ONE setup step you only do once:
-//   1. Go to https://web3forms.com
-//   2. Enter "contact@elitecartinting.com.au" and click "Create Access Key"
-//   3. Check your inbox and click the confirm link
-//   4. Paste the access key (a UUID) below
-var WEB3FORMS_ACCESS_KEY = '6c35c01f-6643-49d1-a025-5ba2c648b3c2';
+// ===== FORMSUBMIT — form submission service =====
+// FormSubmit is a free, no-signup service that emails submissions to your address.
+// First submission triggers an activation email — click the link once to confirm.
+// No API key needed.
+var FORMSUBMIT_EMAIL = 'contact@elitecartinting.com.au';
 
 // ===== CLOUDFLARE WORKER URL =====
-// Optional: deploy the worker in /worker and set this to the deployed URL.
-// Used only for the Google Reviews proxy. Leave blank if the worker is not deployed.
+// Deploy the worker in /worker and set this to its deployed URL.
+// Used for the Google Reviews proxy.
 var WORKER_BASE_URL = ''; // ← fill in after `wrangler deploy`
 
-function getWorkerSubmitUrl() {
-  return WORKER_BASE_URL ? WORKER_BASE_URL.replace(/\/$/, '') + '/submit' : null;
+// Shared form-submission helper.
+// payload → fields sent to FormSubmit (name, phone, email, message, _subject, etc.)
+function submitForm(payload, onOk, onFail) {
+  var submitUrl = 'https://formsubmit.co/ajax/' + FORMSUBMIT_EMAIL;
+  var submitBody = JSON.stringify(Object.assign({ _captcha: 'false', _template: 'table' }, payload));
+
+  var ctrl = ('AbortController' in window) ? new AbortController() : null;
+  var timeoutId = setTimeout(function () {
+    if (ctrl) ctrl.abort();
+    onFail();
+  }, 12000);
+
+  fetch(submitUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: submitBody,
+    signal: ctrl ? ctrl.signal : undefined
+  }).then(function (res) {
+    clearTimeout(timeoutId);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json().catch(function () { return { success: 'false' }; });
+  }).then(function (data) {
+    if (!data || data.success !== 'true') throw new Error((data && data.message) || 'Form rejected');
+    onOk();
+  }).catch(function () {
+    clearTimeout(timeoutId);
+    onFail();
+  });
 }
 // ===== GOOGLE REVIEWS (live from Google Business Profile) =====
 // PREFERRED: deploy the Cloudflare Worker in /worker and set `proxyUrl` below.

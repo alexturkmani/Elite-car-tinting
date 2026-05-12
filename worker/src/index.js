@@ -235,7 +235,12 @@ async function handleSubmit(request, env, origin) {
   }
 
   if (!resendResp.ok) {
-    return json({ success: false, error: 'Email service error.' }, 502, origin);
+    let resendError = 'Email service error.';
+    try {
+      const errBody = await resendResp.json();
+      resendError = errBody.message || errBody.error || resendError;
+    } catch { /* ignore parse errors */ }
+    return json({ success: false, error: resendError, resendStatus: resendResp.status }, 502, origin);
   }
 
   return json({ success: true }, 200, origin);

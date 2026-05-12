@@ -26,25 +26,13 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
 
 3. **Create a Cloudflare account** (free) at https://dash.cloudflare.com
 
-4. **Get a Resend API key** for contact form email delivery
-   - Sign in at https://resend.com (GitHub OAuth works)
-   - Go to **API Keys** → **Create API Key** (Sending access only)
-   - In **Domains** → **Add Domain**, add `elitecartinting.com.au`
-   - Resend will show you three DNS records to add in your DNS provider (Cloudflare DNS or wherever your domain is managed):
-     - A **TXT record** for SPF (e.g. `v=spf1 include:amazonses.com ~all`)
-     - A **CNAME record** for DKIM (e.g. `resend._domainkey → …`)
-     - A **TXT record** for DMARC (e.g. `v=DMARC1; p=none`)
-   - Add all three, wait a few minutes, then click **Verify** in Resend
-   - Once the domain status shows **Verified**, emails send from `noreply@elitecartinting.com.au` to `contact@elitecartinting.com.au`
-
-5. **Install Wrangler** and deploy:
+4. **Install Wrangler** and deploy:
    ```bash
    cd worker
    npm install
    npx wrangler login                             # opens browser
    npx wrangler secret put GOOGLE_API_KEY         # paste the Google API key
    npx wrangler secret put GOOGLE_PLACE_ID        # paste the Place ID
-   npx wrangler secret put RESEND_API_KEY         # paste the Resend API key
    npx wrangler deploy
    ```
 
@@ -53,14 +41,14 @@ API key server-side and cuts API cost to ~$0/month on the free tier.
    https://elite-reviews-proxy.<your-subdomain>.workers.dev
    ```
 
-6. **Wire up the site** — open [`../script.js`](../script.js) and set:
+5. **Wire up the site** — open [`../script.js`](../script.js) and set:
    ```js
    var WORKER_BASE_URL = 'https://elite-reviews-proxy.<your-subdomain>.workers.dev';
    ```
-   That's all — both the Google Reviews proxy and the contact/quote forms will use the worker automatically.
+   That's all — the Google Reviews proxy will use the worker automatically.
 
-The worker will return fresh reviews to every visitor (refreshing from Google at most once every
-10 minutes) and will relay contact form submissions to `contact@elitecartinting.com.au` via Resend.
+The worker returns fresh reviews to every visitor (refreshing from Google at most once every
+10 minutes).
 
 ## Adjusting refresh frequency
 

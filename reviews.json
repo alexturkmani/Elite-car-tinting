@@ -2,7 +2,7 @@
   "rating": 5,
   "userRatingCount": 222,
   "placeId": "ChIJ1xfGFjla1moROjdj6Ls47TQ",
-  "fetchedAt": "2026-06-02T20:08:25.335Z",
+  "fetchedAt": "2026-06-03T20:12:34.497Z",
   "reviews": [
     {
       "name": "Gregory T",
@@ -635,5 +635,5 @@
       "photo": "https://lh3.googleusercontent.com/a/ACg8ocJqppkFs3WBK3Eg7ctTy1ovPGfH98DXfmwfgNcdH7j4nFrUjg=w36-h36-p-rp-mo-br100"
     }
   ],
-  "lastScrapeWarning": "scrape failed at 2026-06-02T20:08:25.335Z: review cards selector timed out"
+  "lastScrapeWarning": "scrape failed at 2026-06-03T20:12:34.497Z: review cards selector timed out"
 }

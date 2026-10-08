@@ -202,6 +202,14 @@
     } else {
       phoneEl.classList.remove('error');
     }
+    if (serviceEl && !serviceEl.value) {
+      serviceEl.classList.add('error');
+      serviceEl.setAttribute('aria-invalid', 'true');
+      if (valid) { serviceEl.focus(); valid = false; }
+    } else if (serviceEl) {
+      serviceEl.classList.remove('error');
+      serviceEl.removeAttribute('aria-invalid');
+    }
     if (!valid) return;
 
     var payload = {
@@ -529,9 +537,8 @@ const GOOGLE_REVIEWS_CONFIG = {
       const relative = r.relativeTime || (when ? timeAgo(when) : '');
       const text = (r.text || '').replace(/</g, '&lt;');
       const rating = r.rating || 5;
-      const avatar = photo
-        ? '<img class="reviewer-avatar-img" src="' + photo + '" alt="' + name + '" loading="lazy" referrerpolicy="no-referrer" />'
-        : '<div class="reviewer-avatar" style="background:' + avatarColor(name) + '">' + initials(name) + '</div>';
+      // Initials keep reviews legible when Google's temporary photo URLs expire.
+      const avatar = '<div class="reviewer-avatar" aria-hidden="true" style="background:' + avatarColor(name) + '">' + initials(name) + '</div>';
       return (
         '<div class="review-card google-review-card">' +
           '<div class="review-header">' +
@@ -551,6 +558,8 @@ const GOOGLE_REVIEWS_CONFIG = {
 
   function renderSummary(rating, count) {
     if (scoreEl) scoreEl.textContent = (Math.round(rating * 10) / 10).toFixed(1);
+    const studioRating = document.getElementById('studioRating');
+    if (studioRating) studioRating.textContent = (Math.round(rating * 10) / 10).toFixed(1);
     if (starsEl) starsEl.innerHTML = renderStars(rating);
     if (countEl) countEl.textContent = 'Based on ' + count + ' Google review' + (count === 1 ? '' : 's');
   }
@@ -646,6 +655,7 @@ const GOOGLE_REVIEWS_CONFIG = {
 // - Other sections keep a light single-axis parallax via data-parallax.
 // - Respects prefers-reduced-motion; disables decorative hero layers on mobile.
 (function initParallax() {
+  if (document.body.classList.contains('studio-home')) return;
   const mq = function (q) { return window.matchMedia && window.matchMedia(q).matches; };
   const reduce = mq('(prefers-reduced-motion: reduce)');
   if (reduce) return;

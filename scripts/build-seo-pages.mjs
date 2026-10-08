@@ -421,7 +421,7 @@ function renderCarLocation(p) {
   const suburbSlug = p.suburb.toLowerCase().replace(/\s+/g, '-');
   const homeHref = homeSlugs.has(suburbSlug)
     ? `/home-window-tinting-${suburbSlug}/`
-    : `/home-window-tinting-tullamarine/`;
+    : `/contact-us/`;
   return `
 <section class="seo-hero">
   <div class="seo-hero-bg"></div>
@@ -674,7 +674,7 @@ function renderService(p) {
       <a href="/car-window-tinting-airport-west/" class="seo-area-tag"><i class="fas fa-map-marker-alt"></i> Airport West</a>
       <a href="/car-window-tinting-moonee-ponds/" class="seo-area-tag"><i class="fas fa-map-marker-alt"></i> Moonee Ponds</a>
       <a href="/car-window-tinting-strathmore/" class="seo-area-tag"><i class="fas fa-map-marker-alt"></i> Strathmore</a>
-      <a href="/home-window-tinting-tullamarine/" class="seo-area-tag primary"><i class="fas fa-map-marker-alt"></i> Tullamarine</a>
+      <a href="/contact-us/" class="seo-area-tag primary"><i class="fas fa-map-marker-alt"></i> Tullamarine</a>
     </div>
   </div>
 </section>`;
@@ -834,13 +834,13 @@ function buildPage(p) {
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <link rel="stylesheet" href="/styles.css" />
-  <link rel="stylesheet" href="/seo-pages.css" />
+  <link rel="stylesheet" href="/seo-pages.css" /><link rel="stylesheet" href="/studio.css" />
 
   ${localBusinessSchema(p)}
   ${breadcrumbSchema(p.slug, p.h1)}

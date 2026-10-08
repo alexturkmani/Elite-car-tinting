@@ -21,8 +21,8 @@
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
 const ALLOWED_ORIGINS = [
-  'https://elite-car-tinting.vercel.app',
-  'https://elite-car-tinting.vercel.app',
+  'https://tinting-business-demo.vercel.app',
+  'https://tinting-business-demo.vercel.app',
   'http://localhost:5500',
   'http://127.0.0.1:5500',
   'null' // file:// previews during local dev

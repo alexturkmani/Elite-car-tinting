@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const SITE = 'https://elite-car-tinting.vercel.app';
+const SITE = 'https://tinting-business-demo.vercel.app';
 
 // ----- Page definitions (mirrors legacy WordPress sitemap exactly) -----
 const PAGES = [

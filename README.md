@@ -19,4 +19,4 @@ The review scraper is disabled by default. It requires a buyer's `GOOGLE_PLACE_I
 
 This project is deployed through its existing Vercel project when `main` is pushed.
 
-Demo address: https://elite-car-tinting.vercel.app. The original custom domain is detached from this Vercel project.
+Demo address: https://tinting-business-demo.vercel.app. The original custom domain is detached from this Vercel project.

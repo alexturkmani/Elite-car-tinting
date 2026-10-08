@@ -382,10 +382,10 @@ function renderCarLocation(p) {
       <p>Pick the service you need. We&rsquo;ll then ask about your vehicle, film type and shade so we can build a transparent quote.</p>
     </div>
     <div class="seo-service-grid">
-      <a href="/#calculator?service=tinting" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=paint" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=detailing" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; fabric/leather protection.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=newcar" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint, full detailing &amp; ceramic coating :  the complete protection bundle.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=tinting#calculator" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=paint#calculator" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=detailing#calculator" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; fabric/leather protection.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=newcar#calculator" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint, full detailing &amp; ceramic coating :  the complete protection bundle.</p><span class="seo-card-arrow">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -431,9 +431,9 @@ function renderCarLocation(p) {
       <h2>Other Services for ${p.suburb} Customers</h2>
     </div>
     <div class="seo-service-grid">
-      <a href="/#calculator?service=paint" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">→</span></a>
-      <a href="/#calculator?service=detailing" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; protection.</p><span class="seo-card-arrow">→</span></a>
-      <a href="/#calculator?service=newcar" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint + full detailing + ceramic coating bundle for new vehicles.</p><span class="seo-card-arrow">→</span></a>
+      <a href="/?service=paint#calculator" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">→</span></a>
+      <a href="/?service=detailing#calculator" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; protection.</p><span class="seo-card-arrow">→</span></a>
+      <a href="/?service=newcar#calculator" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint + full detailing + ceramic coating bundle for new vehicles.</p><span class="seo-card-arrow">→</span></a>
       <a href="/contact-us/" class="seo-service-card"><i class="fas fa-phone-alt"></i><h3>Talk to a Specialist</h3><p>Not sure which service suits your ${p.suburb} ride? Call us for tailored advice.</p><span class="seo-card-arrow">→</span></a>
     </div>
   </div>
@@ -484,10 +484,10 @@ function renderHomeLocation(p) {
       <p>Pick the service you need. We&rsquo;ll then ask about your vehicle, film type and shade so we can build a transparent quote.</p>
     </div>
     <div class="seo-service-grid">
-      <a href="/#calculator?service=tinting" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=paint" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=detailing" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; protection.</p><span class="seo-card-arrow">&rarr;</span></a>
-      <a href="/#calculator?service=newcar" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint, full detailing &amp; ceramic coating bundle for new vehicles.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=tinting#calculator" class="seo-service-card"><i class="fas fa-car-side"></i><h3>Automotive Window Tinting</h3><p>Premium ceramic, carbon &amp; standard films for cars, SUVs, utes &amp; 4WDs.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=paint#calculator" class="seo-service-card"><i class="fas fa-shield-alt"></i><h3>Paint Protection &amp; Ceramic Coatings</h3><p>Long-lasting nano-ceramic coatings &amp; paint protection film.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=detailing#calculator" class="seo-service-card"><i class="fas fa-spray-can-sparkles"></i><h3>Detailing &amp; Interior Protection</h3><p>Premium hand wash, machine polish, full interior detail &amp; protection.</p><span class="seo-card-arrow">&rarr;</span></a>
+      <a href="/?service=newcar#calculator" class="seo-service-card"><i class="fas fa-award"></i><h3>New Car Package</h3><p>Ceramic tint, full detailing &amp; ceramic coating bundle for new vehicles.</p><span class="seo-card-arrow">&rarr;</span></a>
       <a href="/contact-us/" class="seo-service-card"><i class="fas fa-home"></i><h3>Home &amp; Commercial Tinting</h3><p>Residential &amp; commercial window film for ${p.suburb} properties :  enquire for a quote.</p><span class="seo-card-arrow">&rarr;</span></a>
     </div>
   </div>

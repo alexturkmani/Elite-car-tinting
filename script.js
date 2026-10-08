@@ -168,6 +168,10 @@
   var quoteSuccess = document.getElementById('quoteSuccess');
   if (!quoteForm) return;
 
+  var requestedService = new URLSearchParams(window.location.search).get('service');
+  var serviceNames = { tinting: 'Window Tinting', paint: 'Paint Protection & Ceramic Coating', detailing: 'Detailing & Interior Protection', newcar: 'New Car Protection Package' };
+  if (serviceNames[requestedService]) document.getElementById('qService').value = serviceNames[requestedService];
+
   var demoReset = document.querySelector('[data-demo-reset]');
   if (demoReset) demoReset.addEventListener('click', function () {
     quoteForm.reset();

@@ -1,10 +1,10 @@
-# Elite Car Tinting — refined visual system
+# Tinting Business visual system
 
-Midnight navy, soft lavender and cool white; rounded controls; a floating vehicle visual with independently animated glass. The car image is a photorealistic campaign render, not a photograph of customer work or a rotatable 3D model. Window masks, reflection sweeps, continuous shade interpolation and synchronized controls run in the browser. Manual interaction pauses the automatic preview. Reduced-motion preferences disable autoplay and decorative motion.
+Midnight navy, soft lavender and cool white; rounded controls; a stationary vehicle visual with independently animated glass. The car image is a photorealistic campaign render, not a photograph of customer work or a rotatable 3D model. Window masks, reflection sweeps, continuous shade interpolation and synchronized controls run in the browser. Manual interaction pauses the automatic preview. Reduced-motion preferences disable autoplay and decorative motion.
 
 ## Image asset
 
-Generated with the built-in ImageGen tool and saved for the site as `images/elite-coupe-v2.webp`. Original generation filename: `exec-d9c0ab5e-ab59-4bc4-ab23-cd9cb0fc4e9f.png`.
+Generated with the built-in ImageGen tool and saved for the site as `images/tint-coupe.webp`. Original generation filename: `exec-d9c0ab5e-ab59-4bc4-ab23-cd9cb0fc4e9f.png`.
 
 Final generation prompt:
 

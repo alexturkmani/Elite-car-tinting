@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 70" role="img" aria-label="Elite Car Tinting">
-  <defs>
-    <style type="text/css"><![CDATA[
-      @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap');
-      .ect { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; fill: #ffffff; font-weight: 800; font-size: 52px; letter-spacing: 1.5px; }
-    ]]></style>
-  </defs>
-  <text x="0" y="52" class="ect">ELITE CAR TINTING</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 64" role="img" aria-label="Tinting Business"><text x="0" y="46" fill="#fff" font-family="Arial,sans-serif" font-size="40" font-weight="700">Tinting Business</text></svg>

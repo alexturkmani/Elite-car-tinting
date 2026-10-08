@@ -1,5 +1,5 @@
-﻿#!/usr/bin/env node
-// Scrapes the public Google Maps page for Elite Car Tinting and writes the
+#!/usr/bin/env node
+// Scrapes the public Google Maps page for the configured tinting business and writes the
 // results to reviews.json. Runs headlessly with Playwright - no API key needed.
 //
 // Local usage:
@@ -13,13 +13,12 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const PLACE_ID = 'ChIJ1xfGFjla1moROjdj6Ls47TQ';
+const PLACE_ID = process.env.GOOGLE_PLACE_ID || '';
+if (!PLACE_ID) throw new Error('Set GOOGLE_PLACE_ID for the business before enabling review sync.');
 
 // Two URL strategies tried in order; place_id URL is more stable across rebrands
 const URLS = [
   `https://www.google.com/maps/place/?q=place_id:${PLACE_ID}&hl=en`,
-  'https://www.google.com/maps/place/Elite+Car+Tinting/@-37.7419,144.9206,17z/' +
-    'data=!4m8!3m7!1s0x6ad65a3916c617d7:0x34ed38bbe863374a!8m2!3d-37.7419!4d144.9232!9m1!1b1',
 ];
 
 const SCROLL_ROUNDS = 30;
@@ -229,7 +228,7 @@ async function attemptScrape(url) {
       // Save a debug screenshot so failures can be diagnosed from the Actions log
       const shot = resolve(ROOT, 'debug-screenshot.png');
       await page.screenshot({ path: shot, fullPage: false }).catch(() => {});
-      console.error('[scrape] timed out waiting for review cards — screenshot saved');
+      console.error('[scrape] timed out waiting for review cards :  screenshot saved');
       throw new Error('review cards selector timed out');
     }
 
@@ -265,7 +264,7 @@ async function main() {
       const { reviews, summary } = await attemptScrape(url);
 
       if (reviews.length < 3) {
-        console.warn(`[scrape] only ${reviews.length} reviews from ${url} — trying next URL`);
+        console.warn(`[scrape] only ${reviews.length} reviews from ${url} :  trying next URL`);
         lastError = new Error(`low review count: ${reviews.length}`);
         continue;
       }
@@ -291,8 +290,8 @@ async function main() {
     }
   }
 
-  // All URLs failed — preserve previous payload with a warning timestamp
-  console.warn('[scrape] all attempts failed — preserving previous reviews.json');
+  // All URLs failed :  preserve previous payload with a warning timestamp
+  console.warn('[scrape] all attempts failed :  preserving previous reviews.json');
   if (prev) {
     prev.fetchedAt = new Date().toISOString();
     prev.lastScrapeWarning = `scrape failed at ${prev.fetchedAt}: ${lastError?.message}`;

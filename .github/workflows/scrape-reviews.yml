@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   scrape:
+    if: vars.ENABLE_REVIEW_SYNC == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

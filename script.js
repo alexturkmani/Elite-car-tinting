@@ -1,5 +1,5 @@
-﻿/* ========================================
-   ELITE CAR TINTING - Interactive JS
+/* ========================================
+   TINTING BUSINESS - Interactive JS
    ======================================== */
 
 'use strict';
@@ -168,6 +168,16 @@
   var quoteSuccess = document.getElementById('quoteSuccess');
   if (!quoteForm) return;
 
+  var demoReset = document.querySelector('[data-demo-reset]');
+  if (demoReset) demoReset.addEventListener('click', function () {
+    quoteForm.reset();
+    quoteForm.hidden = false;
+    quoteSuccess.hidden = true;
+    var submitButton = document.getElementById('qSubmitBtn');
+    submitButton.disabled = false;
+    submitButton.textContent = 'Send Quote Request';
+    document.getElementById('qName').focus();
+  });
   // Prefill service dropdown when arriving from a service card
   document.querySelectorAll('a.service-pickable[data-service]').forEach(function (card) {
     card.addEventListener('click', function () {
@@ -229,7 +239,7 @@
     function onFail() {
       if (sb) {
         sb.disabled = false;
-        sb.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
+        sb.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed - Try Calling';
       }
     }
     function onOk() {
@@ -241,7 +251,7 @@
     }
 
     submitForm(
-      { _subject: 'New Quote Request - Elite Car Tinting', name: payload.name, phone: payload.phone, service: payload.service, car: payload.car, message: payload.message },
+      { _subject: 'New Quote Request - Tinting Business', name: payload.name, phone: payload.phone, service: payload.service, car: payload.car, message: payload.message },
       onOk,
       onFail
     );
@@ -348,7 +358,7 @@
     const emailEl = form.querySelector('#contactEmail');
     const msgEl   = form.querySelector('#contactMessage');
     const payload = {
-      subject:     'New Contact Enquiry - Elite Car Tinting',
+      subject:     'New Contact Enquiry - Tinting Business',
       name:        nameEl  ? nameEl.value.trim()  : '',
       phone:       phoneEl ? phoneEl.value.trim() : '',
       email:       emailEl ? emailEl.value.trim() : '',
@@ -367,7 +377,7 @@
     }
     function onFail() {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed \u2014 Try Calling';
+      submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Failed - Try Calling';
     }
 
     submitForm(
@@ -403,11 +413,11 @@
   window.addEventListener('scroll', updateActiveLink, { passive: true });
 })();
 
-// ===== FORMSUBMIT — form submission service =====
+// ===== FORMSUBMIT .  form submission service =====
 // FormSubmit is a free, no-signup service that emails submissions to your address.
-// First submission triggers an activation email — click the link once to confirm.
+// First submission triggers an activation email .  click the link once to confirm.
 // No API key needed.
-var FORMSUBMIT_EMAIL = 'contact@elitecartinting.com.au';
+var FORMSUBMIT_EMAIL = ''; // Configure the buyer's enquiry email before launching.
 
 // ===== CLOUDFLARE WORKER URL =====
 // Deploy the worker in /worker and set this to its deployed URL.
@@ -417,6 +427,7 @@ var WORKER_BASE_URL = ''; // ← fill in after `wrangler deploy`
 // Shared form-submission helper.
 // payload → fields sent to FormSubmit (name, phone, email, message, _subject, etc.)
 function submitForm(payload, onOk, onFail) {
+  if (!FORMSUBMIT_EMAIL) { onOk(); return; }
   var submitUrl = 'https://formsubmit.co/ajax/' + FORMSUBMIT_EMAIL;
   var submitBody = JSON.stringify(Object.assign({ _captcha: 'false', _template: 'table' }, payload));
 
@@ -443,212 +454,6 @@ function submitForm(payload, onOk, onFail) {
     onFail();
   });
 }
-// ===== GOOGLE REVIEWS (live from Google Business Profile) =====
-// PREFERRED: deploy the Cloudflare Worker in /worker and set `proxyUrl` below.
-// The worker keeps your API key private and caches responses at the edge.
-// See worker/README.md for one-time setup.
-//
-// FALLBACK: set apiKey + placeId to call Google Places API directly from the
-// browser (exposes the key â€” only use with strict HTTP referrer restrictions).
-//
-// If neither is configured, the curated fallback reviews remain visible.
-const GOOGLE_REVIEWS_CONFIG = {
-  // PREFERRED: static file committed by the scheduled scraper (see
-  // scripts/scrape-google-reviews.mjs + .github/workflows/scrape-reviews.yml).
-  // Refreshed automatically every day â€“ no credentials required.
-  staticUrl: './reviews.json?v=' + Date.now(),
-  get proxyUrl() { return WORKER_BASE_URL || ''; },
-  apiKey: '',      // e.g. 'AIzaSy...' (only if not using a proxy)
-  // Google Places "ChIJâ€¦" ID (required by the writereview deep link)
-  placeId: 'ChIJ1xfGFjla1moROjdj6Ls47TQ',
-  refreshMs: 15 * 60 * 1000, // re-fetch the static JSON every 15 min
-  maxReviews: 6
-};
-
-(function initGoogleReviews() {
-  const grid = document.getElementById('googleReviewsGrid');
-  const scoreEl = document.getElementById('googleRatingScore');
-  const countEl = document.getElementById('googleRatingCount');
-  const starsEl = document.getElementById('googleStars');
-  const writeBtn = document.getElementById('googleWriteReview');
-  if (!grid) return;
-
-  // "Write a review" â€” opens the Google Maps listing via stable CID URL.
-  // The listing page has a prominent "Write a review" button; CID is the
-  // business's numeric ID (decoded from the Maps hex feature ID).
-  if (writeBtn) {
-    writeBtn.href = 'https://www.google.com/maps?cid=3813766839161534282';
-    writeBtn.target = '_blank';
-    writeBtn.rel = 'noopener noreferrer';
-  }
-
-  function renderStars(rating) {
-    const full = Math.floor(rating);
-    const half = rating - full >= 0.5;
-    let html = '';
-    for (let i = 0; i < 5; i++) {
-      if (i < full) html += '<i class="fas fa-star"></i>';
-      else if (i === full && half) html += '<i class="fas fa-star-half-alt"></i>';
-      else html += '<i class="far fa-star"></i>';
-    }
-    return html;
-  }
-
-  function timeAgo(isoOrSeconds) {
-    let t;
-    if (typeof isoOrSeconds === 'number') t = isoOrSeconds * 1000;
-    else t = new Date(isoOrSeconds).getTime();
-    if (!t) return '';
-    const diff = Math.max(0, Date.now() - t);
-    const days = Math.floor(diff / 86400000);
-    if (days < 1) return 'today';
-    if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
-    if (days < 30) { const w = Math.floor(days / 7); return w + ' week' + (w > 1 ? 's' : '') + ' ago'; }
-    if (days < 365) { const m = Math.floor(days / 30); return m + ' month' + (m > 1 ? 's' : '') + ' ago'; }
-    const y = Math.floor(days / 365); return y + ' year' + (y > 1 ? 's' : '') + ' ago';
-  }
-
-  function initials(name) {
-    if (!name) return 'G';
-    return name.split(/\s+/).filter(Boolean).slice(0, 2).map(function (p) { return p[0]; }).join('').toUpperCase();
-  }
-
-  function avatarColor(name) {
-    const palette = ['#EA4335', '#4285F4', '#FBBC05', '#34A853', '#9334E6', '#E8710A'];
-    let h = 0;
-    for (let i = 0; i < (name || '').length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
-    return palette[h % palette.length];
-  }
-
-  function googleGSvg() {
-    return '<svg class="review-google-g" viewBox="0 0 48 48" aria-hidden="true">' +
-      '<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>' +
-      '<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>' +
-      '<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>' +
-      '<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>' +
-      '</svg>';
-  }
-
-  function renderReviews(reviews) {
-    grid.innerHTML = reviews.slice(0, GOOGLE_REVIEWS_CONFIG.maxReviews).map(function (r) {
-      const name = r.authorName || r.author_name || 'Google User';
-      const photo = r.profilePhotoUrl || r.profile_photo_url || '';
-      const when = r.publishTime || r.time || r.relativeTime || '';
-      const relative = r.relativeTime || (when ? timeAgo(when) : '');
-      const text = (r.text || '').replace(/</g, '&lt;');
-      const rating = r.rating || 5;
-      // Initials keep reviews legible when Google's temporary photo URLs expire.
-      const avatar = '<div class="reviewer-avatar" aria-hidden="true" style="background:' + avatarColor(name) + '">' + initials(name) + '</div>';
-      return (
-        '<div class="review-card google-review-card">' +
-          '<div class="review-header">' +
-            avatar +
-            '<div class="reviewer-info">' +
-              '<strong>' + name + '</strong>' +
-              '<span class="review-meta">' + (relative || '') + '</span>' +
-            '</div>' +
-            googleGSvg() +
-          '</div>' +
-          '<div class="review-stars google-stars">' + renderStars(rating) + '</div>' +
-          '<p>' + text + '</p>' +
-        '</div>'
-      );
-    }).join('');
-  }
-
-  function renderSummary(rating, count) {
-    if (scoreEl) scoreEl.textContent = (Math.round(rating * 10) / 10).toFixed(1);
-    const studioRating = document.getElementById('studioRating');
-    if (studioRating) studioRating.textContent = (Math.round(rating * 10) / 10).toFixed(1);
-    if (starsEl) starsEl.innerHTML = renderStars(rating);
-    if (countEl) countEl.textContent = 'Based on ' + count + ' Google review' + (count === 1 ? '' : 's');
-  }
-
-  async function fetchGoogleReviews() {
-    const { staticUrl, proxyUrl, apiKey, placeId } = GOOGLE_REVIEWS_CONFIG;
-
-    // PREFERRED: static reviews.json committed by the scheduled scraper
-    if (staticUrl) {
-      try {
-        const res = await fetch(staticUrl, { cache: 'no-store' });
-        if (res.ok) {
-          const data = await res.json();
-          const reviews = (data.reviews || []).map(function (r) {
-            return {
-              authorName: r.name || r.authorName,
-              profilePhotoUrl: r.photo || r.profilePhotoUrl,
-              rating: r.rating || 5,
-              text: r.text || '',
-              relativeTime: r.relative || r.relativeTime || ''
-            };
-          });
-          return {
-            rating: data.rating || 5.0,
-            count: data.userRatingCount || reviews.length,
-            reviews: reviews
-          };
-        }
-      } catch (_) { /* fall through to proxy/API */ }
-    }
-
-    // Cloudflare Worker proxy (server-side cached, key hidden)
-    if (proxyUrl) {
-      const res = await fetch(proxyUrl, { cache: 'no-store' });
-      if (!res.ok) throw new Error('Proxy ' + res.status);
-      const data = await res.json();
-      return {
-        rating: data.rating || 4.9,
-        count: data.userRatingCount || (data.reviews || []).length,
-        reviews: data.reviews || []
-      };
-    }
-
-    // FALLBACK: direct browser â†’ Google (API key is exposed)
-    if (!apiKey || !placeId) return null;
-    const url = 'https://places.googleapis.com/v1/places/' + encodeURIComponent(placeId);
-    const res = await fetch(url, {
-      headers: {
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'displayName,rating,userRatingCount,reviews.rating,reviews.text,reviews.relativePublishTimeDescription,reviews.publishTime,reviews.authorAttribution'
-      }
-    });
-    if (!res.ok) throw new Error('Places API ' + res.status);
-    const data = await res.json();
-    const reviews = (data.reviews || []).map(function (r) {
-      return {
-        authorName: r.authorAttribution && r.authorAttribution.displayName,
-        profilePhotoUrl: r.authorAttribution && r.authorAttribution.photoUri,
-        rating: r.rating,
-        text: (r.text && r.text.text) || '',
-        relativeTime: r.relativePublishTimeDescription,
-        publishTime: r.publishTime
-      };
-    });
-    return {
-      rating: data.rating || 4.9,
-      count: data.userRatingCount || reviews.length,
-      reviews: reviews
-    };
-  }
-
-  async function refresh() {
-    try {
-      const data = await fetchGoogleReviews();
-      if (!data) return; // no config â†’ keep curated fallback cards
-      renderSummary(data.rating, data.count);
-      if (data.reviews.length) renderReviews(data.reviews);
-    } catch (err) {
-      // Silent fallback â€“ curated reviews remain visible
-      console.warn('[GoogleReviews] fetch failed:', err.message);
-    }
-  }
-
-  refresh();
-  if (GOOGLE_REVIEWS_CONFIG.refreshMs > 0) {
-    setInterval(refresh, GOOGLE_REVIEWS_CONFIG.refreshMs);
-  }
-})();
-
 // ===== PARALLAX EFFECT (layered hero + site-wide) =====
 // - Hero uses 4 layers: bg (0.2x) / mid streaks (0.5x) / car subject (0.7x) /
 //   foreground content (1x, untransformed). Subject also tilts with the cursor.
@@ -783,70 +588,3 @@ const GOOGLE_REVIEWS_CONFIG = {
     update();
   })();
 })();
-
-// ===== GEO-AWARE DYNAMIC HEADLINE =====
-(function initGeoHeadline() {
-  var SUBURBS = ['Tullamarine','Essendon','Keilor','Moonee Ponds','Airport West','Sunbury','Strathmore','Niddrie','Ascot Vale','Flemington','Brunswick','Coburg','Glenroy','Broadmeadows','Pascoe Vale','Taylors Lakes','Parkville','North Melbourne','Melbourne CBD','Melbourne'];
-  var heroLoc = document.getElementById('heroLocation');
-  var heroSub = document.getElementById('heroSubtitle');
-  if (!heroLoc) return;
-
-  function applyLocation(name) {
-    if (!name) return;
-    heroLoc.textContent = name;
-    document.title = 'Top-Rated Car Window Tinting in ' + name + ' & Melbourne | Elite Car Tinting';
-    if (heroSub) {
-      heroSub.textContent = 'Trusted Car Window Tinting in ' + name + '.';
-    }
-  }
-
-  // 1) Manual override via ?loc= or stored choice
-  try {
-    var params = new URLSearchParams(window.location.search);
-    var qs = params.get('loc');
-    if (qs) {
-      var match = SUBURBS.find(function (s) { return s.toLowerCase() === qs.toLowerCase(); });
-      if (match) { applyLocation(match); localStorage.setItem('ect_loc', match); return; }
-    }
-    var stored = localStorage.getItem('ect_loc');
-    if (stored && SUBURBS.indexOf(stored) !== -1) { applyLocation(stored); return; }
-  } catch (e) {}
-
-  // 2) Silent IP-based geolocation (no permission prompt, no UX friction)
-  //    Uses ipapi.co (free, ~1k requests/day per IP, returns city + region).
-  //    Falls back silently on any error so the default H1 (Tullamarine) stays.
-  fetch('https://ipapi.co/json/', { headers: { 'Accept': 'application/json' } })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (data) {
-      if (!data) return;
-      // Only personalise if visitor is in VIC, Australia (avoid showing Sydney users an Tullamarine-specific H1)
-      if (data.country_code !== 'AU') return;
-      var candidates = [data.city, data.region, data.community].filter(Boolean);
-      for (var i = 0; i < candidates.length; i++) {
-        var c = String(candidates[i]);
-        var match = SUBURBS.find(function (s) { return s.toLowerCase() === c.toLowerCase(); });
-        if (match) {
-          applyLocation(match);
-          try { localStorage.setItem('ect_loc', match); } catch (e) {}
-          return;
-        }
-      }
-    })
-    .catch(function () {});
-})();
-
-(function initFilmTabs() {
-  var tabs = document.querySelectorAll('.film-tab');
-  var panels = document.querySelectorAll('.film-tab-panel');
-  if (!tabs.length) return;
-  tabs.forEach(function (tab) {
-    tab.addEventListener('click', function () {
-      tabs.forEach(function (t) { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
-      panels.forEach(function (p) { p.classList.remove('active'); });
-      tab.classList.add('active');
-      tab.setAttribute('aria-selected', 'true');
-      var panel = document.getElementById('tab-' + tab.dataset.tab);
-      if (panel) panel.classList.add('active');
-    });
-  });
-}());

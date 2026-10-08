@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.elitecartinting.com.au/sitemap.xml
+Sitemap: https://elite-car-tinting.vercel.app/sitemap.xml

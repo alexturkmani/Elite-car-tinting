@@ -78,7 +78,27 @@ document.addEventListener('keydown', event => {
   }
 });
 const filmTabs = Array.from(document.querySelectorAll('.film-tab'));
+function selectFilmTab(selectedTab) {
+  const selectedPanel = document.getElementById('tab-' + selectedTab.dataset.tab);
+  if (!selectedPanel) return;
+  filmTabs.forEach(tab => {
+    const selected = tab === selectedTab;
+    tab.classList.toggle('active', selected);
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    const panel = document.getElementById('tab-' + tab.dataset.tab);
+    if (panel) {
+      panel.classList.toggle('active', selected);
+      panel.hidden = !selected;
+    }
+  });
+}
 filmTabs.forEach((tab, index) => {
+  const panel = document.getElementById('tab-' + tab.dataset.tab);
+  tab.id = 'film-tab-' + tab.dataset.tab;
+  tab.setAttribute('aria-controls', 'tab-' + tab.dataset.tab);
+  if (panel) panel.setAttribute('aria-labelledby', tab.id);
+  tab.addEventListener('click', () => selectFilmTab(tab));
   tab.addEventListener('keydown', event => {
     let next;
     if (event.key === 'ArrowRight') next = (index + 1) % filmTabs.length;
@@ -88,6 +108,7 @@ filmTabs.forEach((tab, index) => {
     if (next !== undefined) { event.preventDefault(); filmTabs[next].click(); filmTabs[next].focus(); }
   });
 });
+if (filmTabs.length) selectFilmTab(filmTabs.find(tab => tab.getAttribute('aria-selected') === 'true') || filmTabs[0]);
 document.querySelectorAll('.faq-item').forEach((item, index) => {
   const question = item.querySelector('.faq-question');
   const answer = item.querySelector('.faq-answer');

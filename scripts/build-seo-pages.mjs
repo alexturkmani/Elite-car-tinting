@@ -1,5 +1,5 @@
 // Generates SEO landing pages matching the legacy WordPress URL slugs so that
-// rankings transfer cleanly when the elitecartinting.com.au domain is pointed
+// rankings transfer cleanly when the buyer domain is pointed
 // to this GitHub-hosted site. Each page replicates the legacy meta data
 // (title, description, H1, canonical) exactly while embedding rich, unique
 // content + LocalBusiness schema scoped to the target suburb/service.
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
-const SITE = 'https://lp-elitecartinting.com.au';
+const SITE = 'https://elite-car-tinting.vercel.app';
 
 // ----- Page definitions (mirrors legacy WordPress sitemap exactly) -----
 const PAGES = [

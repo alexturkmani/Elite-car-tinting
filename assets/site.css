@@ -679,3 +679,12 @@ figure { margin: 0; }
   .spec-table caption { padding: 14px 12px; font-size: 16px; }
   .page-hero + .section { padding-top: 36px; }
 }
+
+/* Hero badges: white tiles with coloured icons, matching the 3M tile */
+.trust .trust-icon.tile { background: #fff; border: 0; box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .6); }
+.trust .tile svg { width: 22px; height: 22px; stroke-width: 2; }
+.trust .tile-orange { color: #e8661a; }
+.trust .tile-amber { color: #d98e00; }
+.trust .tile-blue { color: #0b84c6; }
+.trust-3m .badge-3m { box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .6); }
+@media (max-width: 860px) { .trust .tile svg { width: 20px; height: 20px; } }

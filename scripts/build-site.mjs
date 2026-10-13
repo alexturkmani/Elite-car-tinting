@@ -9,7 +9,7 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261016';
+const VERSION = '20261017';
 
 const LOCATIONS = [
   { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },
@@ -357,9 +357,9 @@ built.push(page({
   <div class="shell trust-bar">
     <div class="trust-grid">
       <div class="trust trust-3m">${badge3m()}<span><b>3M window film</b><span>Three 3M ranges</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.shield}</span><span><b>Lifetime warranty</b><span>3M limited warranty</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.sun}</span><span><b>99.9% UV blocked</b><span>3M Ceramic IR</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.pin}</span><span><b>Two workshops</b><span>Sydney &amp; Central Coast</span></span></div>
+      <div class="trust"><span class="trust-icon tile tile-orange">${I.shield}</span><span><b>Lifetime warranty</b><span>3M limited warranty</span></span></div>
+      <div class="trust"><span class="trust-icon tile tile-amber">${I.sun}</span><span><b>99.9% UV blocked</b><span>3M Ceramic IR</span></span></div>
+      <div class="trust"><span class="trust-icon tile tile-blue">${I.pin}</span><span><b>Two workshops</b><span>Sydney &amp; Central Coast</span></span></div>
     </div>
   </div>
 </section>

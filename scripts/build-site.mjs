@@ -9,7 +9,7 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261017';
+const VERSION = '20261018';
 
 const LOCATIONS = [
   { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },
@@ -111,6 +111,7 @@ function header(current) {
   <div class="shell header-row">
     <a class="logo" href="/" aria-label="Home">${logo()}</a>
     <div class="header-right">
+      <nav class="header-links" aria-label="Services"><a href="/window-tinting-services/#automotive">Auto</a><a href="/window-tinting-services/#residential">Residential</a><a href="/commercial-window-tinting/">Commercial</a></nav>
       <div class="header-pills">
         <a class="pill loc" href="/contact/#locations"><span class="pill-icon">${I.pin}</span><span><b>Sydney &amp; Central Coast</b><small>Two workshops</small></span></a>
         <a class="pill phone" href="${PHONE_HREF}" aria-label="Call ${PHONE}"><span class="pill-icon">${I.phone}</span><span class="pill-text"><b>${PHONE}</b><small data-open-status>Mon–Sat</small></span></a>

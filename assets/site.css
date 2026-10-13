@@ -688,3 +688,10 @@ figure { margin: 0; }
 .trust .tile-blue { color: #0b84c6; }
 .trust-3m .badge-3m { box-shadow: 0 6px 18px -8px rgba(0, 0, 0, .6); }
 @media (max-width: 860px) { .trust .tile svg { width: 20px; height: 20px; } }
+
+/* Header service links: frameless, same type as location and phone */
+.header-links { display: flex; align-items: center; gap: 30px; margin-right: 14px; }
+.header-links a { position: relative; font: 700 14px/1.15 var(--head); letter-spacing: .06em; text-transform: uppercase; color: #fff; text-decoration: none; padding: 8px 0; }
+.header-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 2px; background: var(--neon); transform: scaleX(0); transform-origin: left; transition: transform .25s var(--ease); }
+.header-links a:hover::after, .header-links a:focus-visible::after { transform: scaleX(1); }
+@media (max-width: 1240px) { .header-links { display: none; } }

@@ -9,7 +9,7 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261019';
+const VERSION = '20261020';
 
 const LOCATIONS = [
   { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },
@@ -269,8 +269,10 @@ const tintSelector = (id = 'shades') => {
       </div>
       <p class="series-blurb" data-series-blurb>${FILM_SERIES[0].blurb}</p>
       <div class="selector-stage">
+        <div class="car-frame">
         <img class="car-fallback" src="/images/tint-coupe.webp" alt="" loading="lazy">
         <canvas class="car-canvas" role="img" aria-label="Car showing the selected window tint shade"></canvas>
+        </div>
         <div class="vlt-readout" aria-hidden="true"><b data-readout>${first.vlt}%</b><span data-readout-code>${first.code}</span></div>
       </div>
       <div class="selector-ui">

@@ -19,7 +19,7 @@
   }
 
   async function init(root) {
-    const stage = root.querySelector('.selector-stage');
+    const stage = root.querySelector('.car-frame') || root.querySelector('.selector-stage');
     const canvas = root.querySelector('.car-canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const [car, mask] = await Promise.all([loadImage(root.dataset.car), loadImage(root.dataset.mask)]);

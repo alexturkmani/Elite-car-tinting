@@ -35,6 +35,7 @@ const I = {
   eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
   lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>',
   leaf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19l7-7"/></svg>',
+  signal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="4" cy="12" r="1.8" fill="currentColor" stroke="none"/><path d="M8 8a4.4 4.4 0 0 1 0 8"/><path d="M11.5 5a7.6 7.6 0 0 1 0 14"/><path d="M15 2a10.6 10.6 0 0 1 0 20"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M8 5l11 7-11 7z"/></svg>',
   fb: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4A20 20 0 0 0 14.3 4c-2.3 0-3.8 1.4-3.8 4v2.5H8v3h2.5V21z"/></svg>',
   ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
@@ -401,7 +402,7 @@ built.push(page({
     </div>
     <div class="stats">
       <div class="stat reveal"><div class="stat-icon">${I.sun}</div><div class="stat-num"><span data-count="66">66</span><small>%</small></div><h3>Solar energy rejected</h3><p>Less heat gets into the car, so the air-con works less.</p></div>
-      <div class="stat reveal d1"><div class="stat-icon">${I.spark}</div><div class="stat-num"><span data-count="95">95</span><small>%</small></div><h3>Infrared rejected</h3><p>Infrared is the heat you feel on your skin through the glass.</p></div>
+      <div class="stat reveal d1"><div class="stat-icon">${I.signal}</div><div class="stat-num"><span data-count="95">95</span><small>%</small></div><h3>Infrared rejected</h3><p>Infrared is the heat you feel on your skin through the glass.</p></div>
       <div class="stat reveal d2"><div class="stat-icon">${I.shield}</div><div class="stat-num"><span data-count="99.9">99.9</span><small>%</small></div><h3>UV rejected</h3><p>Protects your skin and stops the interior fading.</p></div>
       <div class="stat reveal d3"><div class="stat-icon">${I.eye}</div><div class="stat-num"><span data-count="93">93</span><small>%</small></div><h3>Glare reduced</h3><p>Easier driving into low sun and headlights.</p></div>
     </div>

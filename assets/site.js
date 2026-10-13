@@ -177,3 +177,10 @@ if (hero && heroLight && window.matchMedia('(hover: hover) and (prefers-reduced-
     });
   });
 }
+
+// Pause the hero headline animation while the hero is off screen.
+if (hero && 'IntersectionObserver' in window) {
+  new IntersectionObserver(entries => {
+    document.documentElement.classList.toggle('hero-off', !entries[0].isIntersecting);
+  }).observe(hero);
+}

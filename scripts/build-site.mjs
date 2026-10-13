@@ -9,7 +9,7 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261018';
+const VERSION = '20261019';
 
 const LOCATIONS = [
   { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },

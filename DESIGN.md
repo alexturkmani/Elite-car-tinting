@@ -8,7 +8,7 @@ Midnight navy (`#01080c`) canvas with radial teal glows (`#072233`), white heavy
 - Counters render their real values in HTML instead of starting at zero.
 - No floating rating badge covering headings and footer buttons; mobile gets a slim call/quote bar instead.
 - Stat icons sit in their own tiles instead of behind the numbers, and each stat has its own copy.
-- Film selector buttons are a consistent size, with a shade swatch and NSW legality shown for each.
+- Film selector buttons are a consistent size, each with a shade swatch and 3M's published figures.
 - Gallery images load properly, no duplicated contact fields, no off-palette link colours.
 
 ## Tint preview

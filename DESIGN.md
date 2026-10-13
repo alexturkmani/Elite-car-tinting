@@ -13,8 +13,14 @@ Midnight navy (`#01080c`) canvas with radial teal glows (`#072233`), white heavy
 
 ## Tint preview
 
-`assets/tint-preview.js` renders the window shade on a canvas instead of laying a flat dark overlay on the glass. When you look into a car, light passes through the film twice (in, then back out after reflecting off the interior), so interior visibility scales with VLT² in linear light. A small exterior surface reflection is added. The render's clear glass is treated as ~88% factory glass. The result: 70% looks close to factory glass, 35% shows the cabin clearly but darker, 20% shows silhouettes, and 5% reads as black with reflections.
+`assets/tint-preview.js` renders each 3M shade on a canvas. Light seen through tinted glass passes through the film twice, so interior visibility scales with VLT squared in linear light, plus a small surface reflection. 3M publishes VLT for film on 6mm, 73% VLT automotive glass, so the render's clear glass is treated as that glass.
+
+The preview has tabs for 3M Ceramic IR, Crystalline and Color Stable. Every shade shows 3M's published VLT, total solar energy rejected, infrared rejected, UV rejected and glare reduced. The film data lives in `FILM_SERIES` in `scripts/build-site.mjs`. Sources: 3M Australia Ceramic IR brochure, 3M Crystalline brochure, 3M Color Stable technical data sheet (Rev B, Oct 2021).
+
+A draggable before/after handle compares untinted glass with the selected film. It sweeps across the car once when the section scrolls into view.
 
 The glass mask (`images/tint-coupe-glass.png`) was traced from `images/tint-coupe.webp` with the side mirror cut out.
 
-NSW limits shown in the selector: passenger car front side windows 35% VLT or lighter; rear side and rear windows 20% or lighter.
+## Placeholders
+
+The logo, business name, addresses, hours, team, reviews and voucher terms are shown in [square brackets] until the client supplies them.

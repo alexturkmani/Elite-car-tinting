@@ -9,11 +9,11 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261013';
+const VERSION = '20261014';
 
 const LOCATIONS = [
-  { name: 'Sydney', address: 'Unit 1, 10 Example Street', locality: 'Sydney West NSW', hours: 'Mon–Fri 8am–5pm · Sat 8am–12pm' },
-  { name: 'Central Coast', address: 'Unit 2, 20 Sample Road', locality: 'Central Coast NSW', hours: 'Mon–Fri 8am–5pm · Sat 8am–12pm' }
+  { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },
+  { name: 'Central Coast', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' }
 ];
 
 // ---------- Icons ----------
@@ -40,9 +40,48 @@ const I = {
   ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
 };
 
-const seal = `<svg class="seal" viewBox="0 0 160 180" aria-hidden="true"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4f7f9"/><stop offset=".5" stop-color="#9aa6ad"/><stop offset="1" stop-color="#e3e8eb"/></linearGradient></defs><path d="M80 4l70 22v60c0 44-30 76-70 90C40 162 10 130 10 86V26z" fill="url(#sg)"/><path d="M80 16l58 18v52c0 37-25 64-58 77-33-13-58-40-58-77V34z" fill="#0b1820"/><text x="80" y="72" text-anchor="middle" font-family="Schibsted Grotesk, Arial" font-weight="800" font-size="20" fill="#fff">PREMIUM</text><text x="80" y="96" text-anchor="middle" font-family="Schibsted Grotesk, Arial" font-weight="800" font-size="20" fill="#fff">FILM</text><text x="80" y="120" text-anchor="middle" font-family="Manrope, Arial" font-weight="700" font-size="10" letter-spacing="2" fill="#ff8a2a">LIFETIME WARRANTY</text><path d="M52 134h56" stroke="#3ec6ff" stroke-width="1.5"/></svg>`;
-
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+// ---------- 3M automotive film data ----------
+// Source: 3M product brochures / technical data sheets. All figures are for film applied to
+// 6mm, 73% VLT automotive green glass, so VLT is the combined glass + film value.
+const FILM_SERIES = [
+  {
+    id: 'ir', name: '3M Ceramic IR', blurb: 'Nano-ceramic film with a neutral colour. Strong infrared rejection across every shade.',
+    shades: [
+      { code: 'IR 5', vlt: 5, tser: 66, irr: 95, uv: 99.9, glare: 93 },
+      { code: 'IR 15', vlt: 16, tser: 63, irr: 90, uv: 99.9, glare: 78 },
+      { code: 'IR 25', vlt: 25, tser: 61, irr: 90, uv: 99.9, glare: 65 },
+      { code: 'IR 30', vlt: 30, tser: 60, irr: 88, uv: 99.9, glare: 59 },
+      { code: 'IR 35', vlt: 37, tser: 58, irr: 85, uv: 99.8, glare: 49 },
+      { code: 'IR 50', vlt: 50, tser: 54, irr: 83, uv: 99.8, glare: 32 },
+      { code: 'IR 70', vlt: 64, tser: 51, irr: 78, uv: 99.6, glare: 12 },
+    ],
+  },
+  {
+    id: 'cr', name: '3M Crystalline', blurb: 'Multilayer optical film. The most heat rejection of any 3M film, even in the lightest shades.',
+    shades: [
+      { code: 'CR 20', vlt: 17, tser: 64, irr: 99, uv: 99.9, glare: 77 },
+      { code: 'CR 40', vlt: 33, tser: 62, irr: 99, uv: 99.9, glare: 55 },
+      { code: 'CR 50', vlt: 42, tser: 59, irr: 98, uv: 99.9, glare: 43 },
+      { code: 'CR 60', vlt: 51, tser: 57, irr: 98, uv: 99.9, glare: 30 },
+      { code: 'CR 70', vlt: 58, tser: 55, irr: 97, uv: 99.9, glare: 21 },
+      { code: 'CR 80', vlt: 62, tser: 52, irr: 96, uv: 99.8, glare: 15 },
+      { code: 'CR 90', vlt: 72, tser: 46, irr: 95, uv: 99.9, glare: 1 },
+    ],
+  },
+  {
+    id: 'cs', name: '3M Color Stable', blurb: 'Neutral black film with a lifetime warranty against colour change. Will not turn purple.',
+    shades: [
+      { code: 'CS 5', vlt: 7, tser: 64, irr: 70, uv: 99, glare: 94 },
+      { code: 'CS 20', vlt: 15, tser: 60, irr: 58, uv: 99, glare: 79 },
+      { code: 'CS 35', vlt: 32, tser: 55, irr: 39, uv: 98, glare: 56 },
+      { code: 'CS 50', vlt: 43, tser: 51, irr: 27, uv: 98, glare: 42 },
+    ],
+  },
+];
+const DEFAULT_SHADE = 'IR 35';
+const range = (s, k) => [Math.min(...s.shades.map(x => x[k])), Math.max(...s.shades.map(x => x[k]))];
 
 // ---------- Navigation ----------
 const NAV = [
@@ -60,51 +99,52 @@ const SERVICES = [
   ['home', 'Home window tinting'],
   ['commercial', 'Commercial window tinting'],
   ['ppf', 'Paint protection film'],
-  ['ceramic', 'Ceramic coating'],
   ['other', 'Something else'],
 ];
 
-const logo = (tag = 'Sydney · Central Coast') => `<span class="logo-word">${BRAND}</span><span class="logo-tag">${tag}</span>`;
+const logo = () => `<span class="logo-ph">[BRAND LOGO]</span>`;
 
 function header(current) {
   return `<a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="shell header-row">
-    <a class="logo" href="/" aria-label="${BRAND} home">${logo()}</a>
-    <div class="header-pills">
-      <a class="pill loc" href="/contact/#locations"><span class="pill-icon">${I.pin}</span><span><b>Sydney &amp; Central Coast</b><small>2 workshops · mobile service</small></span></a>
-      <a class="pill phone" href="${PHONE_HREF}" aria-label="Call ${PHONE}"><span class="pill-icon">${I.phone}</span><span class="pill-text"><b>${PHONE}</b><small data-open-status>Mon–Sat</small></span></a>
-      <button class="menu-btn" type="button" data-menu-open aria-expanded="false" aria-controls="menu"><span class="pill-icon">${I.menu}</span><span class="label">Menu</span></button>
+    <a class="logo" href="/" aria-label="Home">${logo()}</a>
+    <div class="header-right">
+      <div class="header-pills">
+        <a class="pill loc" href="/contact/#locations"><span class="pill-icon">${I.pin}</span><span><b>Sydney &amp; Central Coast</b><small>Two workshops</small></span></a>
+        <a class="pill phone" href="${PHONE_HREF}" aria-label="Call ${PHONE}"><span class="pill-icon">${I.phone}</span><span class="pill-text"><b>${PHONE}</b><small data-open-status>Mon–Sat</small></span></a>
+      </div>
+      <button class="menu-btn" type="button" data-menu-open aria-expanded="false" aria-controls="menu" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
 <div class="menu-panel" id="menu" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true" inert>
   <button class="menu-close" type="button" data-menu-close aria-label="Close menu">&times;</button>
   <nav class="menu-nav" aria-label="Main">
-    ${NAV.map(([href, label], n) => `<a href="${href}"${href === current ? ' aria-current="page"' : ''}><span>0${n + 1}</span>${label}</a>`).join('\n    ')}
+    ${NAV.map(([href, label]) => `<a href="${href}"${href === current ? ' aria-current="page"' : ''}>${label}</a>`).join('\n    ')}
   </nav>
   <div class="menu-aside">
-    <div><h3>Call us</h3><a href="${PHONE_HREF}">${PHONE}</a></div>
+    <div><h3>Call</h3><a href="${PHONE_HREF}">${PHONE}</a></div>
     <div><h3>Email</h3><a href="mailto:${EMAIL}">${EMAIL}</a></div>
     <div><h3>Workshops</h3><p>${LOCATIONS.map(l => l.name).join(' &amp; ')}</p></div>
-    <div class="btn-row"><a class="btn" href="/quote/" data-quote>Get quote</a><a class="btn btn-solid" href="/quote/?service=car" data-quote="car">Book now</a></div>
-    <div class="socials" style="justify-content:flex-start;margin:0"><a href="#" aria-label="Facebook">${I.fb}</a><a href="#" aria-label="Instagram">${I.ig}</a><a href="#" aria-label="Google reviews">${I.google}</a></div>
+    <div class="btn-row"><a class="btn" href="/quote/" data-quote>Get a quote</a><a class="btn btn-solid" href="/quote/?service=car" data-quote="car">Book now</a></div>
   </div>
 </div>`;
 }
 
-function quoteForm(id, { compact = false } = {}) {
+function quoteForm(id) {
+  const shadeOptions = FILM_SERIES.map(s => `<optgroup label="${s.name}">${s.shades.map(x => `<option>${s.name} ${x.code} (${x.vlt}% VLT)</option>`).join('')}</optgroup>`).join('');
   return `<form class="form" data-enquiry novalidate>
   <fieldset>
     <legend>Vehicle or property</legend>
     <div class="field full"><label for="${id}-service">Service</label><select id="${id}-service" name="service" required>${SERVICES.map(([v, l]) => `<option value="${v}">${l}</option>`).join('')}</select></div>
     <div class="field"><label for="${id}-make">Vehicle make</label><input id="${id}-make" name="make" placeholder="e.g. Toyota" autocomplete="off"></div>
     <div class="field"><label for="${id}-model">Vehicle model</label><input id="${id}-model" name="model" placeholder="e.g. RAV4" autocomplete="off"></div>
-    <div class="field"><label for="${id}-year">Year of manufacture</label><input id="${id}-year" name="year" inputmode="numeric" pattern="[0-9]{4}" placeholder="e.g. 2022"></div>
-    <div class="field"><label for="${id}-shade">Preferred shade</label><select id="${id}-shade" name="shade"><option value="">Not sure, please advise</option><option>70% clear ceramic</option><option>50% light</option><option>35% medium</option><option>20% dark</option><option>15% very dark</option><option>5% limo</option></select></div>
-    <div class="field"><label for="${id}-removal">Old tint removal needed?</label><select id="${id}-removal" name="removal"><option>No</option><option>Yes</option><option>Not sure</option></select></div>
-    <div class="field"><label for="${id}-location">Nearest workshop</label><select id="${id}-location" name="location">${LOCATIONS.map(l => `<option>${l.name}</option>`).join('')}<option>Mobile service</option></select></div>
-    ${compact ? '' : `<div class="field full"><label for="${id}-notes">Tell us what you need</label><textarea id="${id}-notes" name="notes" placeholder="Windows to tint, film preference, timing, address for home or commercial jobs"></textarea></div>`}
+    <div class="field"><label for="${id}-year">Year</label><input id="${id}-year" name="year" inputmode="numeric" pattern="[0-9]{4}" placeholder="e.g. 2022"></div>
+    <div class="field"><label for="${id}-shade">Film and shade</label><select id="${id}-shade" name="shade"><option value="">Not sure yet</option>${shadeOptions}</select></div>
+    <div class="field"><label for="${id}-removal">Remove old tint?</label><select id="${id}-removal" name="removal"><option>No</option><option>Yes</option><option>Not sure</option></select></div>
+    <div class="field"><label for="${id}-location">Workshop</label><select id="${id}-location" name="location">${LOCATIONS.map(l => `<option>${l.name}</option>`).join('')}</select></div>
+    <div class="field full"><label for="${id}-notes">Anything else?</label><textarea id="${id}-notes" name="notes" placeholder="Which windows, timing, or the address for home and commercial jobs"></textarea></div>
   </fieldset>
   <fieldset>
     <legend>Your details</legend>
@@ -112,8 +152,8 @@ function quoteForm(id, { compact = false } = {}) {
     <div class="field"><label for="${id}-phone">Phone</label><input id="${id}-phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel"></div>
     <div class="field"><label for="${id}-email">Email</label><input id="${id}-email" name="email" type="email" required autocomplete="email"></div>
   </fieldset>
-  <div class="form-foot"><p>We reply with a fixed price, usually the same business day. Demo form: nothing is sent until an email address is configured.</p><button class="btn btn-solid" type="submit">Get my quote</button></div>
-  <div class="form-success" role="status"><div class="ok-icon">${I.check}</div><h3>Thank you!</h3><p class="muted">Your quote request has been received. We'll be in touch shortly with a price for your new tint.</p></div>
+  <div class="form-foot"><p>Demo form. Nothing is sent until an email address is set up.</p><button class="btn btn-solid" type="submit">Send</button></div>
+  <div class="form-success" role="status"><div class="ok-icon">${I.check}</div><h3>Thanks</h3><p class="muted">We've got your details and will reply with a price.</p></div>
 </form>`;
 }
 
@@ -121,37 +161,34 @@ function footer() {
   return `<footer class="site-footer">
   <div class="shell footer-grid">
     <div>
-      <h2>Contacts</h2>
+      <h2>Contact</h2>
       <ul class="footer-list">
         <li><a href="${PHONE_HREF}">${PHONE}</a></li>
         <li><a href="mailto:${EMAIL}">${EMAIL}</a></li>
-        ${LOCATIONS.map(l => `<li>${l.name}<br><span style="color:var(--muted);font-weight:600">${l.address}</span></li>`).join('\n        ')}
+        ${LOCATIONS.map(l => `<li>${l.name}<br><span class="footer-sub">${l.address}</span></li>`).join('\n        ')}
       </ul>
-      <div class="socials"><a href="#" aria-label="Facebook">${I.fb}</a><a href="#" aria-label="Instagram">${I.ig}</a><a href="#" aria-label="Google reviews">${I.google}</a></div>
+      <div class="socials"><a href="#" aria-label="Facebook">${I.fb}</a><a href="#" aria-label="Instagram">${I.ig}</a><a href="#" aria-label="Google">${I.google}</a></div>
       <div class="btn-row"><a class="btn btn-sm" href="/quote/" data-quote>Get a quote</a><a class="btn btn-sm btn-solid" href="/quote/?service=car" data-quote="car">Book now</a></div>
     </div>
     <div class="footer-brand">
-      <a class="logo" href="/" aria-label="${BRAND} home">${logo()}</a>
-      <div class="accreds">
-        <div class="accred">${I.shield}<span><b>Accredited installer</b><small>Industry association member</small></span></div>
-        <div class="accred">${I.leaf}<span><b>Energy rated films</b><small>WERS-rated home films</small></span></div>
-      </div>
+      <a class="logo" href="/" aria-label="Home">${logo()}</a>
+      <p class="muted">Window tinting with 3M film for cars, homes and businesses.</p>
     </div>
     <div>
-      <h2>Quick links</h2>
+      <h2>Pages</h2>
       <ul class="footer-list">
         ${NAV.map(([href, label]) => `<li><a href="${href}">${label}</a></li>`).join('\n        ')}
         <li><a href="/privacy-policy/">Privacy policy</a></li>
       </ul>
     </div>
   </div>
-  <div class="shell footer-base"><span>&copy; <span data-year>2026</span> ${BRAND}. Window tinting &amp; vehicle protection across Sydney and the Central Coast.</span><span>Demo website · content and details are placeholders</span></div>
+  <div class="shell footer-base"><span>&copy; <span data-year>2026</span> [Business name]. 3M is a trademark of 3M Company.</span><span>Demo site</span></div>
 </footer>
-<div class="action-bar"><a class="btn" href="${PHONE_HREF}">Call now</a><a class="btn btn-solid" href="/quote/" data-quote>Free quote</a></div>
+<div class="action-bar"><a class="btn" href="${PHONE_HREF}">Call</a><a class="btn btn-solid" href="/quote/" data-quote>Get a quote</a></div>
 <div class="modal" id="quote" role="dialog" aria-modal="true" aria-labelledby="quote-title" aria-hidden="true" inert>
   <div class="modal-box">
     <button class="menu-close" type="button" data-modal-close aria-label="Close quote form">&times;</button>
-    <div class="modal-head"><span class="script warm" style="font-size:28px">Quick quote</span><h2 id="quote-title">Get a fast quote to your inbox</h2><p><span class="stars" aria-hidden="true">★★★★★</span> Fixed pricing, no obligation.</p></div>
+    <div class="modal-head"><h2 id="quote-title">Get a quote</h2><p>Tell us what you need. We reply with a fixed price.</p></div>
     ${quoteForm('mq')}
   </div>
 </div>`;
@@ -204,75 +241,73 @@ ${body.includes('data-tint-preview') ? `<script src="/assets/tint-preview.js?v=$
 const pageHero = ({ script, title, text, img, crumbs }) => `<section class="page-hero">
   <div class="page-hero-media"><img src="${img}" alt="" fetchpriority="high"></div>
   <div class="shell">
-    <span class="script warm">${script}</span>
+    ${script ? `<span class="script warm">${script}</span>` : ''}
     <h1 class="h-xl">${title}</h1>
     <p>${text}</p>
     ${crumbs ? `<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>${crumbs}</span></nav>` : ''}
   </div>
 </section>`;
 
-const tintSelector = (id = 'shades') => `<section class="section glow-c selector" id="${id}">
+const specCells = s => [['vlt', 'Visible light in'], ['tser', 'Solar energy rejected'], ['irr', 'Infrared rejected'], ['uv', 'UV rejected'], ['glare', 'Glare reduced']].map(([k, l]) => `<div><h4>${l}</h4><p data-spec="${k}">${s[k]}%</p><div class="spec-bar" aria-hidden="true"><i style="width:${s[k]}%"></i></div></div>`).join('');
+
+const tintSelector = (id = 'shades') => {
+  const first = FILM_SERIES[0].shades.find(x => x.code === DEFAULT_SHADE);
+  return `<section class="section glow-c selector" id="${id}">
   <div class="shell">
     <div class="section-head center reveal">
-      <span class="script" style="margin-inline:auto;width:fit-content">See the difference</span>
-      <h2 class="h-lg">Select your film</h2>
-      <p class="copy">Each shade is rendered from how light really passes through tinted glass, so the darkness you see here is a close match to the finished car. Legal limits shown are for NSW passenger cars.</p>
+      <span class="script center-script">Shade preview</span>
+      <h2 class="h-lg">Compare 3M film shades</h2>
+      <p class="copy">Pick a 3M range and a shade, then drag the line across the car to compare it with untinted glass. Every figure is from 3M's data sheets.</p>
     </div>
-    <div class="reveal" data-tint-preview data-car="/images/tint-coupe.webp" data-mask="/images/tint-coupe-glass.png">
+    <div class="reveal" data-tint-preview data-car="/images/tint-coupe.webp" data-mask="/images/tint-coupe-glass.png" data-blurbs='${esc(JSON.stringify(Object.fromEntries(FILM_SERIES.map(x => [x.id, x.blurb]))))}'>
+      <div class="series-tabs" role="tablist" aria-label="3M film range">
+        ${FILM_SERIES.map((s, k) => `<button type="button" role="tab" class="series-tab" data-series="${s.id}" aria-selected="${k === 0}">${s.name.replace('3M ', '')}</button>`).join('')}
+      </div>
+      <p class="series-blurb" data-series-blurb>${FILM_SERIES[0].blurb}</p>
       <div class="selector-stage">
         <img class="car-fallback" src="/images/tint-coupe.webp" alt="" loading="lazy">
-        <canvas class="car-canvas" role="img" aria-label="White coupe showing the selected window tint shade"></canvas>
-        <div class="vlt-readout" aria-hidden="true"><b data-readout>35%</b><span>Visible light</span></div>
+        <canvas class="car-canvas" role="img" aria-label="Car showing the selected window tint shade"></canvas>
+        <div class="vlt-readout" aria-hidden="true"><b data-readout>${first.vlt}%</b><span data-readout-code>${first.code}</span></div>
       </div>
       <div class="selector-ui">
-        <h3>Select film</h3>
-        <div class="film-btns" role="group" aria-label="Tint shade">
-          ${[[5, 'Limo'], [15, 'Very dark'], [20, 'Dark'], [35, 'Medium'], [50, 'Light'], [70, 'Clear']].map(([v, l]) => `<button class="film-btn" type="button" data-vlt="${v}" aria-pressed="${v === 35}"><span class="swatch" aria-hidden="true"></span><b>${v}%</b><small>${l}</small></button>`).join('\n          ')}
-        </div>
-        <div class="film-info" aria-live="polite">
-          <div><h4 data-film-name>35% VLT · Medium</h4><p data-film-look>The darkest legal option for front side windows in NSW.</p></div>
-          <div><h4>Front side windows</h4><p><span class="legal yes" data-legal-front>Legal</span></p></div>
-          <div><h4>Rear side &amp; rear windows</h4><p><span class="legal yes" data-legal-rear>Legal</span></p></div>
-        </div>
-        <p class="fine">VLT (visible light transmission) is measured through the glass and film together. NSW passenger cars: front side windows 35% or lighter, rear side and rear windows 20% or lighter. Goods vehicles and some other vehicles have different rules. Screens vary, so we'll show you real film samples on your car before we start.</p>
+        ${FILM_SERIES.map((s, k) => `<div class="film-btns" role="group" aria-label="${s.name} shades" data-series-group="${s.id}"${k ? ' hidden' : ''}>
+          ${s.shades.map(x => `<button class="film-btn" type="button" data-shade='${JSON.stringify(x)}' aria-pressed="${x.code === DEFAULT_SHADE}"><span class="swatch" aria-hidden="true"></span><b>${x.code}</b><small>${x.vlt}% VLT</small></button>`).join('\n          ')}
+        </div>`).join('\n        ')}
+        <div class="spec-grid" aria-live="polite">${specCells(first)}</div>
+        <p class="fine">Figures are 3M's published data for film on 6mm automotive glass (73% VLT), so VLT is the glass and film together. Your windows may differ slightly, so we show you samples on your car first.</p>
       </div>
     </div>
   </div>
 </section>`;
+};
 
-const ctaBand = (title = 'Ready for a cooler, more private drive?', text = 'Tell us your vehicle and the look you want. We\'ll come back with a fixed price.') => `<section class="section tight">
+const ctaBand = (title = 'Get a fixed-price quote', text = 'Send us your vehicle and the shade you like. We reply the same business day.') => `<section class="section tight">
   <div class="shell">
     <div class="cta-band reveal">
-      <div><span class="script warm" style="font-size:30px">Let's get started</span><h2 class="h-md">${title}</h2><p class="muted">${text}</p></div>
+      <div><h2 class="h-md">${title}</h2><p class="muted">${text}</p></div>
       <div class="btn-row"><a class="btn" href="${PHONE_HREF}">Call ${PHONE}</a><a class="btn btn-solid" href="/quote/" data-quote>Get a quote</a></div>
     </div>
   </div>
 </section>`;
 
-const REVIEWS = [
-  ['Sarah M.', 'Car tinting · Sydney', 'Booked online, dropped the car off in the morning and it was ready after lunch. The 20% on the rear looks factory-perfect and the car is so much cooler.'],
-  ['James T.', 'Home tinting · Central Coast', 'Our west-facing living room was unusable in summer. They talked us through the options, fitted it in a day and the glare is gone without darkening the room.'],
-  ['Priya K.', 'Paint protection · Sydney', 'Really professional from quote to pickup. Clean edges, no bubbles, and they explained exactly how to look after the film. Highly recommend.'],
-];
 const reviewsSection = () => `<section class="section reviews">
   <div class="reviews-bg"><img src="/images/photos/car-brick.webp" alt="" loading="lazy"></div>
   <div class="shell">
     <div class="section-head center reveal">
-      <span class="script" style="margin-inline:auto;width:fit-content">Testimonials</span>
+      <span class="script center-script">Testimonials</span>
       <h2 class="h-lg">Recent reviews</h2>
-      <div class="review-summary"><span class="g-badge">${I.google}</span><span><b>5.0 <span class="stars" aria-hidden="true">★★★★★</span></b><small>Google reviews sync here at launch</small></span></div>
+      <div class="review-summary"><span class="g-badge">${I.google}</span><span><b>[Google rating]</b><small>Pulled from your Google Business Profile</small></span></div>
     </div>
     <div class="review-grid">
-      ${REVIEWS.map(([n, s, t], k) => `<blockquote class="review reveal d${k + 1}"><span class="stars" aria-label="5 out of 5 stars">★★★★★</span><p>${t}</p><footer><span class="avatar" aria-hidden="true">${n[0]}</span><span><b>${n}</b><small>${s}</small></span></footer></blockquote>`).join('\n      ')}
+      ${[1, 2, 3].map(k => `<div class="review review-ph reveal d${k}"><span class="stars" aria-hidden="true">★★★★★</span><p>[Customer review from Google]</p><footer><span class="avatar" aria-hidden="true"></span><span><b>[Customer name]</b><small>[Service]</small></span></footer></div>`).join('\n      ')}
     </div>
-    <p class="demo-note">Example reviews for the demo. The live site shows your verified Google reviews.</p>
   </div>
 </section>`;
 
 const strip = () => `<section class="section tight" aria-label="Recent work">
   <div class="shell">
     <div class="strip">
-      ${[['glass-reflection', 'Ceramic tint'], ['window-sunset', 'Front sides 35%'], ['suv-road', 'SUV privacy'], ['detailing', 'Paint protection'], ['interior-mirror', 'Heat rejection']].map(([f, c]) => `<figure class="photo reveal"><img src="/images/photos/${f}.webp" alt="${c}" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('\n      ')}
+      ${[['glass-reflection', 'Car tint'], ['window-sunset', 'Front windows'], ['suv-road', 'SUV'], ['detailing', 'Paint protection'], ['interior-mirror', 'Interior view']].map(([f, c]) => `<figure class="photo reveal"><img src="/images/photos/${f}.webp" alt="${c}" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('\n      ')}
     </div>
   </div>
 </section>`;
@@ -287,7 +322,6 @@ const business = {
   telephone: PHONE,
   email: EMAIL,
   areaServed: ['Sydney', 'Central Coast NSW'],
-  description: 'Demo website for a window tinting and vehicle protection business.',
 };
 
 // ---------- Pages ----------
@@ -297,43 +331,43 @@ const AREAS = [
   ['erina', 'Erina', 'Central Coast'], ['tuggerah', 'Tuggerah', 'Central Coast'], ['wyong', 'Wyong', 'Central Coast'],
 ];
 const built = [];
+const ir = FILM_SERIES[0];
 
 // Home
 built.push(page({
   slug: '/',
   current: '/',
-  title: `Window Tinting Sydney & Central Coast | Car, Home & Commercial | ${BRAND}`,
-  description: 'Premium car, home and commercial window tinting plus paint protection across Sydney and the Central Coast. Accurate shade previews, lifetime warranty and fast quotes.',
+  title: `Window Tinting Sydney & Central Coast | 3M Film | ${BRAND}`,
+  description: '3M window tinting for cars, homes and businesses in Sydney and the Central Coast. Compare 3M film shades and get a fixed-price quote.',
   preload: '/images/elite-studio.webp',
   schema: business,
   body: `<section class="hero">
-  <div class="hero-media"><img src="/images/elite-studio.webp" alt="Dark grey performance coupe with tinted windows in a studio" fetchpriority="high"></div>
+  <div class="hero-light" aria-hidden="true"></div>
+  <div class="hero-media"><img src="/images/elite-studio.webp" alt="Grey coupe with dark tinted windows" fetchpriority="high"></div>
   <div class="shell hero-inner">
     <div class="hero-copy">
-      <span class="script warm">Keeping Sydney cool</span>
-      <h2 class="h-xl">Premium tint &amp;<br>sleek protection</h2>
-      <p class="lead">Car, home and commercial window tinting with films that block heat, glare and 99% of UV. Fitted by specialists in Sydney and on the Central Coast.</p>
-      <div class="btn-row"><a class="btn" href="/quote/" data-quote>Quick quote</a><a class="btn btn-solid" href="/quote/?service=car" data-quote="car">Book now</a></div>
+      <span class="script warm">Sydney &amp; Central Coast</span>
+      <h2 class="h-xl">3M window tinting</h2>
+      <p class="lead">Car, home and commercial tinting with 3M film. Fixed prices, and most cars are done the same day.</p>
+      <div class="btn-row"><a class="btn" href="/quote/" data-quote>Get a quote</a><a class="btn btn-solid" href="/quote/?service=car" data-quote="car">Book now</a></div>
     </div>
   </div>
-  <a class="hero-shade-link" href="#shades"><span class="shade-chips" aria-hidden="true"><i style="background:#c9cdd0"></i><i style="background:#7d8287"></i><i style="background:#3f4448"></i><i style="background:#16191b"></i></span><span><b>Compare shades</b><small>See 5% to 70% on a real car</small></span></a>
   <div class="shell trust-bar">
     <div class="trust-grid">
-      <div class="trust"><span class="trust-icon">${I.google}</span><span><b>5.0 / 5.0</b><span>Google rating</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.medal}</span><span><b>15+ years</b><span>Tinting experience</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.shield}</span><span><b>Lifetime warranty</b><span>Workmanship guarantee</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.spark}</span><span><b>Premium films</b><span>Ceramic &amp; carbon, no fading</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.spark}</span><span><b>3M film</b><span>Ceramic IR, Crystalline, Color Stable</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.shield}</span><span><b>Lifetime warranty</b><span>3M limited film warranty</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.sun}</span><span><b>Up to 99.9% UV</b><span>Blocked by 3M Ceramic IR</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.pin}</span><span><b>Two workshops</b><span>Sydney and Central Coast</span></span></div>
     </div>
   </div>
 </section>
 
 <section class="section tight intro center">
   <div class="shell reveal">
-    <h1 class="h-lg">Window Tinting Sydney &amp; Central Coast</h1>
-    <span class="script">Cool by design</span>
-    <p class="lead" style="max-width:900px">Our commitment to excellence shows in the films we choose: <strong>premium products</strong>, matched to <strong>every budget</strong>, without ever compromising on <strong>quality</strong>.</p>
+    <h1 class="h-lg">Window tinting in Sydney and the Central Coast</h1>
+    <p class="lead" style="max-width:820px">We tint cars, homes and commercial buildings with <strong>3M film</strong>. You get a <strong>fixed price</strong> up front, and we show you film samples on your own glass before we start.</p>
     <div class="rule"></div>
-    ${checks(['Expert recommendations', 'Precision installation', 'Quality assurance'])}
+    ${checks(['Fixed-price quotes', '3M film on every job', 'Lifetime film warranty'])}
   </div>
 </section>
 
@@ -341,56 +375,54 @@ built.push(page({
   <div class="shell split">
     <div class="split-media reveal">
       <div class="duo">
-        <div class="photo"><img src="/images/photos/studio-mercedes.webp" alt="Dark sedan in a detailing studio after tinting" loading="lazy"></div>
-        <div class="photo"><img src="/images/photos/gclass-rear.webp" alt="Black four-wheel drive with dark rear tint" loading="lazy"></div>
+        <div class="photo"><img src="/images/photos/studio-mercedes.webp" alt="Dark sedan in a workshop" loading="lazy"></div>
+        <div class="photo"><img src="/images/photos/gclass-rear.webp" alt="Black 4WD with tinted rear windows" loading="lazy"></div>
       </div>
-      ${seal}
     </div>
-    <div class="split-copy center reveal d1">
-      <span class="script">Driven by quality</span>
-      <h2 class="h-lg">Shifting the shades of excellence</h2>
-      <p class="copy">${BRAND} delivers window tinting across Sydney and the Central Coast with premium films and outstanding service for vehicles, homes and <a href="/commercial-window-tinting/" style="color:var(--neon-2)">businesses</a>. With more than 15 years of experience, we deliver the quality we believe in, at prices that suit every budget, with warranties that last a lifetime.</p>
-      <div class="btn-row"><a class="btn" href="/products/">Our products</a></div>
+    <div class="split-copy reveal d1">
+      <span class="script">Our film</span>
+      <h2 class="h-lg">Why we use 3M</h2>
+      <p class="copy">3M's car films contain no metal, so they don't affect your phone, GPS or toll tag. They hold their colour and come with 3M's limited lifetime warranty.</p>
+      <p class="copy">We carry three 3M ranges. Color Stable gives a neutral black look. Ceramic IR adds more heat rejection. Crystalline rejects the most heat, even in very light shades.</p>
+      <div class="btn-row"><a class="btn" href="/products/">Compare the ranges</a></div>
     </div>
   </div>
 </section>
 
-<div class="marquee" aria-hidden="true"><div class="marquee-track">${('<span>Making the world a <em>cooler</em> place.</span>').repeat(4)}</div></div>
-
 <section class="section glow-bl">
   <div class="shell">
     <div class="stats-head section-head reveal">
-      <div><span class="script">Why choose us</span><h2 class="h-lg">The proof is<br>in the numbers</h2></div>
+      <div><span class="script">3M Ceramic IR</span><h2 class="h-lg">What the film does</h2></div>
+      <p class="copy">3M's published figures for its Ceramic IR range, at the darkest shade.</p>
     </div>
     <div class="stats">
-      <div class="stat reveal"><div class="stat-icon">${I.shield}</div><div class="stat-num"><span data-count="15">15</span><small>+</small></div><h3>Years experience</h3><p>Installers trained on every make, from city hatchbacks to European prestige.</p></div>
-      <div class="stat reveal d1"><div class="stat-icon">${I.car}</div><div class="stat-num"><span data-count="20">20</span><small>k+</small></div><h3>Vehicles tinted</h3><p>Cars, utes, vans, trucks and caravans tinted in our workshops.</p></div>
-      <div class="stat reveal d2"><div class="stat-icon">${I.google}</div><div class="stat-num"><span data-count="600">600</span><small>+</small></div><h3>Five-star reviews</h3><p>Customers rate the finish, the cleanliness and the turnaround.</p></div>
-      <div class="stat reveal d3"><div class="stat-icon">${I.star}</div><div class="stat-num"><span data-count="5.0">5.0</span><small>/5</small></div><h3>Service rating</h3><p>Same-day turnaround on most cars, with a lifetime workmanship warranty.</p></div>
+      <div class="stat reveal"><div class="stat-icon">${I.sun}</div><div class="stat-num"><span data-count="66">66</span><small>%</small></div><h3>Solar energy rejected</h3><p>Less heat gets into the car, so the air-con works less.</p></div>
+      <div class="stat reveal d1"><div class="stat-icon">${I.spark}</div><div class="stat-num"><span data-count="95">95</span><small>%</small></div><h3>Infrared rejected</h3><p>Infrared is the heat you feel on your skin through the glass.</p></div>
+      <div class="stat reveal d2"><div class="stat-icon">${I.shield}</div><div class="stat-num"><span data-count="99.9">99.9</span><small>%</small></div><h3>UV rejected</h3><p>Protects your skin and stops the interior fading.</p></div>
+      <div class="stat reveal d3"><div class="stat-icon">${I.eye}</div><div class="stat-num"><span data-count="93">93</span><small>%</small></div><h3>Glare reduced</h3><p>Easier driving into low sun and headlights.</p></div>
     </div>
-    <div class="stats-foot"><a class="btn" href="/about/">About us</a></div>
   </div>
 </section>
 
 <section class="section tight process">
   <div class="shell">
-    <div class="process-top reveal"><span class="pill-icon">${I.play}</span><b>How we work</b></div>
+    <div class="process-top reveal"><b>How it works</b></div>
     <div class="steps">
-      <div class="step reveal"><h3>Quote in minutes</h3><p>Send your vehicle or windows and we reply with a fixed price, usually the same day.</p></div>
-      <div class="step reveal d1"><h3>Choose your film</h3><p>See real film samples on your glass and get honest advice on legal shades.</p></div>
-      <div class="step reveal d2"><h3>Precision fit</h3><p>Computer-cut patterns, dust-controlled bays and edge-to-edge coverage.</p></div>
-      <div class="step reveal d3"><h3>Drive away covered</h3><p>Aftercare guide and a lifetime warranty against peeling, bubbling and fading.</p></div>
+      <div class="step reveal"><h3>Get a quote</h3><p>Tell us your car or windows. We send a fixed price, usually the same day.</p></div>
+      <div class="step reveal d1"><h3>Pick a shade</h3><p>We put film samples on your glass so you can see the real result.</p></div>
+      <div class="step reveal d2"><h3>Fitting</h3><p>Film is cut to your windows and fitted in a clean, enclosed bay.</p></div>
+      <div class="step reveal d3"><h3>Aftercare</h3><p>Keep windows up for 3 to 5 days. We give you the warranty paperwork.</p></div>
     </div>
   </div>
 </section>
 
 <section class="section glow-l">
   <div class="shell split flip">
-    <div class="split-media reveal"><div class="photo ratio-wide"><img src="/images/photos/suv-workshop.webp" alt="Large SUV in the tinting workshop" loading="lazy"></div></div>
-    <div class="split-copy center reveal d1">
+    <div class="split-media reveal"><div class="photo ratio-wide"><img src="/images/photos/suv-workshop.webp" alt="Large SUV in the workshop" loading="lazy"></div></div>
+    <div class="split-copy reveal d1">
       <span class="script">Every vehicle</span>
-      <h2 class="h-lg">Big or small,<br>we tint them all</h2>
-      <p class="copy">We cater to every client and vehicle type. Compact cars, family SUVs, work utes, vans, trucks and caravans all get the same careful fit. Drive into our workshop with any vehicle and leave with a tint that reflects the sun and your style.</p>
+      <h2 class="h-lg">Cars, 4WDs, vans and trucks</h2>
+      <p class="copy">Small hatchbacks, family SUVs, work utes, vans, trucks and caravans. If it has windows, we can tint it. Goods vehicles have different rules for the rear windows, and we'll tell you what applies.</p>
       <div class="btn-row"><a class="btn" href="/window-tinting-services/">Services</a></div>
     </div>
   </div>
@@ -398,12 +430,12 @@ built.push(page({
 
 <section class="section tight">
   <div class="shell">
-    <div class="section-head reveal"><span class="script">What we do</span><h2 class="h-lg">Tint &amp; protection services</h2></div>
+    <div class="section-head reveal"><span class="script">Services</span><h2 class="h-lg">What we do</h2></div>
     <div class="cards">
-      <a class="card reveal" href="/window-tinting-services/#automotive"><div class="card-media"><img src="/images/photos/window-sunset.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Car window tinting</h3><p>Carbon and ceramic films that cut heat, glare and UV, within NSW legal limits.</p><span class="card-link">Learn more</span></div></a>
-      <a class="card reveal d1" href="/window-tinting-services/#residential"><div class="card-media"><img src="/images/photos/house-modern.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Home window tinting</h3><p>Cooler rooms, less glare and furniture protection without losing your view.</p><span class="card-link">Learn more</span></div></a>
-      <a class="card reveal d2" href="/commercial-window-tinting/"><div class="card-media"><img src="/images/photos/office-glass.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Commercial tinting</h3><p>Solar control, privacy frosting and safety film for offices, shops and strata.</p><span class="card-link">Learn more</span></div></a>
-      <a class="card reveal d3" href="/window-tinting-services/#protection"><div class="card-media"><img src="/images/photos/detailing.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Paint protection</h3><p>Self-healing paint protection film and ceramic coating to keep paint like new.</p><span class="card-link">Learn more</span></div></a>
+      <a class="card reveal" href="/window-tinting-services/#automotive"><div class="card-media"><img src="/images/photos/window-sunset.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Car tinting</h3><p>3M Color Stable, Ceramic IR and Crystalline films.</p><span class="card-link">More</span></div></a>
+      <a class="card reveal d1" href="/window-tinting-services/#residential"><div class="card-media"><img src="/images/photos/house-modern.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Home tinting</h3><p>Cut heat and glare in hot rooms and stop floors fading.</p><span class="card-link">More</span></div></a>
+      <a class="card reveal d2" href="/commercial-window-tinting/"><div class="card-media"><img src="/images/photos/office-glass.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Commercial tinting</h3><p>Offices, shops and strata buildings. Solar, privacy and safety film.</p><span class="card-link">More</span></div></a>
+      <a class="card reveal d3" href="/window-tinting-services/#protection"><div class="card-media"><img src="/images/photos/detailing.webp" alt="" loading="lazy"></div><div class="card-body"><h3>Paint protection</h3><p>Clear film over the paint to stop stone chips and scratches.</p><span class="card-link">More</span></div></a>
     </div>
   </div>
 </section>
@@ -419,72 +451,54 @@ built.push(page({
   slug: '/window-tinting-services/',
   current: '/window-tinting-services/',
   title: `Window Tinting Services Sydney & Central Coast | ${BRAND}`,
-  description: 'Car, home and commercial window tinting, paint protection film and ceramic coating. Premium films, precision installation and a lifetime warranty.',
+  description: 'Car, home and commercial window tinting and paint protection film in Sydney and the Central Coast, using 3M film.',
   schema: business,
-  body: `${pageHero({ script: 'Window tinting specialists', title: 'Tinting services', text: '15+ years delivering the service we would expect ourselves, with premium films at honest prices.', img: '/images/photos/studio-mercedes.webp', crumbs: 'Services' })}
-<section class="section tight center">
-  <div class="shell reveal">
-    <span class="script" style="margin-inline:auto;width:fit-content">Quality, precision, style</span>
-    <p class="lead" style="max-width:860px;margin-inline:auto">At ${BRAND} we know quality, precision and style matter when it comes to window tinting. From our Sydney and Central Coast workshops, our team delivers top-notch tinting for cars, homes and businesses.</p>
-  </div>
-</section>
+  body: `${pageHero({ script: 'Services', title: 'What we do', text: 'Car, home and commercial window tinting, plus paint protection film.', img: '/images/photos/studio-mercedes.webp', crumbs: 'Services' })}
 <section class="section glow-r" id="automotive">
   <div class="shell split">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/window-sunset.webp" alt="Tinted front side window at sunset" loading="lazy"></div></div>
+    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/window-sunset.webp" alt="Tinted front side window" loading="lazy"></div></div>
     <div class="split-copy reveal d1">
-      <span class="script">Keeping customers cool</span>
-      <h2 class="h-md">Automotive window tinting</h2>
-      <p class="copy">Drive in comfort and style. Our films keep the cabin cool, reduce glare and block 99% of harmful UV, protecting you and your interior. They add privacy and security, and every shade we fit on a registered car is within NSW legal limits.</p>
-      ${checks(['Carbon and ceramic films', 'Computer-cut patterns for a factory look', 'Most cars done in a single day'], 'stack')}
+      <span class="script">Cars</span>
+      <h2 class="h-md">Car window tinting</h2>
+      <p class="copy">We fit 3M Color Stable, Ceramic IR and Crystalline film. All three block at least 98% of UV. The ceramic and Crystalline ranges also cut a lot of the heat you feel through the glass.</p>
+      ${checks(['Film cut to your exact windows', 'Most cars done in 2 to 4 hours', '3M limited lifetime warranty'], 'stack')}
       <div class="btn-row"><a class="btn" href="/quote/?service=car" data-quote="car">Get a quote</a><a class="btn" href="/#shades">Compare shades</a></div>
     </div>
   </div>
 </section>
 <section class="section glow-l" id="residential">
   <div class="shell split flip">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/home-interior.webp" alt="Bright bedroom with floor-to-ceiling windows" loading="lazy"></div></div>
+    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/home-interior.webp" alt="Bedroom with large windows" loading="lazy"></div></div>
     <div class="split-copy reveal d1">
-      <span class="script">Comfort at home</span>
-      <h2 class="h-md">Residential window tinting</h2>
-      <p class="copy">Take the heat out of west-facing rooms, stop furniture and floors fading and cut glare on screens, all while keeping your view. Choose from near-invisible spectrally selective films, daytime privacy films and decorative frosting.</p>
-      ${checks(['Up to 80% of solar heat rejected', 'Energy-rated films', 'Clean, same-day installs'], 'stack')}
+      <span class="script">Homes</span>
+      <h2 class="h-md">Home window tinting</h2>
+      <p class="copy">Film for west-facing rooms that get too hot, TVs with glare, and floors or furniture that are fading. Clear films keep the view. Frosted films add privacy to bathrooms and street-facing windows.</p>
+      ${checks(['Clear, tinted and frosted films', 'Most homes done in a day', 'We clean up as we go'], 'stack')}
       <div class="btn-row"><a class="btn" href="/quote/?service=home" data-quote="home">Get a quote</a></div>
     </div>
   </div>
 </section>
 <section class="section glow-r" id="protection">
   <div class="shell split">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/detailing.webp" alt="Car being prepared for paint protection film" loading="lazy"></div></div>
+    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/detailing.webp" alt="Car being washed before paint protection film" loading="lazy"></div></div>
     <div class="split-copy reveal d1">
-      <span class="script">Protect the paint</span>
-      <h2 class="h-md">Paint protection film &amp; ceramic coating</h2>
-      <p class="copy">Clear, self-healing paint protection film guards against stone chips, scratches and bird droppings. Pair it with a ceramic coating for deep gloss and easy washing. Choose front-end, high-impact zones or full-body coverage.</p>
-      ${checks(['Self-healing gloss or satin film', 'Ceramic coating packages', 'Headlight and taillight film'], 'stack')}
+      <span class="script">Paint</span>
+      <h2 class="h-md">Paint protection film</h2>
+      <p class="copy">A clear film over the paint that takes stone chips, scratches and bird droppings instead of your paint. Choose the front of the car, the high-impact areas, or the whole body.</p>
+      ${checks(['Gloss or satin finish', 'Front, partial or full body', 'Headlight protection'], 'stack')}
       <div class="btn-row"><a class="btn" href="/quote/?service=ppf" data-quote="ppf">Get a quote</a></div>
-    </div>
-  </div>
-</section>
-<section class="section glow-l">
-  <div class="shell split flip">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/suv-workshop.webp" alt="SUV in the workshop" loading="lazy"></div></div>
-    <div class="split-copy reveal d1">
-      <span class="script">Keeping things simple</span>
-      <h2 class="h-md">A simple process</h2>
-      <p class="copy">Our team helps you choose the right film, then fits it with precision and backs it with a lifetime warranty.</p>
-      ${checks(['Expert recommendations', 'Precision installation', 'Quality assurance'], 'stack')}
-      <div class="btn-row"><a class="btn btn-solid" href="/quote/" data-quote>Book now</a></div>
     </div>
   </div>
 </section>
 <section class="section tight">
   <div class="shell">
-    <div class="section-head center reveal"><span class="script" style="margin-inline:auto;width:fit-content">Good to know</span><h2 class="h-md">Frequently asked questions</h2></div>
+    <div class="section-head center reveal"><h2 class="h-md">Common questions</h2></div>
     <div class="faq reveal">
-      <details><summary>How dark can I legally go in NSW?</summary><p>For passenger cars, front side windows must be 35% VLT or lighter and rear side and rear windows 20% or lighter. The windscreen can only have a tinted band across the top. Goods vehicles have different rear-window rules, so ask us about vans and utes.</p></details>
-      <details><summary>How long does a car take?</summary><p>Most sedans, hatches and SUVs are finished in two to four hours. Old tint removal adds time, and we'll tell you exactly how long when you book.</p></details>
-      <details><summary>When can I wind my windows down?</summary><p>Leave windows up for three to five days while the adhesive cures. A slight haze or small water pockets during curing are normal and clear on their own.</p></details>
-      <details><summary>Will tint affect my phone, GPS or toll tag?</summary><p>Our carbon and ceramic films contain no metal, so they don't interfere with phone signal, GPS, keyless entry or e-tags.</p></details>
-      <details><summary>What does the warranty cover?</summary><p>Our lifetime workmanship warranty covers peeling, bubbling, cracking and fading for as long as you own the vehicle or property.</p></details>
+      <details><summary>How dark can I go in NSW?</summary><p>On a passenger car, the front side windows must let through at least 35% of visible light, and the rear side and rear windows at least 20%. The windscreen can only have a strip across the top. Vans and utes can have different rules for the rear, so ask us about your vehicle.</p></details>
+      <details><summary>How long does it take?</summary><p>Most cars take 2 to 4 hours. Removing old tint adds time. We'll tell you when you book.</p></details>
+      <details><summary>When can I wind the windows down?</summary><p>Wait 3 to 5 days so the film can dry. A little haze or a few water spots in that time is normal and clears on its own.</p></details>
+      <details><summary>Will it affect my phone, GPS or toll tag?</summary><p>No. 3M's automotive films contain no metal.</p></details>
+      <details><summary>What does the warranty cover?</summary><p>3M's limited lifetime warranty covers the film against peeling, bubbling, cracking and colour change. Ask us for the full terms.</p></details>
     </div>
   </div>
 </section>
@@ -492,73 +506,54 @@ ${ctaBand()}`
 }));
 
 // Products
-const FILMS = [
-  { name: 'Carbon series', tag: 'Best value', vlt: '5–70%', heat: 45, uv: '99%', points: ['Deep, true-black look', 'Will not fade or turn purple', 'No signal interference'] },
-  { name: 'Ceramic series', tag: 'Most popular', vlt: '5–70%', heat: 65, uv: '99%', featured: true, points: ['Nano-ceramic heat rejection', 'Crystal-clear from inside', 'Lifetime warranty'] },
-  { name: 'Ceramic IR', tag: 'Maximum comfort', vlt: '5–70%', heat: 80, uv: '99%', points: ['Highest infrared rejection', 'Ideal for clear 70% fronts', 'Feels cooler on your skin'] },
-];
 built.push(page({
   slug: '/products/',
   current: '/products/',
-  title: `Window Film Products | Carbon & Ceramic Tint | ${BRAND}`,
-  description: 'Compare carbon, ceramic and ceramic IR window films. Heat rejection, UV protection and shade options explained, with an accurate shade preview.',
-  body: `${pageHero({ script: 'Best products since day one', title: 'Our products', text: 'Premium films from leading manufacturers, chosen for clarity, colour stability and heat rejection.', img: '/images/photos/glass-reflection.webp', crumbs: 'Products' })}
+  title: `3M Window Film | Ceramic IR, Crystalline & Color Stable | ${BRAND}`,
+  description: 'Compare 3M Ceramic IR, Crystalline and Color Stable automotive window films: VLT, solar energy rejection, infrared, UV and glare for every shade.',
+  body: `${pageHero({ script: 'Products', title: '3M window film', text: 'Three 3M ranges. Every figure on this page is from 3M\'s own data sheets.', img: '/images/photos/glass-reflection.webp', crumbs: 'Products' })}
 <section class="section glow-r">
   <div class="shell">
-    <div class="section-head reveal"><span class="script">Carbon &amp; ceramic films</span><h2 class="h-lg">The ${BRAND} range</h2><p class="copy">Every film comes in shades from 5% to 70% VLT. Higher heat rejection means a cooler cabin at the same darkness, which is why ceramic films are worth it if you want a lighter, legal look.</p></div>
     <div class="range">
-      ${FILMS.map((f, k) => `<article class="film-card reveal d${k + 1}${f.featured ? ' featured' : ''}"><span class="tag" style="font:700 11px/1 var(--head);letter-spacing:.12em;text-transform:uppercase;color:var(--neon)">${f.tag}</span><h3>${f.name}</h3><dl><dt>Shades</dt><dd>${f.vlt} VLT</dd><dt>UV blocked</dt><dd>${f.uv}</dd><dt>Heat rejection</dt><dd>Up to ${f.heat}%</dd></dl><div class="meter" aria-hidden="true"><i style="width:${f.heat}%"></i></div><ul>${f.points.map(p => `<li>${p}</li>`).join('')}</ul></article>`).join('\n      ')}
+      ${FILM_SERIES.map((s, k) => { const v = range(s, 'vlt'), t = range(s, 'tser'), r = range(s, 'irr'); return `<article class="film-card reveal d${k + 1}"><h3>${s.name}</h3><p class="muted">${s.blurb}</p><dl><dt>Shades</dt><dd>${s.shades.length}</dd><dt>VLT</dt><dd>${v[0]}% to ${v[1]}%</dd><dt>Solar energy rejected</dt><dd>up to ${t[1]}%</dd><dt>Infrared rejected</dt><dd>up to ${r[1]}%</dd><dt>UV rejected</dt><dd>up to ${Math.max(...s.shades.map(x => x.uv))}%</dd></dl></article>`; }).join('\n      ')}
     </div>
-    <p class="fine">Heat rejection is total solar energy rejected at the darkest shade, as typically published by film manufacturers. Exact figures depend on the film, shade and your glass. Your installer will confirm the specification for your vehicle.</p>
   </div>
 </section>
 <section class="section tight">
   <div class="shell">
-    <div class="section-head reveal"><span class="script">Premium tinting</span><h2 class="h-lg">Benefits of automotive window film</h2></div>
-    <div class="benefits">
-      ${[[I.spark, 'Enhanced appearance', 'An even, factory-matched finish that adds class to any vehicle.'], [I.sun, 'Greater comfort', 'Rejects daytime heat for a cooler cabin and more efficient air-con.'], [I.eye, 'Better visibility', 'Cuts glare from sun and headlights, making driving easier on your eyes.'], [I.lock, 'More privacy', 'Keep belongings out of sight with shades from 5% to 70% VLT.'], [I.home, 'Reduced fading', 'Protects leather, fabric and dash plastics from sun damage.'], [I.star, 'Lasting colour', 'Colour-stable films that never fade or turn purple.'], [I.shield, 'Increased safety', 'Blocks 99% of UV, a leading cause of skin cancer, and holds shattered glass together.'], [I.medal, 'Lifetime warranty', 'Covered against peeling, bubbling and fading for as long as you own the car.']].map(([ic, h, p], k) => `<div class="benefit reveal${k % 4 ? ' d' + (k % 4) : ''}"><h3>${ic}${h}</h3><p>${p}</p></div>`).join('\n      ')}
-    </div>
-    <div class="btn-row" style="margin-top:40px"><a class="btn" href="/quote/" data-quote>2 minute quote</a></div>
+    <div class="section-head reveal"><h2 class="h-md">Every shade, side by side</h2><p class="copy">3M data for film on 6mm automotive glass (73% VLT).</p></div>
+    ${FILM_SERIES.map(s => `<div class="spec-table-wrap reveal"><table class="spec-table"><caption>${s.name}</caption><thead><tr><th scope="col">Shade</th><th scope="col">VLT</th><th scope="col">Solar energy rejected</th><th scope="col">Infrared rejected</th><th scope="col">UV rejected</th><th scope="col">Glare reduced</th></tr></thead><tbody>${s.shades.map(x => `<tr><th scope="row">${x.code}</th><td>${x.vlt}%</td><td>${x.tser}%</td><td>${x.irr}%</td><td>${x.uv}%</td><td>${x.glare}%</td></tr>`).join('')}</tbody></table></div>`).join('\n    ')}
+    <p class="fine">Sources: 3M Automotive Window Film Ceramic IR Series brochure (3M Australia), Crystalline Series brochure, and Color Stable Series technical data sheet (Rev B, Oct 2021).</p>
   </div>
 </section>
 ${tintSelector('shades')}
-${ctaBand()}`
+${ctaBand('Not sure which film?', 'Tell us what matters most (heat, privacy or looks) and we\'ll recommend a film and shade.')}`
 }));
 
 // About
 built.push(page({
   slug: '/about/',
   current: '/about/',
-  title: `About Us | ${BRAND} Sydney & Central Coast`,
-  description: `Meet the ${BRAND} team. Window tinting and vehicle protection specialists with workshops in Sydney and on the Central Coast.`,
-  body: `${pageHero({ script: 'Since day one', title: 'About us', text: '15+ years delivering the service we would expect ourselves, with premium products at honest prices.', img: '/images/elite-studio.webp', crumbs: 'About' })}
+  title: `About Us | ${BRAND}`,
+  description: 'Window tinting with 3M film, from workshops in Sydney and on the Central Coast.',
+  body: `${pageHero({ script: 'About', title: 'About us', text: '[Short line about the business, e.g. when it started and who runs it.]', img: '/images/elite-studio.webp', crumbs: 'About' })}
 <section class="section glow-r">
   <div class="shell split">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/studio-mercedes.webp" alt="Sedan in the ${BRAND} studio" loading="lazy"></div></div>
-    <div class="split-copy center reveal d1">
-      <span class="script">Driven by quality</span>
-      <h2 class="h-lg">Setting new standards</h2>
-      <p class="copy">At ${BRAND} we deliver one of the fastest and most cost-effective ways to lift your vehicle's looks and comfort, and we make sure every film is applied with precision and care. High-quality materials and proven techniques give a sleek finish that lasts, making tint a choice that is both stylish and smart.</p>
-      <div class="btn-row"><a class="btn" href="/products/">Our products</a></div>
+    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/studio-mercedes.webp" alt="Sedan in the workshop" loading="lazy"></div></div>
+    <div class="split-copy reveal d1">
+      <span class="script">Our story</span>
+      <h2 class="h-lg">[Business name]</h2>
+      <p class="copy">[Two or three sentences in the owner's words: how the business started, how long you've been tinting, and what you care about on every job.]</p>
+      <p class="copy">We work from two workshops, one in Sydney and one on the Central Coast, and fit 3M film on every job.</p>
+      <div class="btn-row"><a class="btn" href="/products/">Our film</a></div>
     </div>
   </div>
 </section>
 <section class="section tight">
   <div class="shell">
-    <div class="section-head reveal"><span class="script">50+ years combined</span><h2 class="h-lg">Meet our team</h2><p class="copy">Placeholder profiles: swap in team photos and names before launch.</p></div>
+    <div class="section-head reveal"><span class="script">The team</span><h2 class="h-lg">Who you'll deal with</h2></div>
     <div class="team">
-      ${[['Alex', 'Owner'], ['Sam', 'Office manager'], ['Jordan', 'Workshop manager'], ['Taylor', 'Lead technician'], ['Casey', 'PPF specialist']].map(([n, r], k) => `<div class="member reveal${k % 4 ? ' d' + (k % 4) : ''}"><div class="portrait" aria-hidden="true">${n[0]}</div><b>${n}</b><small>${r}</small></div>`).join('\n      ')}
-    </div>
-  </div>
-</section>
-<section class="section glow-l">
-  <div class="shell split flip">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/suv-workshop.webp" alt="SUV in the workshop" loading="lazy"></div></div>
-    <div class="split-copy center reveal d1">
-      <span class="script">Say hello!</span>
-      <h2 class="h-lg">Everyone is welcome</h2>
-      <p class="copy">Our services are tailored for everyone, from compact cars to RVs and trucks. Bring your vehicle to one of our workshops, or book our mobile service, and drive away with a tint that suits your style and shields you from the sun.</p>
-      <div class="btn-row"><a class="btn" href="/quote/" data-quote>2 minute quote</a></div>
+      ${[1, 2, 3, 4].map(k => `<div class="member reveal${k > 1 ? ' d' + (k - 1) : ''}"><div class="portrait">[Photo]</div><b>[Name]</b><small>[Role]</small></div>`).join('\n      ')}
     </div>
   </div>
 </section>
@@ -571,50 +566,48 @@ built.push(page({
   slug: '/commercial-window-tinting/',
   current: '/commercial-window-tinting/',
   title: `Commercial Window Tinting Sydney & Central Coast | ${BRAND}`,
-  description: 'Solar control, privacy frosting, safety and anti-graffiti films for offices, retail, strata and schools across Sydney and the Central Coast.',
-  body: `${pageHero({ script: 'Work cooler', title: 'Commercial window tinting', text: 'Cut energy costs, control glare and add privacy with minimal disruption to your business.', img: '/images/photos/office-glass.webp', crumbs: 'Commercial' })}
+  description: 'Solar control, privacy, safety and anti-graffiti film for offices, shops and strata buildings in Sydney and the Central Coast.',
+  body: `${pageHero({ script: 'Commercial', title: 'Commercial window tinting', text: 'Film for offices, shops, strata buildings and schools.', img: '/images/photos/office-glass.webp', crumbs: 'Commercial' })}
 <section class="section glow-r">
   <div class="shell split">
-    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/office-glass.webp" alt="Glass office building facade" loading="lazy"></div></div>
+    <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/office-glass.webp" alt="Glass office building" loading="lazy"></div></div>
     <div class="split-copy reveal d1">
-      <span class="script">Built for business</span>
-      <h2 class="h-md">Comfortable spaces, lower bills</h2>
-      <p class="copy">Glass is often the biggest source of heat gain in a commercial building. Solar control film rejects heat before it enters, evens out hot spots, reduces glare on screens and lowers air-conditioning demand, all without replacing a single pane.</p>
-      ${checks(['After-hours installation available', 'Site assessment and written quote', 'Energy-rated film options'], 'stack')}
-      <div class="btn-row"><a class="btn btn-solid" href="/quote/?service=commercial" data-quote="commercial">Request a site visit</a></div>
+      <span class="script">Buildings</span>
+      <h2 class="h-md">Cooler rooms without new glass</h2>
+      <p class="copy">Large windows let in a lot of heat. Solar film reflects much of it before it gets inside, so rooms near the glass stay comfortable, screens are easier to read, and the air-con runs less.</p>
+      ${checks(['Free site visit and written quote', 'After-hours fitting', 'Work scheduled around tenants'], 'stack')}
+      <div class="btn-row"><a class="btn btn-solid" href="/quote/?service=commercial" data-quote="commercial">Book a site visit</a></div>
     </div>
   </div>
 </section>
 <section class="section tight">
   <div class="shell">
-    <div class="section-head reveal"><span class="script">Applications</span><h2 class="h-lg">Films for every building</h2></div>
+    <div class="section-head reveal"><h2 class="h-lg">Film types</h2></div>
     <div class="cards three">
-      ${[['Solar control', 'Reject heat and glare in offices, retail and showrooms while keeping natural light.'], ['Privacy & frosting', 'Frosted, gradient and custom-cut films for meeting rooms, clinics and partitions.'], ['Safety & security', 'Hold broken glass together to meet safety requirements and slow down break-ins.'], ['Anti-graffiti', 'Sacrificial film that takes scratches and tags, then simply gets replaced.'], ['Branding & decals', 'Cut vinyl logos, opening hours and manifestation strips for glass doors.'], ['Strata & schools', 'Large-scale projects scheduled around residents, students and staff.']].map(([h, p], k) => `<div class="card plain reveal${k % 3 ? ' d' + (k % 3) : ''}"><h3>${h}</h3><p>${p}</p></div>`).join('\n      ')}
+      ${[['Solar control', 'Less heat and glare, while keeping daylight.'], ['Privacy and frosting', 'Frosted or patterned film for meeting rooms, clinics and bathrooms.'], ['Safety and security', 'Holds broken glass together and slows down break-ins.'], ['Anti-graffiti', 'A layer that takes scratches and tags, then gets replaced.'], ['Signage', 'Cut vinyl logos, opening hours and glass door markings.'], ['Strata and schools', 'Large jobs planned around residents, students and staff.']].map(([h, p], k) => `<div class="card plain reveal${k % 3 ? ' d' + (k % 3) : ''}"><h3>${h}</h3><p>${p}</p></div>`).join('\n      ')}
     </div>
   </div>
 </section>
-${ctaBand('Planning a commercial project?', 'Book a free site assessment and we\'ll recommend the right film for each elevation.')}`
+${ctaBand('Planning a commercial job?', 'Book a site visit and we\'ll quote each window.')}`
 }));
 
 // Contact
 built.push(page({
   slug: '/contact/',
   current: '/contact/',
-  title: `Contact Us | ${BRAND} Sydney & Central Coast`,
-  description: `Contact ${BRAND} for window tinting and paint protection in Sydney and on the Central Coast. Call, email or send an enquiry.`,
+  title: `Contact | ${BRAND}`,
+  description: 'Contact us for window tinting in Sydney and on the Central Coast.',
   schema: business,
-  body: `${pageHero({ script: 'Keeping you cool', title: 'Contact us', text: 'Call, email or send an enquiry. We reply with a fixed price, usually the same business day.', img: '/images/photos/car-brick.webp', crumbs: 'Contact' })}
+  body: `${pageHero({ script: 'Contact', title: 'Contact us', text: 'Call, email or send the form. We reply with a fixed price.', img: '/images/photos/car-brick.webp', crumbs: 'Contact' })}
 <section class="section glow-r">
   <div class="shell split" style="align-items:start">
     <div class="reveal">
-      <span class="script">Contact details</span>
-      <div class="locations" id="locations" style="grid-template-columns:1fr;margin-top:16px">
-        ${LOCATIONS.map(l => `<div class="location"><h3>${l.name} workshop</h3><dl><dt>Address</dt><dd>${l.address}<br>${l.locality}</dd><dt>Phone</dt><dd><a href="${PHONE_HREF}">${PHONE}</a></dd><dt>Email</dt><dd><a href="mailto:${EMAIL}">${EMAIL}</a></dd><dt>Hours</dt><dd>${l.hours}</dd></dl><h4 class="muted" style="font:600 12px/1 var(--head);letter-spacing:.14em;text-transform:uppercase">Areas we service</h4><div class="areas">${AREAS.filter(a => a[2] === l.name).map(([s, n]) => `<a href="/window-tinting-${s}/">${n}</a>`).join('')}</div></div>`).join('\n        ')}
+      <div class="locations" id="locations">
+        ${LOCATIONS.map(l => `<div class="location"><h3>${l.name}</h3><dl><dt>Address</dt><dd>${l.address}<br>${l.locality}</dd><dt>Phone</dt><dd><a href="${PHONE_HREF}">${PHONE}</a></dd><dt>Email</dt><dd><a href="mailto:${EMAIL}">${EMAIL}</a></dd><dt>Hours</dt><dd>${l.hours}</dd></dl><h4 class="areas-title">Areas</h4><div class="areas">${AREAS.filter(a => a[2] === l.name).map(([s, n]) => `<a href="/window-tinting-${s}/">${n}</a>`).join('')}</div></div>`).join('\n        ')}
       </div>
     </div>
     <div class="form-panel reveal d1">
-      <span class="script">Send an enquiry</span>
-      <div style="height:16px"></div>
+      <h2 class="h-md" style="margin-bottom:22px">Send an enquiry</h2>
       ${quoteForm('cf')}
     </div>
   </div>
@@ -626,8 +619,8 @@ built.push(page({
   slug: '/quote/',
   current: '/quote/',
   title: `Get a Quote | ${BRAND}`,
-  description: 'Get a fast, fixed-price quote for car, home or commercial window tinting and paint protection.',
-  body: `${pageHero({ script: 'Quick quote', title: 'Get a fast quote', text: 'Tell us about your vehicle or property and we\'ll send a fixed price to your inbox.', img: '/images/elite-studio.webp', crumbs: 'Quote' })}
+  description: 'Get a fixed-price quote for window tinting or paint protection.',
+  body: `${pageHero({ script: 'Quote', title: 'Get a quote', text: 'Tell us about your car or building and we\'ll send a fixed price.', img: '/images/elite-studio.webp', crumbs: 'Quote' })}
 <section class="section tight glow-c">
   <div class="shell" style="max-width:860px">
     <div class="form-panel reveal">${quoteForm('qp')}</div>
@@ -640,14 +633,14 @@ built.push(page({
   slug: '/vouchers/',
   current: '/vouchers/',
   title: `Gift Vouchers | ${BRAND}`,
-  description: `Give the gift of a cooler drive. ${BRAND} gift vouchers for window tinting, paint protection and ceramic coating.`,
-  body: `${pageHero({ script: 'The coolest gift', title: 'Gift vouchers', text: 'Perfect for birthdays, new cars and anyone who hates a hot steering wheel.', img: '/images/photos/gclass-rear.webp', crumbs: 'Vouchers' })}
+  description: 'Gift vouchers for window tinting and paint protection.',
+  body: `${pageHero({ script: 'Vouchers', title: 'Gift vouchers', text: 'Use on any service at either workshop.', img: '/images/photos/gclass-rear.webp', crumbs: 'Vouchers' })}
 <section class="section glow-c">
   <div class="shell">
     <div class="vouchers">
-      ${[100, 250, 500].map((v, k) => `<div class="voucher reveal${k ? ' d' + k : ''}"><span class="logo-word">${BRAND}</span><div><b>$${v}</b><br><small>Gift voucher · valid 3 years</small></div></div>`).join('\n      ')}
+      ${[100, 250, 500].map((v, k) => `<div class="voucher reveal${k ? ' d' + k : ''}"><span class="logo-ph">[BRAND LOGO]</span><div><b>$${v}</b><br><small>Gift voucher</small></div></div>`).join('\n      ')}
     </div>
-    <div class="center reveal" style="margin-top:40px"><p class="copy" style="margin-bottom:22px">Vouchers can be used on any service at either workshop. Custom amounts available.</p><div class="btn-row"><a class="btn btn-solid" href="/quote/?service=other" data-quote="other">Buy a voucher</a></div></div>
+    <div class="center reveal" style="margin-top:40px"><p class="copy" style="margin:0 auto 22px">Other amounts are available. Vouchers are valid for [X] years.</p><div class="btn-row"><a class="btn btn-solid" href="/quote/?service=other" data-quote="other">Buy a voucher</a></div></div>
   </div>
 </section>`
 }));
@@ -657,10 +650,10 @@ built.push(page({
   slug: '/privacy-policy/',
   current: '',
   title: `Privacy Policy | ${BRAND}`,
-  description: `How ${BRAND} collects and uses your personal information.`,
-  body: `${pageHero({ script: 'Your data', title: 'Privacy policy', text: 'Template policy for the demo. Replace with the business\'s reviewed policy before launch.', img: '/images/photos/glass-reflection.webp', crumbs: 'Privacy policy' })}
+  description: 'How we collect and use your personal information.',
+  body: `${pageHero({ script: '', title: 'Privacy policy', text: 'Placeholder. Replace with the business\'s own policy before launch.', img: '/images/photos/glass-reflection.webp', crumbs: 'Privacy policy' })}
 <section class="section tight"><div class="shell" style="max-width:820px">
-  <p class="copy">We collect the details you provide in our enquiry forms (name, phone, email and vehicle or property information) only to respond to your enquiry and provide our services. We do not sell or share your information with third parties except where needed to deliver a service you request or where required by law. You can ask us to access, correct or delete your information at any time by contacting ${EMAIL}.</p>
+  <p class="copy">We use the details you send through our forms (name, phone, email and vehicle or property details) to reply to your enquiry and do the work you book. We don't sell your information. To see, change or delete what we hold about you, email ${EMAIL}.</p>
 </div></section>`
 }));
 
@@ -669,24 +662,23 @@ for (const [slug, name, region] of AREAS) {
   built.push(page({
     slug: `/window-tinting-${slug}/`,
     current: '',
-    title: `Window Tinting ${name} | Car, Home & Commercial | ${BRAND}`,
-    description: `Car, home and commercial window tinting near ${name}. Premium ceramic and carbon films, NSW-legal shades and a lifetime warranty from ${BRAND}.`,
+    title: `Window Tinting ${name} | 3M Film | ${BRAND}`,
+    description: `Car, home and commercial window tinting near ${name} with 3M film. Fixed-price quotes from our ${region} workshop.`,
     schema: { ...business, areaServed: name },
-    body: `${pageHero({ script: `Serving ${name}`, title: `Window tinting ${name}`, text: `Premium car, home and commercial tinting for ${name} from our ${region} workshop, with mobile service available.`, img: region === 'Sydney' ? '/images/photos/studio-mercedes.webp' : '/images/photos/house-modern.webp', crumbs: `Window tinting ${name}` })}
+    body: `${pageHero({ script: region, title: `Window tinting ${name}`, text: `Car, home and commercial tinting for ${name}, from our ${region} workshop.`, img: region === 'Sydney' ? '/images/photos/studio-mercedes.webp' : '/images/photos/house-modern.webp', crumbs: `Window tinting ${name}` })}
 <section class="section glow-r">
   <div class="shell split">
     <div class="split-media reveal"><div class="photo ratio-43"><img src="/images/photos/window-sunset.webp" alt="Tinted car window" loading="lazy"></div></div>
     <div class="split-copy reveal d1">
-      <span class="script">Local specialists</span>
-      <h2 class="h-md">Tinting for ${name} drivers and homes</h2>
-      <p class="copy">${name} summers are hard on cars and homes. Our ${region} team fits carbon and ceramic films that cut heat, glare and UV, with every vehicle shade kept within NSW legal limits. Most cars are ready the same day.</p>
-      ${checks(['Lifetime workmanship warranty', 'NSW-legal shades, explained clearly', 'Mobile service around ' + name], 'stack')}
-      <div class="btn-row"><a class="btn btn-solid" href="/quote/" data-quote>Get a quote</a><a class="btn" href="/window-tinting-services/">All services</a></div>
+      <h2 class="h-md">Tinting near ${name}</h2>
+      <p class="copy">Our ${region} workshop tints cars, homes and commercial buildings around ${name} with 3M film. Most cars are ready the same day.</p>
+      ${checks(['3M film', 'Fixed-price quotes', '3M limited lifetime warranty'], 'stack')}
+      <div class="btn-row"><a class="btn btn-solid" href="/quote/" data-quote>Get a quote</a><a class="btn" href="/window-tinting-services/">Services</a></div>
     </div>
   </div>
 </section>
 ${tintSelector('shades')}
-${ctaBand(`Window tinting in ${name}, done properly`)}`
+${ctaBand(`Window tinting in ${name}`)}`
   }));
 }
 

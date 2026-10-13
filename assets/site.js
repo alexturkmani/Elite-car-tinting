@@ -162,3 +162,18 @@ if (!reduce && 'IntersectionObserver' in window) {
 
 const year = document.querySelector('[data-year]');
 if (year) year.textContent = new Date().getFullYear();
+
+// Hero: a soft light follows the pointer, like sun moving across tinted glass.
+const hero = document.querySelector('.hero');
+const heroLight = document.querySelector('.hero-light');
+if (hero && heroLight && window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
+  let frame = 0;
+  hero.addEventListener('pointermove', e => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      const r = hero.getBoundingClientRect();
+      heroLight.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100) + '%');
+      heroLight.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100) + '%');
+    });
+  });
+}

@@ -638,3 +638,44 @@ figure { margin: 0; }
 /* Header: no frame around location and phone */
 .header-pills { background: none; border: 0; backdrop-filter: none; border-radius: 0; overflow: visible; gap: 6px; }
 .pill { border-right: 0; border-radius: 10px; }
+
+/* 3M badge */
+.badge-3m { display: inline-grid; place-items: center; flex: none; background: #fff; border-radius: 8px; padding: 7px 9px; line-height: 0; }
+.badge-3m img { width: 34px; height: auto; }
+.badge-lg { padding: 10px 14px; margin-bottom: 22px; }
+.badge-lg img { width: 56px; }
+.trust-3m .badge-3m { width: 46px; height: 46px; padding: 0 6px; border-radius: 12px; }
+.trust-3m .badge-3m img { width: 32px; }
+.film-card .badge-3m { align-self: flex-start; }
+.footer-3m { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+
+/* Mobile hero badges: even 2 x 2 grid, icon above text */
+@media (max-width: 860px) {
+  .trust-grid { grid-template-columns: 1fr 1fr; gap: 20px 16px; }
+  .trust, .trust.trust-3m { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .trust-icon, .trust-3m .badge-3m { width: 40px; height: 40px; border-radius: 10px; }
+  .trust-3m .badge-3m img { width: 28px; }
+  .trust b { font-size: 15px; line-height: 1.25; }
+  .trust span span { font-size: 13px; line-height: 1.35; margin-top: 2px; }
+}
+
+/* Trust badges: keep icon boxes centred (the generic .trust span rule must not apply) */
+.trust .trust-icon, .trust .badge-3m { display: grid; place-items: center; line-height: 0; font-size: 0; }
+.trust .badge-3m { padding: 0; }
+.trust > span:last-child { display: block; }
+
+/* Audit fixes */
+.page-hero { padding-bottom: clamp(48px, 6vw, 80px); }
+.page-hero + .section { padding-top: clamp(40px, 5vw, 70px); }
+.split-copy .checks { margin-top: 20px; }
+.team { grid-template-columns: repeat(4, 1fr); }
+.film-card dl { margin-top: auto; }
+@media (max-width: 1100px) { .team { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 860px) {
+  .spec-table { min-width: 0; font-size: 13px; }
+  .spec-table th, .spec-table td { padding: 10px 6px; }
+  .spec-table th:first-child, .spec-table td:first-child { padding-left: 12px; }
+  .spec-table thead th { font-size: 9.5px; letter-spacing: .04em; vertical-align: bottom; }
+  .spec-table caption { padding: 14px 12px; font-size: 16px; }
+  .page-hero + .section { padding-top: 36px; }
+}

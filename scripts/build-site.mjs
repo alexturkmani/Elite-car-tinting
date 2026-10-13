@@ -9,7 +9,7 @@ const BRAND = 'Demo Tint';
 const PHONE = '1300 000 000';
 const PHONE_HREF = 'tel:1300000000';
 const EMAIL = 'hello@demotint.com.au';
-const VERSION = '20261015';
+const VERSION = '20261016';
 
 const LOCATIONS = [
   { name: 'Sydney', address: '[Street address]', locality: '[Suburb] NSW', hours: '[Opening hours]' },
@@ -102,6 +102,7 @@ const SERVICES = [
   ['other', 'Something else'],
 ];
 
+const badge3m = (cls = '') => `<span class="badge-3m ${cls}"><img src="/images/brands/3m.svg" alt="3M" width="300" height="158"></span>`;
 const logo = () => `<span class="logo-ph">[BRAND LOGO]</span>`;
 
 function header(current) {
@@ -172,7 +173,8 @@ function footer() {
     </div>
     <div class="footer-brand">
       <a class="logo" href="/" aria-label="Home">${logo()}</a>
-      <p class="muted">Window tinting with 3M film for cars, homes and businesses.</p>
+      <p class="muted">Window tinting for cars, homes and businesses.</p>
+      <div class="footer-3m">${badge3m()}<span>Installer of 3M window film</span></div>
     </div>
     <div>
       <h2>Pages</h2>
@@ -354,10 +356,10 @@ built.push(page({
   </div>
   <div class="shell trust-bar">
     <div class="trust-grid">
-      <div class="trust"><span class="trust-icon">${I.spark}</span><span><b>3M film</b><span>Ceramic IR, Crystalline, Color Stable</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.shield}</span><span><b>Lifetime warranty</b><span>3M limited film warranty</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.sun}</span><span><b>Up to 99.9% UV</b><span>Blocked by 3M Ceramic IR</span></span></div>
-      <div class="trust"><span class="trust-icon">${I.pin}</span><span><b>Two workshops</b><span>Sydney and Central Coast</span></span></div>
+      <div class="trust trust-3m">${badge3m()}<span><b>3M window film</b><span>Three 3M ranges</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.shield}</span><span><b>Lifetime warranty</b><span>3M limited warranty</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.sun}</span><span><b>99.9% UV blocked</b><span>3M Ceramic IR</span></span></div>
+      <div class="trust"><span class="trust-icon">${I.pin}</span><span><b>Two workshops</b><span>Sydney &amp; Central Coast</span></span></div>
     </div>
   </div>
 </section>
@@ -382,6 +384,7 @@ built.push(page({
     <div class="split-copy reveal d1">
       <span class="script">Our film</span>
       <h2 class="h-lg">Why we use 3M</h2>
+      ${badge3m('badge-lg')}
       <p class="copy">3M's car films contain no metal, so they don't affect your phone, GPS or toll tag. They hold their colour and come with 3M's limited lifetime warranty.</p>
       <p class="copy">We carry three 3M ranges. Color Stable gives a neutral black look. Ceramic IR adds more heat rejection. Crystalline rejects the most heat, even in very light shades.</p>
       <div class="btn-row"><a class="btn" href="/products/">Compare the ranges</a></div>
@@ -515,7 +518,7 @@ built.push(page({
 <section class="section glow-r">
   <div class="shell">
     <div class="range">
-      ${FILM_SERIES.map((s, k) => { const v = range(s, 'vlt'), t = range(s, 'tser'), r = range(s, 'irr'); return `<article class="film-card reveal d${k + 1}"><h3>${s.name}</h3><p class="muted">${s.blurb}</p><dl><dt>Shades</dt><dd>${s.shades.length}</dd><dt>VLT</dt><dd>${v[0]}% to ${v[1]}%</dd><dt>Solar energy rejected</dt><dd>up to ${t[1]}%</dd><dt>Infrared rejected</dt><dd>up to ${r[1]}%</dd><dt>UV rejected</dt><dd>up to ${Math.max(...s.shades.map(x => x.uv))}%</dd></dl></article>`; }).join('\n      ')}
+      ${FILM_SERIES.map((s, k) => { const v = range(s, 'vlt'), t = range(s, 'tser'), r = range(s, 'irr'); return `<article class="film-card reveal d${k + 1}">${badge3m()}<h3>${s.name.replace('3M ', '')}</h3><p class="muted">${s.blurb}</p><dl><dt>Shades</dt><dd>${s.shades.length}</dd><dt>VLT</dt><dd>${v[0]}% to ${v[1]}%</dd><dt>Solar energy rejected</dt><dd>up to ${t[1]}%</dd><dt>Infrared rejected</dt><dd>up to ${r[1]}%</dd><dt>UV rejected</dt><dd>up to ${Math.max(...s.shades.map(x => x.uv))}%</dd></dl></article>`; }).join('\n      ')}
     </div>
   </div>
 </section>

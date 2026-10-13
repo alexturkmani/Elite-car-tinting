@@ -29,7 +29,7 @@ onScroll();
   const weekday = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day);
   const open = (weekday && hour >= 8 && hour < 17) || (day === 'Sat' && hour >= 8 && hour < 12);
   el.forEach(node => {
-    node.innerHTML = open ? '<span class="open-dot"></span>Open now' : 'Closed · Request a quote';
+    node.textContent = open ? 'Open now' : 'Closed · Request a quote';
   });
 })();
 

@@ -634,3 +634,7 @@ figure { margin: 0; }
   .compare-tags span { font-size: 10px; padding: 5px 7px; }
   .compare-handle span { width: 34px; height: 34px; margin: -17px 0 0 -17px; }
 }
+
+/* Header: no frame around location and phone */
+.header-pills { background: none; border: 0; backdrop-filter: none; border-radius: 0; overflow: visible; gap: 6px; }
+.pill { border-right: 0; border-radius: 10px; }

@@ -1,0 +1,16 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": true,
+  "redirects": [
+    { "source": "/about-us/", "destination": "/about/", "permanent": true },
+    { "source": "/contact-us/", "destination": "/contact/", "permanent": true },
+    { "source": "/automotive-window-tinting/", "destination": "/window-tinting-services/", "permanent": true },
+    { "source": "/ceramic-coating/", "destination": "/window-tinting-services/", "permanent": true },
+    { "source": "/headlights-taillights-tint/", "destination": "/window-tinting-services/", "permanent": true },
+    { "source": "/car-wrap-blackouts/", "destination": "/window-tinting-services/", "permanent": true },
+    { "source": "/gallery/", "destination": "/", "permanent": true },
+    { "source": "/business-card/", "destination": "/", "permanent": true },
+    { "source": "/car-window-tinting-:suburb/", "destination": "/window-tinting-services/", "permanent": true },
+    { "source": "/home-window-tinting-:suburb/", "destination": "/window-tinting-services/", "permanent": true }
+  ]
+}

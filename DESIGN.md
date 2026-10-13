@@ -1,11 +1,20 @@
-# Tinting Business visual system
+# Demo Tint visual system
 
-Midnight navy, soft lavender and cool white; rounded controls; a stationary vehicle visual with independently animated glass. The car image is a photorealistic campaign render, not a photograph of customer work or a rotatable 3D model. Window masks, reflection sweeps, continuous shade interpolation and synchronized controls run in the browser. Manual interaction pauses the automatic preview. Reduced-motion preferences disable autoplay and decorative motion.
+Midnight navy (`#01080c`) canvas with radial teal glows (`#072233`), white heavy grotesk headings (Schibsted Grotesk), Manrope body text and neon script accents (Yellowtail) in warm orange and cyan glow. Buttons are outlined or solid white with a trailing arrow. The header is a logo plus a frosted pill group (location, phone with live open status, menu).
 
-## Image asset
+## Fixes over the reference layout
 
-Generated with the built-in ImageGen tool and saved for the site as `images/tint-coupe.webp`. Original generation filename: `exec-d9c0ab5e-ab59-4bc4-ab23-cd9cb0fc4e9f.png`.
+- Content is visible without waiting for entrance animations; reveals only enhance it.
+- Counters render their real values in HTML instead of starting at zero.
+- No floating rating badge covering headings and footer buttons; mobile gets a slim call/quote bar instead.
+- Stat icons sit in their own tiles instead of behind the numbers, and each stat has its own copy.
+- Film selector buttons are a consistent size, with a shade swatch and NSW legality shown for each.
+- Gallery images load properly, no duplicated contact fields, no off-palette link colours.
 
-Final generation prompt:
+## Tint preview
 
-> Use case: product-mockup. Asset type: photoreal premium vehicle cutout for an interactive window tint configurator on a website. Create a single pearl white luxury sports coupe, perfectly side-on SIDE ELEVATION PROFILE, front of the car faces RIGHT. Entire car including both wheels visible, symmetrical level camera at door height, no perspective foreshortening. Low sleek two-door coupe with black multispoke alloy wheels and silver brake discs, crisp realistic tires, subtle satin chrome trim. Roof and side window silhouette clearly defined. MOST IMPORTANT: Both side windows have completely clear UNTINTED glass with a bright light grey leather interior, seats, steering wheel and cabin visible through them, plausible photographic glass reflections. No dark tint on windows. Cool studio keylight, soft lavender-blue rim lighting along white body contours; true premium product photographic realism, sharp accurate body and wheel details. Car centred horizontally, occupies about 90% canvas width, generous transparent room above and below, landscape 1536x1024 canvas. Fully transparent background and floor, no scene, no pedestal, no ground rectangle. Keep a soft contact shadow directly beneath the tires if transparency permits. No logos, no badges, no number plate text, no writing, no watermark. Must look like an expensive physically rendered automotive marketing asset, not a drawing or a generic cartoon.
+`assets/tint-preview.js` renders the window shade on a canvas instead of laying a flat dark overlay on the glass. When you look into a car, light passes through the film twice (in, then back out after reflecting off the interior), so interior visibility scales with VLT² in linear light. A small exterior surface reflection is added. The render's clear glass is treated as ~88% factory glass. The result: 70% looks close to factory glass, 35% shows the cabin clearly but darker, 20% shows silhouettes, and 5% reads as black with reflections.
+
+The glass mask (`images/tint-coupe-glass.png`) was traced from `images/tint-coupe.webp` with the side mirror cut out.
+
+NSW limits shown in the selector: passenger car front side windows 35% VLT or lighter; rear side and rear windows 20% or lighter.
